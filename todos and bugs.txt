@@ -1,0 +1,12 @@
+*** bugs ***
+1 - in confirm dialog, category dialog won't close if nothing is selected
+2 - put dash instead of "no reason is set"
+3 - diffrent style for report dialog fields(?)
+4 - close calender after selecting
+5 - ask if there's another way to count reports in operator dashboard 
+6 - clicks in profile form  toggle the dropdown
+
+*** todos ***
+1 - suggestion for register report map
+2 - in comments, it hasn't been demonstrated that what report it belongs to 
+3 - replace all usemakerequest hooks with callapi

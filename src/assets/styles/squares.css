@@ -1,0 +1,30 @@
+/* square shape */
+.sq15 {
+  width: 15px;
+  height: 15px;
+}
+
+.sq25 {
+  width: 25px;
+  height: 25px;
+}
+
+.sq50 {
+  width: 50px;
+  height: 50px;
+}
+
+.sq75 {
+  width: 75px;
+  height: 75px;
+}
+
+.sq100 {
+  width: 100px;
+  height: 100px;
+}
+
+.sq150 {
+  width: 150px;
+  height: 150px;
+}

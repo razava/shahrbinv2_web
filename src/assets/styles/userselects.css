@@ -1,0 +1,4 @@
+/* user select */
+.not-selectable {
+  user-select: none;
+}

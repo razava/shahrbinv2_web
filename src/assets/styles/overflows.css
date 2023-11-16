@@ -1,0 +1,24 @@
+/* overflow */
+.of-hidden {
+  overflow: hidden;
+}
+
+.of-x-hidden {
+  overflow-x: hidden;
+}
+
+.of-y-hidden {
+  overflow-y: hidden;
+}
+
+.of-auto {
+  overflow: auto;
+}
+
+.of-auto-x {
+  overflow-x: auto;
+}
+
+.of-auto-y {
+  overflow-y: auto;
+}

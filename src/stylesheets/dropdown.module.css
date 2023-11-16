@@ -1,0 +1,125 @@
+.dropdownWrapper {
+  position: relative;
+}
+
+.show .dropdown {
+  display: flex;
+}
+
+.dropdown {
+  position: absolute;
+  left: 100%;
+  display: none;
+  min-width: 200px;
+  transition: height 0.3s;
+  flex-direction: column;
+  align-items: stretch;
+  z-index: var(--z-dropdown);
+  border-radius: 8px;
+  box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.1);
+  margin: 0;
+  perspective: 1000px;
+}
+
+.dropdownAnimated {
+  transform-origin: top left;
+  animation: growDown 300ms ease-in-out both;
+}
+
+.dropdowntoggle {
+  font-size: 12px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.dropdownitem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  border-right: 5px solid var(--white);
+}
+
+.dropdownitem:hover:first-child {
+  border-radius: 8px 8px 0 0;
+}
+
+.dropdownitem:hover:last-child {
+  border-radius: 0 0 8px 8px;
+}
+
+.dropdownitem:first-child {
+  border-radius: 8px 8px 0 0;
+}
+
+.dropdownitem:last-child {
+  border-bottom: none;
+  border-radius: 0 0 8px 8px;
+}
+
+.dropdownitem > * {
+  margin: 0 5px;
+}
+
+.dropdownitem:hover {
+  background-color: var(--glassPrimary);
+  color: var(--primary);
+  border-right: 5px solid var(--primary);
+}
+
+.dropdownicon {
+  overflow: hidden;
+}
+
+.dropdownicon > svg:first-child {
+  display: none;
+}
+
+.dropdownitem:hover .dropdownicon > svg:last-child {
+  display: none;
+}
+
+.dropdownitem:hover .dropdownicon > svg:first-child {
+  display: flex;
+}
+
+.toggle {
+  font-size: 15px;
+  color: var(--cream);
+  cursor: pointer;
+  text-align: center;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background 0.3s;
+}
+
+.userActions {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+@keyframes growDown {
+  0% {
+    transform-origin: top left;
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  80% {
+    transform-origin: top left;
+    transform: scaleY(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform-origin: top left;
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}

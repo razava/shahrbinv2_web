@@ -1,0 +1,25 @@
+/* responsive width */
+.rw1 {
+  width: 100%;
+  max-width: 100px;
+}
+
+.rw2 {
+  width: 100%;
+  max-width: 200px;
+}
+
+.rw3 {
+  width: 100%;
+  max-width: 300px;
+}
+
+.rw4 {
+  width: 100%;
+  max-width: 400px;
+}
+
+.rw5 {
+  width: 100%;
+  max-width: 500px;
+}

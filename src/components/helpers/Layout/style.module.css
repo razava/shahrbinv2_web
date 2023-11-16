@@ -1,0 +1,7 @@
+.layoutScrollable {
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  border-radius: 5px;
+}

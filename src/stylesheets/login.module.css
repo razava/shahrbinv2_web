@@ -1,0 +1,225 @@
+.wrapper {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--secondary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.container {
+  max-width: 700px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  flex-direction: column;
+  position: relative;
+  margin: 0 20px;
+}
+
+.loginContainer {
+  position: relative;
+  max-width: 350px;
+  width: 100%;
+  padding: 20px;
+  border: 1px solid var(--mute);
+  border-radius: 15px;
+  margin: 20px;
+  background-color: var(--white);
+}
+
+.loginBrands {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: calc(100% + 10px);
+}
+
+.loginFormTitleImage {
+  max-width: 150px;
+  height: 50px;
+  object-fit: contain;
+  position: absolute;
+  top: -25px;
+  background-color: var(--white);
+}
+
+.loginFormWrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: var(--white);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.1);
+}
+
+.loginImage {
+  position: absolute;
+  bottom: -32px;
+  left: -32px;
+  object-fit: cover;
+  max-width: 300px;
+  width: 100%;
+}
+
+.loginTitle {
+  font-size: 1.5rem;
+  color: var(--dark);
+  position: relative;
+}
+
+.loginForm {
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.inputGroup {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: stretch;
+  background-color: #eee;
+  margin: 10px 0;
+  border-radius: 5px;
+}
+
+.inputIcon {
+  flex-basis: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  font-size: 1.5rem;
+  color: #333;
+  border-bottom: 2px solid #333;
+  font-size: 20px;
+}
+
+.inputContainer {
+  flex-basis: 80%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  position: relative;
+}
+
+.input {
+  width: 100%;
+  border: 0;
+  background-color: #eee;
+  outline: 0;
+  font-size: 13px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  text-align: center;
+  direction: ltr;
+}
+
+.inputUnderline {
+  position: absolute;
+  height: 2px;
+  width: 0;
+  background-color: var(--dark);
+  bottom: 0;
+  right: 0;
+  transition: all 0.2s;
+}
+
+.input:focus ~ .inputUnderline,
+.input:not(.input:placeholder-shown) ~ .inputUnderline {
+  width: 100%;
+}
+
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus,
+.input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #eee inset !important;
+}
+
+.inputLabel {
+  font-size: 1.3rem;
+  color: #888;
+}
+
+.btnGroup {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginBtn {
+  width: 100%;
+  border: 0;
+  cursor: pointer;
+  margin: 10px auto;
+  padding: 8px 12px;
+  border-radius: 4px;
+  background-color: var(--primary);
+  color: var(--white);
+  position: relative;
+  outline: 0;
+  font-size: 15px;
+}
+
+.loginBtn:active {
+  top: 2px;
+}
+
+.btnIcon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .loginFormWrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .loginBrands {
+    position: absolute;
+    top: 100%;
+    bottom: auto;
+  }
+
+  .loginImage {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    object-fit: cover;
+    width: 100%;
+    transform: translateX(-50%);
+    max-width: 250px;
+  }
+}

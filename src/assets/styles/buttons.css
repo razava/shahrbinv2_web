@@ -1,0 +1,90 @@
+/* buttons */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--white);
+  font-size: 15px;
+  background: var(--primary);
+  border-radius: 5px;
+  border: 0;
+  outline: 0;
+  padding: 4px 8px;
+  position: relative;
+  transition: all 0.1s ease;
+  cursor: pointer;
+}
+
+.btn.feedback:active {
+  transform: translateY(2px);
+}
+
+.btn.primary {
+  background: var(--primary);
+}
+
+.btn.primary {
+  background: var(--primary);
+}
+
+.btn.white {
+  background: var(--white);
+}
+
+.btn.dark {
+  background: var(--dark);
+}
+
+.btn.mute {
+  background: var(--mute);
+}
+
+.btn.success {
+  background: var(--success);
+}
+
+.btn.outline {
+  background-color: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+}
+
+.btn.outline.primary-outline {
+  border: 1px solid var(--primary);
+  color: var(--primary);
+}
+
+.btn.outline.dark-outline {
+  border: 1px solid var(--dark);
+  color: var(--dark);
+}
+
+.btn.outline.white-outline {
+  border: 1px solid var(--white);
+  color: var(--white);
+}
+
+.btn.outline.mute-outline {
+  border: 1px solid var(--mute);
+  color: var(--mute);
+}
+
+.btn.outline.success-outline {
+  border: 1px solid var(--success);
+  color: var(--success);
+}
+
+.btn.outline.error-outline {
+  border: 1px solid var(--error);
+  color: var(--error);
+}
+
+.btn.error {
+  background: var(--error);
+}
+
+.btn-reset {
+  outline: none;
+  border: none;
+}

@@ -1,0 +1,34 @@
+/* text colors */
+.text-primary {
+  color: var(--primary);
+}
+
+.text-white {
+  color: var(--white);
+}
+
+.text-dark {
+  color: var(--dark);
+}
+
+.text-gradient {
+  background: -webkit-linear-gradient(var(--primary), var(--dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-mute {
+  color: var(--mute);
+}
+
+.text-success {
+  color: var(--success);
+}
+
+.text-error {
+  color: var(--error);
+}
+
+.text-color {
+  color: var(--text);
+}

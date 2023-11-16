@@ -1,0 +1,48 @@
+/* backgrounds */
+.bg-primary {
+  background: var(--primary);
+}
+
+.bg-secondary {
+  background: var(--secondary);
+}
+
+.bg-white {
+  background: var(--white);
+}
+
+.bg-dark {
+  background: var(--dark);
+}
+
+.bg-mute {
+  background: var(--mute);
+}
+
+.bg-success {
+  background: var(--accepted);
+}
+
+.bg-error {
+  background: var(--error);
+}
+
+.bg-transparent {
+  background: transparent;
+}
+
+.bg-light {
+  background: #ddd;
+}
+
+.bg-color {
+  background: var(--bg);
+}
+
+.bg-light2 {
+  background: var(--lightBlue);
+}
+
+.bg-gradient {
+  background: linear-gradient(45deg, var(--primary) 20%, var(--dark) 70%);
+}

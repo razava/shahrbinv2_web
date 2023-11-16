@@ -1,0 +1,32 @@
+/* coordinates */
+.t0 {
+  top: 0;
+}
+
+.t100 {
+  top: 100%;
+}
+
+.l0 {
+  left: 0;
+}
+
+.l100 {
+  left: 100%;
+}
+
+.r0 {
+  right: 0;
+}
+
+.r100 {
+  right: 100%;
+}
+
+.b0 {
+  bottom: 0;
+}
+
+.b100 {
+  bottom: 100%;
+}

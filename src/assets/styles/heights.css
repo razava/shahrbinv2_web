@@ -1,0 +1,52 @@
+/* heights */
+.vh100 {
+  height: 100vh;
+}
+
+.h100 {
+  height: 100%;
+}
+
+.h90 {
+  height: 90%;
+}
+
+.h80 {
+  height: 80%;
+}
+
+.h70 {
+  height: 70%;
+}
+
+.h60 {
+  height: 60%;
+}
+
+.h50 {
+  height: 50%;
+}
+
+.h40 {
+  height: 40%;
+}
+
+.h30 {
+  height: 30%;
+}
+
+.h20 {
+  height: 20%;
+}
+
+.h10 {
+  height: 10%;
+}
+
+.h0 {
+  height: 0%;
+}
+
+.h-auto {
+  height: auto;
+}

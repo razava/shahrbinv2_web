@@ -1,0 +1,42 @@
+.scrollbar {
+  scrollbar-color: var(--primary) var(--border);
+  scrollbar-width: thin;
+}
+
+.scrollbar-h {
+  scrollbar-color: var(--primary) var(--border);
+  scrollbar-width: thin;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 8px;
+  background-color: var(--primary);
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  width: 8px;
+  background-color: var(--border);
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  width: 2px;
+  background-color: var(--primary);
+  border-radius: 4px;
+}
+
+.scrollbar-h::-webkit-scrollbar {
+  height: 2px;
+  background-color: var(--primary);
+}
+
+.scrollbar-h::-webkit-scrollbar-track {
+  height: 2px;
+  background-color: var(--border);
+}
+
+.scrollbar-h::-webkit-scrollbar-thumb {
+  height: 2px;
+  background-color: var(--primary);
+  border-radius: 4px;
+}
+

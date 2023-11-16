@@ -1,0 +1,87 @@
+.btn {
+  border: 0;
+  outline: 0;
+  text-align: center;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background 0.2s;
+  cursor: pointer;
+  background-color: var(--btnBg);
+  color: var(--btnText);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  min-width: 100px;
+}
+
+.btn:disabled {
+  background-color: var(--border);
+  cursor: not-allowed;
+}
+
+.iconBtn > * {
+  margin: 0 5px;
+}
+
+.btn.green {
+  border: 1px solid var(--accepted);
+  color: var(--white);
+  background-color: var(--accepted);
+}
+
+.btn.green:hover {
+  border: 1px solid var(--accepted);
+  color: var(--accepted);
+  background-color: transparent;
+}
+
+.btn.red {
+  border: 1px solid var(--rejected);
+  color: var(--white);
+  background-color: var(--rejected);
+}
+
+.btn.red:hover {
+  border: 1px solid var(--rejected);
+  color: var(--rejected);
+  background-color: transparent;
+}
+
+.btnOutline {
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  background-color: transparent;
+}
+
+.btnOutline:hover {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+.btn.bounce:active {
+  top: 2px;
+}
+
+.btnOutline.green {
+  border: 1px solid var(--accepted);
+  color: var(--accepted);
+  background-color: transparent;
+}
+
+.btnOutline.red {
+  border: 1px solid var(--rejected);
+  background-color: transparent;
+  color: var(--rejected);
+}
+
+.btnOutline.green:hover {
+  background-color: var(--accepted);
+  color: var(--white);
+}
+
+.btnOutline.red:hover {
+  background-color: var(--rejected);
+  color: var(--white);
+}

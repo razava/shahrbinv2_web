@@ -1,0 +1,36 @@
+.page {
+  transition: margin 0.6s;
+  background-color: transparent;
+  position: fixed;
+  border-radius: 10px;
+  width: calc((100vw * 17) / 24);
+  height: calc((100vh * 20) / 24);
+  top: calc((100vh * 7) / 48);
+  right: calc((100vw * 6) / 24);
+  transition: all 0.6s;
+  /* overflow-y: auto; */
+}
+
+.page.close {
+  transition: all 0.6s;
+  width: calc((100vw * 41) / 48);
+  right: calc((100vw * 6) / 48);
+}
+
+.wrapper {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  .page.close {
+    transition: all 0.6s;
+    width: calc((100vw * 37) / 48);
+    right: calc((100vw * 10) / 48);
+  }
+}

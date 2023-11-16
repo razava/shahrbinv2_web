@@ -1,0 +1,168 @@
+/*  flexes  */
+.frc,
+.frs,
+.fre,
+.frsb,
+.frse,
+.frsa,
+.fcc,
+.fcs,
+.fce,
+.fcsb,
+.fcse,
+.fcsa {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.frs {
+  justify-content: flex-start;
+}
+
+.fre {
+  justify-content: flex-end;
+}
+
+.frsb {
+  justify-content: space-between;
+}
+
+.frse {
+  justify-content: space-evenly;
+}
+
+.frsa {
+  justify-content: space-around;
+}
+
+.fcc {
+  flex-direction: column;
+}
+
+.fcs {
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.fcs-2 {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.fce {
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.fcsb {
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.fcse {
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.fcsa {
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.fdr {
+  flex-direction: row;
+}
+
+.fdc {
+  flex-direction: column;
+}
+
+.fdrr {
+  flex-direction: row-reverse;
+}
+
+.fdcr {
+  flex-direction: column-reverse;
+}
+
+.al-s {
+  align-items: flex-start;
+}
+
+.al-e {
+  align-items: flex-end;
+}
+
+.al-st {
+  align-items: stretch;
+}
+
+.al-bs {
+  align-items: baseline;
+}
+
+.al-c {
+  align-items: center;
+}
+
+.ju-s {
+  justify-content: flex-start;
+}
+
+.ju-c {
+  justify-content: center;
+}
+
+.ju-e {
+  justify-content: flex-end;
+}
+
+.ju-sb {
+  justify-content: space-between;
+}
+
+.ju-sa {
+  justify-content: space-around;
+}
+
+.ju-se {
+  justify-content: space-evenly;
+}
+
+.ju-st {
+  justify-content: stretch;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-2 {
+  flex: 2;
+}
+
+.flex-3 {
+  flex: 3;
+}
+
+.flex-4 {
+  flex: 4;
+}
+
+.flex-5 {
+  flex: 5;
+}
+
+.flex-auto {
+  flex: auto;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.flexEven > * {
+  flex: 1;
+}

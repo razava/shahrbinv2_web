@@ -1,0 +1,19 @@
+.wrapper {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  width: 100%;
+  /* left: 1%; */
+  background-color: var(--white);
+  border-radius: 10px;
+  box-shadow: 0 0 6px 1px rgba(0, 0, 0, 0.1);
+  height: calc((100vh * 3) / 48);
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.wrapper.fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+}

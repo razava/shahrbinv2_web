@@ -1,0 +1,182 @@
+#root.lightTheme {
+  width: 100%;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #cdcdcd;
+  /* colors */
+  --primary: #144887;
+  --glassPrimary: #14488740;
+  --link: #66717e;
+  --cream: #c0b787;
+  /* --bg: #e9e9e9; */
+  --bg: #fff;
+  /* --bg: #fff; */
+  --text: #0e1621;
+  --border: #ddd;
+  --btnBg: #144887;
+  --btnText: #ffffff;
+  --lightBlue: #cedce9;
+  --darkBlue: #19525b;
+  --yellow: #ffcd08;
+  --secondary: #f6c507;
+  --mute: #e5eae7;
+  --dark: #0e1621;
+  --white: #ffffff;
+  --waiting: #f6830f;
+  --accepted: #83a95c;
+  --rejected: #a20a0ab0;
+  --success: #83a95c;
+  --glassSuccess: #83a95c40;
+  --error: #a20a0a;
+  --glassError: #a20a0a30;
+  /* sizes */
+  --headerHeight: 60px;
+  --sidebarWidth: 250px;
+  --scrollbarWidth: 15px;
+  /* z-indexes */
+  --z-sidebar: 99;
+  --z-header: 499;
+  --z-dropdown: 399;
+  --z-dialog: 699;
+  --z-dialog2: 698;
+  --z-datepicker: 799;
+  --z-overlay: 1000;
+  --z-scrollbar: 1200;
+  --rmsc-gray: #000;
+}
+
+#content.modal {
+  /* filter: blur(4px); */
+  /* position: fixed; */
+}
+
+#root.darkTheme {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--border);
+  /* colors */
+  --primary: #000;
+  --link: #66717e;
+  --cream: #c0b787;
+  --bg: #0a172c;
+  --text: #fff;
+  --border: #8b949e;
+  --btnBg: #30363d;
+  --btnText: #ffffff;
+  --inputBg: #0e1621;
+  --inputText: #ffffff;
+  --lightBlue: #51b5ec;
+  --darkBlue: #19525b;
+  --yellow: #ffcd08;
+  --mute: #d4d6b9;
+  --dark: #0e1621;
+  --white: #ffffff;
+  --waiting: #f6830f;
+  --accepted: #83a95c;
+  --success: #83a95c;
+  --rejected: #a20a0a;
+  --error: #a20a0a;
+  /* sizes */
+  --headerHeight: 60px;
+  --sidebarWidth: 250px;
+  --scrollbarWidth: 15px;
+  /* z-indexes */
+  --z-sidebar: 99;
+  --z-header: 499;
+  --z-dropdown: 399;
+  --z-dialog: 699;
+  --z-dialog2: 698;
+  --z-datepicker: 799;
+  --z-overlay: 1000;
+  --z-scrollbar: 1200;
+  --rmsc-gray: #000;
+}
+
+#modal-root.lightTheme {
+  /* width: 100%; */
+  /* height: 100vh; */
+  background-color: var(--glass);
+  display: none;
+  /* colors */
+  --primary: #144887;
+  --glassPrimary: #14488720;
+  --link: #66717e;
+  --cream: #c0b787;
+  --bg: #fff;
+  --text: #144887;
+  --border: #ddd;
+  --btnBg: #144887;
+  --btnText: #ffffff;
+  --inputBg: #ffffff;
+  --inputText: #0e1621;
+  --lightBlue: #cedce9;
+  --darkBlue: #19525b;
+  --yellow: #ffcd08;
+  --mute: #e5eae7;
+  --dark: #0e1621;
+  --white: #ffffff;
+  --waiting: #f6830f;
+  --accepted: #83a95c;
+  --rejected: #a20a0a;
+  --success: #83a95c;
+  --glassSuccess: #83a95ca0;
+  --error: #a20a0a;
+  --glassError: #a20a0aa0;
+  --glass: rgba(0, 0, 0, 0.3);
+  /* sizes */
+  --headerHeight: 60px;
+  --sidebarWidth: 250px;
+  --scrollbarWidth: 15px;
+  /* z-indexes */
+  --z-sidebar: 99;
+  --z-header: 499;
+  --z-dropdown: 399;
+  --z-dialog: 699;
+  --z-dialog2: 698;
+  --z-datepicker: 799;
+  --z-overlay: 1000;
+  --z-scrollbar: 1200;
+  --rmsc-gray: #000;
+}
+
+#modal-root.darkTheme {
+  width: 100%;
+  height: 100vh;
+  background-color: var(--glass);
+  display: none;
+  /* colors */
+  --primary: #000;
+  --link: #66717e;
+  --cream: #c0b787;
+  --bg: #0a172c;
+  --text: #fff;
+  --border: #8b949e;
+  --btnBg: #30363d;
+  --btnText: #ffffff;
+  --inputBg: #0e1621;
+  --inputText: #ffffff;
+  --lightBlue: #51b5ec;
+  --darkBlue: #19525b;
+  --yellow: #ffcd08;
+  --mute: #d4d6b9;
+  --dark: #0e1621;
+  --white: #ffffff;
+  --waiting: #f6830f;
+  --accepted: #83a95c;
+  --rejected: #a20a0a;
+  --error: #a20a0a;
+  /* sizes */
+  --headerHeight: 60px;
+  --sidebarWidth: 250px;
+  --scrollbarWidth: 15px;
+  /* z-indexes */
+  --z-sidebar: 99;
+  --z-header: 499;
+  --z-dropdown: 399;
+  --z-dialog: 699;
+  --z-dialog2: 698;
+  --z-datepicker: 799;
+  --z-overlay: 1000;
+  --z-scrollbar: 1200;
+  --rmsc-gray: #000;
+}

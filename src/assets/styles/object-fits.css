@@ -1,0 +1,8 @@
+/* object fit */
+.objfit-cover {
+  object-fit: cover;
+}
+
+.objfit-contain {
+  object-fit: contain;
+}

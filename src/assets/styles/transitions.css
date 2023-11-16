@@ -1,0 +1,8 @@
+/* transitions */
+.trans-1 {
+  transition: all 0.3s;
+}
+
+.trans-light {
+  transition: all 0.2s;
+}

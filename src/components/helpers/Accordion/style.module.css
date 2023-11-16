@@ -1,0 +1,28 @@
+.accordionWrapper {
+  width: 100%;
+}
+
+.accordionItem {
+}
+
+.accordionItemTitle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+
+.itemContent {
+  opacity: 0;
+  max-height: 0px;
+  overflow: hidden;
+  transition: all 0.4s;
+}
+
+.itemContent.active {
+  max-height: 300px;
+  height: auto;
+  /* transition: all 0.3s; */
+  opacity: 1;
+}

@@ -1,0 +1,40 @@
+/* border radiuses */
+.br0 {
+  border-radius: 0;
+}
+
+.br05 {
+  border-radius: 5px;
+}
+
+.br1 {
+  border-radius: 10px;
+}
+
+.br15 {
+  border-radius: 15px;
+}
+
+.br2 {
+  border-radius: 20px;
+}
+
+.br25 {
+  border-radius: 25px;
+}
+
+.br3 {
+  border-radius: 30px;
+}
+
+.br35 {
+  border-radius: 35px;
+}
+
+.br4 {
+  border-radius: 40px;
+}
+
+.br50 {
+  border-radius: 50%;
+}

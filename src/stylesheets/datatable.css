@@ -1,0 +1,95 @@
+.datatable {
+  width: 100%;
+  /* left: 1%; */
+  position: relative;
+  /* margin: 0 auto 20px auto; */
+  /* background-color: #fff; */
+  border-radius: 5px;
+  flex: 1;
+}
+
+.rdt_Table {
+  scrollbar-color: var(--primary) var(--border);
+  scrollbar-width: thin;
+}
+
+.datatable.withPagination {
+  border-radius: 5px 5px 0 0;
+}
+
+.pagination-icon {
+  font-size: 1.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rdt_TableRow {
+  cursor: pointer;
+}
+
+.rdt_TableCol,
+.rdt_TableCell {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+}
+
+.rdt_TableCell {
+  /* justify-content: flex-start; */
+}
+
+.rdt_TableCell > span {
+  padding: 2px 4px;
+  border-radius: 2px;
+  text-align: right;
+  font-size: 1.3rem;
+}
+
+.datatable div[role="heading"] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  width: 100%;
+  border-bottom: 1px solid #fff;
+}
+
+.rdt_Table {
+  border-radius: 10px 10px 0 0;
+}
+
+.rdt_TableHead {
+  border-radius: 10px 10px 0 0;
+  border-bottom: 2px solid var(--primary);
+}
+
+.rdt_TableHeadRow {
+  border-radius: 10px 10px 0 0;
+  background-color: #fff;
+  /* background-color: var(--primary) !important; */
+}
+
+.rdt_TableCol {
+  font-weight: 700 !important;
+  font-size: 1.5rem !important;
+  color: var(--primary) !important;
+}
+
+.rdt_TableBody::-webkit-scrollbar {
+  width: 8px;
+  background-color: var(--primary);
+}
+
+.rdt_TableBody::-webkit-scrollbar-track {
+  width: 8px;
+  background-color: var(--border);
+}
+
+.rdt_TableBody::-webkit-scrollbar-thumb {
+  width: 2px;
+  background-color: var(--primary);
+  border-radius: 4px;
+}

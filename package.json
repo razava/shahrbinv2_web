@@ -1,0 +1,69 @@
+{
+  "name": "shahrbin-admin",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": "https://api.shahrbin.parsicgroup.ir",
+  "homepage": "https://admin.parsicgroup.ir/",
+  "dependencies": {
+    "@ckeditor/ckeditor5-react": "^3.0.2",
+    "@hassanmojab/react-modern-calendar-datepicker": "^3.1.7",
+    "@microsoft/signalr": "^5.0.6",
+    "@moji7798/ckeditor5-custom-build": "^0.0.3",
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.3",
+    "@testing-library/user-event": "^12.6.2",
+    "axios": "^0.21.1",
+    "chart.js": "^3.7.0",
+    "chartjs-plugin-datalabels": "^2.0.0",
+    "dayjs": "^1.11.8",
+    "jalaliday": "^2.3.0",
+    "jwt-decode": "^3.1.2",
+    "mapbox-gl": "^1.13.0",
+    "moment-jalaali": "^0.9.2",
+    "nprogress": "^0.2.0",
+    "ol": "^6.5.0",
+    "react": "^17.0.1",
+    "react-chartjs-2": "^4.0.0",
+    "react-data-table-component": "^7.0.0-alpha-5",
+    "react-data-table-component-extensions": "^1.5.2",
+    "react-datepicker2": "^3.3.13",
+    "react-dom": "^17.0.1",
+    "react-lazy-load-image-component": "^1.5.1",
+    "react-mapbox-gl": "^5.1.1",
+    "react-multi-select-component": "^3.1.2",
+    "react-portal": "^4.2.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "^5.0.1",
+    "react-toastify": "^7.0.2",
+    "recharts": "^2.0.7",
+    "styled-components": "^5.2.1",
+    "web-vitals": "^0.2.4"
+  },
+  "scripts": {
+    "start": "set PORT=3000 && react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "react-error-overlay": "^6.0.9"
+  }
+}

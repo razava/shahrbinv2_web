@@ -1,0 +1,44 @@
+/* borders */
+.no-border {
+  border: 0;
+}
+
+.border-primary {
+  border: 1px solid var(--primary);
+}
+
+.border-mute {
+  border: 1px solid var(--mute);
+}
+
+.border-white {
+  border: 1px solid var(--white);
+}
+
+.border-dark {
+  border: 1px solid var(--dark);
+}
+
+.border-success {
+  border: 1px solid var(--success);
+}
+
+.border-error {
+  border: 1px solid var(--error);
+}
+
+.border-light {
+  border: 1px solid #ddd;
+}
+
+.border-color {
+  border: 1px solid var(--border);
+}
+
+.border-t-light {
+  border-top: 1px solid #ddd;
+}
+
+.border-b-light {
+  border-bottom: 1px solid #ddd;
+}

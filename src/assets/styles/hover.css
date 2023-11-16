@@ -1,0 +1,28 @@
+/* hover */
+.hv-light,
+.hv-mute,
+.hv-text {
+  transition: opacity 0.2s, background 0.2s;
+}
+
+.hv-light:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.hv-mute:hover {
+  background-color: #ddd;
+}
+
+.hv-text:hover {
+  opacity: 0.8;
+}
+
+.hv-primary:hover {
+  background-color: var(--glassPrimary);
+  color: var(--primary);
+  border-right: 5px solid var(--primary);
+}
+
+.hv-primary {
+  border-right: 5px solid transparent;
+}

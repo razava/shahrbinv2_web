@@ -1,0 +1,258 @@
+.page__sidepanel {
+  background-color: var(--primary);
+  position: fixed;
+  width: var(--sidebarWidth);
+  top: var(--headerHeight);
+  right: calc(100vw / 48);
+  height: 100vh;
+  transition: width 0.6s;
+}
+
+.sidepanel__close {
+  /* transition: width 0.3s; */
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: var(--primary);
+  font-size: 1.4rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--cream);
+  border-top: 1px solid var(--cream);
+}
+
+.sidepanel__lists,
+.sidepanel__list,
+.sidepanel__listItems,
+.icons__list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  opacity: 1;
+}
+
+.icons__list {
+  border-bottom: 1px solid var(--white);
+}
+
+.icons__list:last-child {
+  border-bottom: 0;
+}
+
+.sidepanel__lists {
+  max-height: calc(100vh - var(--headerHeight) - 50px);
+  overflow-y: auto;
+}
+
+.sidepanel__lists::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidepanel__lists::-webkit-scrollbar-track {
+  background-color: var(--cream);
+}
+
+.sidepanel__lists::-webkit-scrollbar-thumb {
+  background-color: var(--link);
+}
+
+.toggleLink {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.toggleCheckbox {
+  display: none;
+}
+
+.subList {
+  max-height: 0px;
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-right: 20px;
+  transition: all 0.3s;
+}
+
+.sublistShow {
+  transition: all 1s;
+  height: auto;
+  max-height: 200px;
+}
+
+.subListItem {
+  width: 90%;
+  margin: 5px 0;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s;
+  padding: 5px 10px;
+  border-radius: 15px 0 0 15px;
+  color: var(--white);
+}
+
+.subListItem:hover {
+  background-color: var(--white);
+  color: var(--primary);
+}
+
+.center {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidepanel__listTitle {
+  padding: 10px;
+  font-size: 1.6rem;
+  color: var(--white);
+}
+
+.sidepanel__listItem,
+.sidepanel__listItem_noHover {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: width 0.3s;
+  color: var(--white);
+  cursor: pointer;
+}
+
+.sidepanel__listItem label,
+.sidepanel__listItem_noHover label {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.hasSubList {
+  flex-direction: column;
+}
+
+/* .sidepanel__listItem:hover:not(.subListItem) {
+  width: 100%;
+} */
+
+.sidepanel__listItem:hover .sidepanel__itemName {
+  letter-spacing: 1px;
+}
+
+.sidepanel__itemIcon {
+  font-size: 1.3rem;
+  color: var(--white);
+}
+
+.active {
+  border-radius: 15px 0 0 15px;
+  background-color: var(--white);
+  color: var(--primary);
+}
+
+.activeIcon {
+  color: var(--yellow) !important;
+}
+
+.sidepanel__itemName {
+  margin-right: 10px;
+  transition: letter-spacing 0.3s;
+  font-size: 1.3rem;
+}
+
+.hide {
+  opacity: 0;
+}
+
+.sidepanel__list {
+  border-bottom: 1px solid var(--primary);
+}
+
+.sidepanel__listItems {
+  padding: 10px;
+}
+
+.sidepanel__listLinks {
+  width: 100%;
+}
+
+.sidepanelClose {
+  width: 50px;
+  transition: width 0.6s;
+}
+
+.pageClose {
+  transition: margin 0.6s;
+  margin-right: 50px;
+}
+
+.icon {
+  color: var(--white);
+  font-size: 1.4rem;
+  padding: 10px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .page__sidepanel {
+    z-index: var(--z-sidebar);
+  }
+
+  .page {
+    margin-right: 50px;
+  }
+}
+
+/* **************** bars ****************** */
+.bars {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  /* border: 1px solid var(--white); */
+  border-radius: 4px;
+}
+
+.bar {
+  position: relative;
+  width: 20px;
+  height: 2px;
+  background-color: var(--dark);
+  margin-bottom: 3px;
+  transition: transform 0.3s;
+}
+
+.bars.close > .bar1 {
+  transform: rotate(45deg);
+  top: 10px;
+  transition: transform 0.3s;
+  position: absolute;
+}
+
+.bars.close > .bar2 {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: transform 0.3s;
+}
+
+.bars.close > .bar3 {
+  transform: rotate(-45deg);
+  top: 10px;
+  transition: transform 0.3s;
+  position: absolute;
+}
