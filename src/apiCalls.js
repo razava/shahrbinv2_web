@@ -1436,6 +1436,19 @@ export class ComplaintsAPI {
       .catch((err) => err.response);
   }
 
+  static getFinishedComplaints(token, payload, source, instance) {
+    const initialUrl = `${prefix}/api/complaintTask/All?complaintStates=1&DeadlineReached=true`;
+    return axios
+      .get(initialUrl, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((res) => res)
+      .catch((err) => err.response);
+  }
+
   static getAllComplaints(token, payload, source, instance) {
     const initialUrl = `${prefix}/api/complaintTask/All`;
     return axios

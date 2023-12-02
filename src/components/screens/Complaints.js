@@ -7,7 +7,9 @@ import ComplaintDialog from "../commons/dataDisplay/ComplaintDialog";
 import DialogToggler from "../helpers/DialogToggler";
 import Tabs from "../helpers/Tabs";
 import TabLabel from "../helpers/Tabs/TabLabel";
-
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
 const modalRoot = document && document.getElementById("modal-root");
 const tabs = [
   {
@@ -19,6 +21,11 @@ const tabs = [
     id: "live",
     title: "در حال بررسی",
     caller: ComplaintsAPI.getLiveComplaints,
+  },
+  {
+    id: "finished",
+    title: "منقضی شده",
+    caller: ComplaintsAPI.getFinishedComplaints,
   },
 ];
 
@@ -38,6 +45,41 @@ const Complaints = () => {
   const [loading, setLoading] = useState(true);
 
   //   variables
+  const isTime5 = (time) => {
+    var now = dayjs().utc().format("YYYY-MM-DDTHH:mm:ss.SSSSSS");
+    if (!time) return false;
+    const targetTime = new Date(time).getTime();
+    const currentTime = new Date(now).getTime();
+    const timeDiff = targetTime - currentTime;
+    const diffDays = timeDiff / (1000 * 60);
+    return diffDays > 0 && diffDays < 7200 ? true : false;
+  };
+  const isTimePassed = (time) => {
+    var now = dayjs().utc().format("YYYY-MM-DDTHH:mm:ss.SSSSSS");
+    if (!time) return false;
+    const targetTime = new Date(time).getTime();
+    const currentTime = new Date(now).getTime();
+    const timeDiff = targetTime - currentTime;
+    return timeDiff < 0 ? true : false;
+  };
+  const conditionalRowStyles = [
+    {
+      when: (row) => isTimePassed(row.currentDeadline),
+      style: {
+        backgroundColor: "#fecaca",
+        color: "var(--dark)",
+        borderRight: "5px solid #FF0000",
+      },
+    },
+    {
+      when: (row) => isTime5(row.currentDeadline),
+      style: {
+        backgroundColor: "#f6c5078f",
+        color: "var(--dark)",
+        borderRight: "5px solid #f6c507",
+      },
+    },
+  ];
   const queries = {
     page,
     perPage: limit,
@@ -65,7 +107,7 @@ const Complaints = () => {
   };
 
   const tableScrollable = (window.innerHeight * 21) / 24 - 200;
-  
+
   //   functions
   const getComplaints = (caller = tabs[0].caller) => {
     setLoading(true);
@@ -152,6 +194,7 @@ const Complaints = () => {
         loading={loading}
         // filters={true}
         // filterTypes={{ query: true, from: true, to: true }}
+        conditionalRowStyles={conditionalRowStyles}
         onRowClicked={onRowClicked}
         fixedHeaders={true}
         fixedHeaderScrollHeight={tableScrollable + "px"}

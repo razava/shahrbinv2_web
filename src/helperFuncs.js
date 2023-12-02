@@ -505,7 +505,16 @@ export const hasRole = (userRoles = [], acceptedRoles = []) => {
 
 export const accessibilityByRoles = (path) => {
   if (path === "/admin/infos")
-    return ["Manager", "Mayor", "Executive", "Operator", "Admin", "Inspector"];
+    return [
+      "Manager",
+      "Mayor",
+      "Executive",
+      "Operator",
+      "Admin",
+      "Inspector",
+      "ComplaintInspector",
+      "ComplaintAdmin",
+    ];
   if (path === "/admin/newReports")
     return [
       "Manager",

@@ -1,6 +1,15 @@
 export const roles = {
   newReports: ["Operator", "Executive", "Contractor", "Inspector"],
-  infos: ["Manager", "Mayor", "Executive", "Operator", "Admin", "Inspector"],
+  infos: [
+    "Manager",
+    "Mayor",
+    "Executive",
+    "Operator",
+    "Admin",
+    "Inspector",
+    "ComplaintAdmin",
+    "ComplaintInspector",
+  ],
   userManager: ["Admin"],
   categories: ["Admin"],
   processes: ["Admin"],

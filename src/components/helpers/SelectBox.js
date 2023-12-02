@@ -39,7 +39,9 @@ const SelectBox = ({
       }
     }
   );
-
+  console.log(value);
+  
+  // console.log(options[0].id);
   return (
     <>
       {horizontal ? (
@@ -62,6 +64,7 @@ const SelectBox = ({
             </label>
           )}
           <select
+  
             value={value?.id ? value.id : value}
             disabled={disabled}
             onChange={handleChange(name)}
@@ -73,7 +76,19 @@ const SelectBox = ({
             <option value={""}>{placeholder}</option>
             {staticData &&
               options.map((o, i) => (
-                <option key={i} value={o.id} style={{backgroundColor: o?.level ? o.level == "up" ? "#87D37C" : "#f55353" : "white"}}>
+                <option
+                  key={i}
+                  value={o.id}
+                  // style={{
+                  //   color: o?.level
+                  //     ? o.level == "up"
+                  //       ? "rgba(8, 189, 17)"
+                  //       : "rgba(245, 29, 29)"
+                  //     : "white",
+                  // }}
+                  style={{ textAlign: o?.level && "right" }}
+                >
+                  {o?.level ? (o.level == "up" ? "⬆️" : "⬇️") : ""}
                   {handle.map((h, i) => o[h]).join(" ")}
                 </option>
               ))}

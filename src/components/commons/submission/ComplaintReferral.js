@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import Textarea from "../../helpers/Textarea";
 import TextInput from "../../helpers/TextInput";
@@ -42,7 +42,7 @@ const ComplaintReferral = ({
     var referOptions = upOptions.concat(downOptions);
     // console.log(referOptions);
   }
-
+  console.log(referralData);
   // variables
   const isDeadlineMandatory = referralData.referToId
     ? data.referToOptions.find(
@@ -120,6 +120,11 @@ const ComplaintReferral = ({
       requestEnded: () => setFinishLoading(false),
     });
   };
+  useEffect(() => {
+    setRefrerralData((prev) => {
+      return {...prev,referToId:referOptions[0].id}
+    } )
+  },[])
   return (
     <>
       <section className={styles.complaintRefferalWrapper}>
