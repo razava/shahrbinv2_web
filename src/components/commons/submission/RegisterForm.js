@@ -63,10 +63,17 @@ const RegisterForm = ({
   const getPayload = () => {
     let payload;
     if (edit) {
-      payload = new FormData();
-      Object.keys(formData).forEach((key) => {
-        payload.append(key, formData[key]);
-      });
+      // payload = new FormData();
+      const editedFormData = formData;
+      delete editedFormData.organization;
+      delete editedFormData.password;
+      delete editedFormData.userName;
+      delete editedFormData.phoneNumber;
+      // Object.keys(editedFormData).forEach((key) => {
+      //   payload.append(key, editedFormData[key]);
+      // });
+      payload = editedFormData
+      console.log(payload);
     } else {
       const selectedRoles = roles.map((role) => role.roleName);
       const selectedRegions = regions.map((region) => region.id);

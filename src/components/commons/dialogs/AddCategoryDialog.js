@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import styles from "../../../stylesheets/reportdialog.module.css";
-import { ConfigurationsAPI, ProcessesAPI } from "../../../apiCalls";
+import { CommonAPI, ConfigurationsAPI, ProcessesAPI } from "../../../apiCalls";
 import Button from "../../helpers/Button";
 import {
   constants,
@@ -13,6 +13,10 @@ import MultiSelect from "../../helpers/MultiSelect";
 import TextInput from "../../helpers/TextInput";
 import SelectBox from "../../helpers/SelectBox";
 import Textarea from "../../helpers/Textarea";
+import TreeSystem from "./TreeSystem";
+import AppContext, { AppStore } from "../../../store/AppContext";
+import { getCategoryById } from "../../../api/AdminApi";
+import { useQuery } from "@tanstack/react-query";
 
 const objectionValues = [
   {
@@ -35,6 +39,18 @@ const AddCategoryDialog = ({
   const isEditMode = mode === "edit";
 
   // data states
+  const { data, isLoading, isSuccess } = useQuery({
+    queryKey: ["categoryData", categoryId],
+    queryFn: () => getCategoryById(categoryId),
+    enabled: isEditMode,
+    onSuccess: (res) => {
+      setCategoryId2(res.parentId);
+      if (res.parentId != 1) {
+        setParent([{ id: res.parentId, title: findParenTitle(res.parentId) }]);
+      }
+    },
+  });
+  console.log(data);
   const [values, setValues] = useState({
     title: "",
     processId: "",
@@ -48,13 +64,47 @@ const AddCategoryDialog = ({
   const [processes, setProcesses] = useState([]);
   const [parents, setParents] = useState([]);
   const parentId = useRef(null);
-
+  const [store] = useContext(AppStore);
+  // const rootId = store.categories
+  console.log(store.initials.categories.id);
+  const [categoryDialog, setCategoryDialog] = useState(false);
+  const [categoryTitle2, setCategoryTitle2] = useState([]);
+  const [parent, setParent] = useState([]);
+  const [categoryId2, setCategoryId2] = useState(store.initials.categories.id);
   // main states
+  let categoryTitle;
+  store.initials.categories.categories.map((item) => {
+    if (item.id == categoryId) {
+      categoryTitle = item.title;
+      return item;
+    } else {
+      const a = item.categories.map((itm) => {
+        if (itm.id == categoryId) {
+          categoryTitle = itm.title;
+        }
+      });
+    }
+  });
   const [payload, setPayload] = useState(null);
-
+  console.log(categoryId2);
   // flags
   const [createRequest, setCreateRequest] = useState(false);
 
+  const onCategoriesSelected = (selecteds) => {
+    // if (selecteds.length > 0) {
+    if (selecteds.length > 0) {
+      const selected = selecteds[0];
+      setCategoryTitle2(selected.title);
+      setCategoryId2(selected.id);
+    }
+
+    // }
+    // else {
+    //   setCategoryTitle2("");
+    //   setCategoryId2(null);
+    // }
+  };
+  console.log(categoryId2);
   const getData = () => {
     const token = getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN);
 
@@ -65,30 +115,30 @@ const AddCategoryDialog = ({
       });
     });
     const parents = new Promise((resolve, reject) => {
-      ConfigurationsAPI.getCategories(token).then((res) => {
+      CommonAPI.getSubjectGroups(token).then((res) => {
         if (res && res.status === 200) resolve(res);
         else reject(res);
       });
     });
     return Promise.all([processes, parents]);
   };
-
+  // console.log(defaltValues);
   const fillInputs = () => {
-    parentId.current = defaltValues.parentId;
+    parentId.current = data.parentId;
     setValues({
-      title: defaltValues.title,
-      processId: defaltValues.processId,
-      order: defaltValues.order,
-      code: defaltValues.code,
-      responseDuration: defaltValues.responseDuration / 24,
-      duration: defaltValues.duration / 24,
-      description: defaltValues.description,
-      objectionAllowed: defaltValues.objectionAllowed ? 1 : 0,
+      title: data.title,
+      processId: data.processId,
+      order: data.order,
+      code: data.code,
+      responseDuration: data.responseDuration / 24,
+      duration: data.duration / 24,
+      description: data.description,
+      objectionAllowed: data.objectionAllowed ? 1 : 0,
     });
   };
 
   useEffect(() => {
-    if (isEditMode) {
+    if (isEditMode && data) {
       fillInputs();
     }
 
@@ -96,7 +146,7 @@ const AddCategoryDialog = ({
       setProcesses(res[0]?.data);
       setParents(res[1]?.data);
     });
-  }, []);
+  }, [data]);
 
   const onParentChange = (value) => {
     parentId.current = value && value[0]?.id;
@@ -111,15 +161,35 @@ const AddCategoryDialog = ({
       }
       setValues({ ...values, [name]: value });
     };
-
+  console.log(store.initials);
+  const findParenTitle = (parentId) => {
+    console.log(parentId);
+    if (parentId == 1) return "";
+    const categories = store.initials.categories;
+    let categoryTitle;
+    store.initials.categories.categories.map((item) => {
+      if (item.id == parentId) {
+        categoryTitle = item.title;
+        return item;
+      } else {
+        const a = item.categories.map((itm) => {
+          if (itm.id == parentId) {
+            categoryTitle = itm.title;
+          }
+        });
+      }
+    });
+    console.log(categoryTitle);
+    return categoryTitle;
+  };
   const createCategory = () => {
     const payload = {
       ...values,
       responseDuration: values.responseDuration * 24,
       duration: values.duration * 24,
       objectionAllowed: Number(values.objectionAllowed) === 1 ? true : false,
-      parentId: parentId.current,
-      processId: values.processId ? values.processId : null,
+      parentId: categoryId2,
+      processId: values.processId ? Number(values.processId) : null,
     };
     setPayload(payload);
     setCreateRequest(true);
@@ -135,6 +205,7 @@ const AddCategoryDialog = ({
     (res) => {
       setCreateRequest(false);
       const status = isEditMode ? 204 : 201;
+      console.log(res);
       if (res && res.status === status) {
         onSuccess();
       } else if (serverError(res)) return;
@@ -142,22 +213,28 @@ const AddCategoryDialog = ({
     },
     categoryId
   );
+  
+  const defaultSelected =
+    data?.parentId != 1
+      ? [{ id: data?.parentId, title: findParenTitle(data?.parentId) }]
+      : [];
   return (
     <>
-      <form className="w100 mx-a relative">
-        <div className="w100 mxa row">
-          <TextInput
-            value={values.title}
-            title="عنوان"
-            wrapperClassName="col-md-6 col-sm-12"
-            inputClassName=""
-            name="title"
-            onChange={handleChange}
-            required={false}
-          />
-          <MultiSelect
+      <>
+        <form className="w100 mx-a relative">
+          <div className="w100 mxa row">
+            <TextInput
+              value={values.title}
+              title="عنوان"
+              wrapperClassName="col-md-6 col-sm-12"
+              inputClassName=""
+              name="title"
+              onChange={handleChange}
+              required={false}
+            />
+            {/* <MultiSelect
             strings={{ label: "پدر" }}
-            caller={ConfigurationsAPI.getCategories}
+            caller={CommonAPI.getSubjectGroups}
             isStatic={false}
             wrapperClassName={"col-md-6 col-sm-12"}
             nameKey="title"
@@ -168,93 +245,125 @@ const AddCategoryDialog = ({
             defaultSelecteds={category ? [{ id: category.parentId }] : []}
             isInDialog={true}
             id="categories"
+          /> */}
+            {console.log(data?.parentId)}
+            <TreeSystem
+              isStatic
+              staticData={store.initials.categories}
+              condition={categoryDialog}
+              setCondition={setCategoryDialog}
+              onChange={onCategoriesSelected}
+              defaultSelecteds={parent}
+              singleSelect={true}
+              onClose={() => setCategoryDialog(false)}
+              mode="Add"
+              renderToggler={(selected) => (
+                <TextInput
+                  placeholder="انتخاب کنید."
+                  title="پدر"
+                  readOnly={true}
+                  onClick={() => setCategoryDialog(true)}
+                  wrapperClassName="col-md-6 col-sm-12 col-12"
+                  inputClassName="pointer"
+                  required={false}
+                  value={
+                    selected.length > 0
+                      ? selected[0].title
+                      : categoryId
+                      ? findParenTitle(data?.parentId)
+                      : ""
+                  }
+                />
+              )}
+            ></TreeSystem>
+          </div>
+
+          <div className="w100 mxa row">
+            <SelectBox
+              value={values.processId}
+              label="فرآیند"
+              caller={ConfigurationsAPI.getProcesses}
+              wrapperClassName="col-md-6 col-sm-12"
+              inputClassName=""
+              name="processId"
+              handleChange={handleChange}
+              required={false}
+            />
+            <SelectBox
+              value={values.objectionAllowed}
+              label="امکان تجدید نظر"
+              staticData={true}
+              options={objectionValues.map((v) => ({ ...v, id: v.value }))}
+              wrapperClassName="col-md-6 col-sm-12"
+              inputClassName=""
+              name="objectionAllowed"
+              handleChange={handleChange}
+              required={false}
+            />
+          </div>
+          <div className="w100 mxa row">
+            <TextInput
+              value={values.order}
+              title="ترتیب"
+              wrapperClassName="col-md-6 col-sm-12"
+              inputClassName=""
+              name="order"
+              onChange={handleChange}
+              required={false}
+            />
+            <TextInput
+              value={values.code}
+              title="کد"
+              wrapperClassName="col-md-6 col-sm-12"
+              inputClassName=""
+              name="code"
+              onChange={handleChange}
+              required={false}
+            />
+          </div>
+          <div className="w100 mxa row">
+            <TextInput
+              value={values.responseDuration}
+              title="ضرب‌العجل پاسخگویی"
+              wrapperClassName="col-md-6 col-sm-12"
+              inputClassName=""
+              name="responseDuration"
+              onChange={handleChange}
+              required={false}
+              placeholder="روز"
+            />
+            <TextInput
+              value={values.duration}
+              title="ضرب‌العجل اتمام"
+              wrapperClassName="col-md-6 col-sm-12"
+              inputClassName=""
+              name="duration"
+              onChange={handleChange}
+              required={false}
+              placeholder="روز"
+            />
+          </div>
+          <div className="w100 mxa row">
+            <Textarea
+              value={values.description}
+              title="توضیحات"
+              wrapperClassName="col-md-12"
+              inputClassName=""
+              name="description"
+              handleChange={handleChange}
+              required={false}
+            />
+          </div>
+        </form>
+        <div className="w100 mxa fre py1 px2 border-t-light mt1">
+          <Button
+            title={isEditMode ? "ویرایش دسته‌بندی" : "ایجاد دسته‌بندی"}
+            className="py1 br05 bg-primary"
+            onClick={createCategory}
+            loading={loading}
           />
         </div>
-        <div className="w100 mxa row">
-          <SelectBox
-            value={values.processId}
-            label="فرآیند"
-            caller={ConfigurationsAPI.getProcesses}
-            wrapperClassName="col-md-6 col-sm-12"
-            inputClassName=""
-            name="processId"
-            handleChange={handleChange}
-            required={false}
-          />
-          <SelectBox
-            value={values.objectionAllowed}
-            label="امکان تجدید نظر"
-            staticData={true}
-            options={objectionValues.map((v) => ({ ...v, id: v.value }))}
-            wrapperClassName="col-md-6 col-sm-12"
-            inputClassName=""
-            name="objectionAllowed"
-            handleChange={handleChange}
-            required={false}
-          />
-        </div>
-        <div className="w100 mxa row">
-          <TextInput
-            value={values.order}
-            title="ترتیب"
-            wrapperClassName="col-md-6 col-sm-12"
-            inputClassName=""
-            name="order"
-            onChange={handleChange}
-            required={false}
-          />
-          <TextInput
-            value={values.code}
-            title="کد"
-            wrapperClassName="col-md-6 col-sm-12"
-            inputClassName=""
-            name="code"
-            onChange={handleChange}
-            required={false}
-          />
-        </div>
-        <div className="w100 mxa row">
-          <TextInput
-            value={values.responseDuration}
-            title="ضرب‌العجل پاسخگویی"
-            wrapperClassName="col-md-6 col-sm-12"
-            inputClassName=""
-            name="responseDuration"
-            onChange={handleChange}
-            required={false}
-            placeholder="روز"
-          />
-          <TextInput
-            value={values.duration}
-            title="ضرب‌العجل اتمام"
-            wrapperClassName="col-md-6 col-sm-12"
-            inputClassName=""
-            name="duration"
-            onChange={handleChange}
-            required={false}
-            placeholder="روز"
-          />
-        </div>
-        <div className="w100 mxa row">
-          <Textarea
-            value={values.description}
-            title="توضیحات"
-            wrapperClassName="col-md-12"
-            inputClassName=""
-            name="description"
-            handleChange={handleChange}
-            required={false}
-          />
-        </div>
-      </form>
-      <div className="w100 mxa fre py1 px2 border-t-light mt1">
-        <Button
-          title={isEditMode ? "ویرایش دسته‌بندی" : "ایجاد دسته‌بندی"}
-          className="py1 br05 bg-primary"
-          onClick={createCategory}
-          loading={loading}
-        />
-      </div>
+      </>
     </>
   );
 };

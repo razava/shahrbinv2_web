@@ -44,13 +44,13 @@ const Poll = ({ match }) => {
     <>
       {loading && <Loader />}
       <Title title="نتایج نظرسنجی" size={1} />
-      {data.frequencies && (
+      {data.pollChoicesResults && (
         <MyPieChart
           data={[
-            data.frequencies.map((value) => {
+            data.pollChoicesResults.map((value) => {
               return {
-                name: value.item1.shortTitle,
-                value: parseInt(value.item2),
+                name: value.shortTitle,
+                value: value.percentage,
               };
             }),
           ]}

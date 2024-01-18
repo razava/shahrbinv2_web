@@ -79,18 +79,21 @@ const QuickAccess = ({ match }) => {
     getPolls();
   };
 
-  const deleteAccess = (accessId) => {
+  const deleteAccess = (accessId, isDeleted) => {
     setLoading(true);
-    callAPI({
-      caller: QuickAccessAPI.deleteAccess,
-      successStatus: 204,
-      payload: accessId,
-      successCallback: () => {
-        toast("عملیات با موفقیت انجام شد.", { type: "success" });
-        getPolls();
+    callAPI(
+      {
+        caller: QuickAccessAPI.editAccess,
+        successStatus: 204,
+        payload: { isDeleted: !isDeleted },
+        successCallback: () => {
+          toast("عملیات با موفقیت انجام شد.", { type: "success" });
+          getPolls();
+        },
+        requestEnded: () => setLoading(false),
       },
-      requestEnded: () => setLoading(false),
-    });
+      accessId
+    );
   };
 
   // renders
@@ -118,7 +121,7 @@ const QuickAccess = ({ match }) => {
       id: `quickaccess-2`,
       title: (row) => (row.isDeleted ? "بازیابی" : "حذف"),
       icon: (row) => (row.isDeleted ? "fas fa-times" : "fas fa-recycle"),
-      onClick: (row) => deleteAccess(row.id),
+      onClick: (row) => deleteAccess(row.id, row.isDeleted),
     },
   ];
 

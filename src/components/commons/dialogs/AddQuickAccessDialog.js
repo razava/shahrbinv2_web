@@ -1,5 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ConfigurationsAPI, QuickAccessAPI } from "../../../apiCalls";
+import {
+  CommonAPI,
+  ConfigurationsAPI,
+  QuickAccessAPI,
+} from "../../../apiCalls";
 import {
   callAPI,
   fixURL,
@@ -11,6 +15,8 @@ import TextInput from "../../helpers/TextInput";
 import useMakeRequest from "../../hooks/useMakeRequest";
 import styles from "../../../stylesheets/reportdialog.module.css";
 import Button from "../../helpers/Button";
+import { useMutation } from "@tanstack/react-query";
+import { postFiles } from "../../../api/commonApi";
 
 const AddQuickAccessDialog = ({
   setLoading = (f) => f,
@@ -38,7 +44,21 @@ const AddQuickAccessDialog = ({
   // flags
   const [createRequest, setCreateRequest] = useState(false);
   const [preview, setPreview] = useState(false);
+  const [tempFile, setTempFile] = useState("");
 
+  const uploadMutation = useMutation({
+    mutationKey: ["File"],
+    mutationFn: postFiles,
+    onSuccess: (res) => {
+      setImage(res.id);
+      showPreview(tempFile);
+    },
+    onError: (err) => {},
+  });
+  // functions
+  const openFilePicker = () => {
+    fileInputRef.current.click();
+  };
   const fillInputs = (data) => {
     parentId.current = data?.categoryId;
     setValues({
@@ -67,7 +87,11 @@ const AddQuickAccessDialog = ({
   const handleImageChange = (e) => {
     if (!e.target.files[0]) return;
     const file = e.target.files[0];
-
+    // const formData = new FormData();
+    // formData.append("File", file);
+    // formData.append("AttachmentType", 1);
+    // setTempFile(file);
+    // uploadMutation.mutate(formData);
     setImage(file);
     showPreview(file);
   };
@@ -131,7 +155,7 @@ const AddQuickAccessDialog = ({
         <div className="w100 mxa row">
           <MultiSelect
             strings={{ label: "دسته‌بندی" }}
-            caller={ConfigurationsAPI.getCategories}
+            caller={CommonAPI.getSubjectGroups}
             isStatic={false}
             nameKey="title"
             valueKey="id"

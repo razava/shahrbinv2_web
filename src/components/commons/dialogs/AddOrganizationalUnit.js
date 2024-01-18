@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import TextInput from "../../helpers/TextInput";
 import MultiSelect from "../../helpers/MultiSelect";
-import { OrganizationalUnitAPI } from "../../../apiCalls";
+import { OrganizationalUnitAPI, ProcessesAPI } from "../../../apiCalls";
 import styles from "../../../stylesheets/reportdialog.module.css";
 import Button from "../../helpers/Button";
 import useMakeRequest from "../../hooks/useMakeRequest";
 import { callAPI, serverError, unKnownError } from "../../../helperFuncs";
+import { set } from "nprogress";
 
 const AddOrganizationalUnit = ({
   setLoading = (f) => f,
@@ -69,6 +70,8 @@ const AddOrganizationalUnit = ({
   useEffect(() => {
     if (isEditMode) {
       getData();
+    } else {
+      setValues((prev) => ({ ...prev, userName: '', password: '' }));
     }
   }, []);
 
@@ -86,10 +89,9 @@ const AddOrganizationalUnit = ({
     const actorIds = values.actorIds.map((a) => (a.actorId ? a.actorId : a.id));
     const organizationalUnitIds = values.organizationalUnitIds.map((a) => a.id);
     const payload = {
-      id: organizationId,
       title: values.title,
-      actorIds,
-      organizationalUnitIds,
+      executiveActorsIds: actorIds,
+      organizationalUnitsIds: organizationalUnitIds,
       userName: values.userName,
       password: values.password,
     };
@@ -101,12 +103,12 @@ const AddOrganizationalUnit = ({
     isEditMode
       ? OrganizationalUnitAPI.updateUnit
       : OrganizationalUnitAPI.createUnit,
-    isEditMode ? 204 : 200,
+    isEditMode ? 204 : 201,
     createRequest,
     payload,
     (res) => {
       setCreateRequest(false);
-      const status = isEditMode ? 204 : 200;
+      const status = isEditMode ? 204 : 201;
       if (res && res.status === status) {
         onSuccess();
       } else if (serverError(res)) return;
@@ -116,7 +118,7 @@ const AddOrganizationalUnit = ({
   );
   return (
     <>
-      <form className="w90 mx-a relative fcc">
+      <form autoComplete="off" className="w90 mx-a relative fcc">
         <div className="w100 mxa row">
           <TextInput
             wrapperClassName="col-md-12"
@@ -131,7 +133,7 @@ const AddOrganizationalUnit = ({
         <div className="w100 mxa row">
           <MultiSelect
             strings={{ label: "واحدهای اجرایی" }}
-            caller={OrganizationalUnitAPI.getOrgansActors}
+            caller={ProcessesAPI.getExecutives}
             isStatic={false}
             nameKey="title"
             valueKey={"id"}
@@ -168,6 +170,7 @@ const AddOrganizationalUnit = ({
                 name="userName"
                 onChange={handleChange}
                 wrapperClassName="col-md-12"
+                id="userNameForOrg"
               />
             </div>
             <div className="w100 mxa row">

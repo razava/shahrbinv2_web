@@ -39,7 +39,19 @@ const EditReportDialog = ({ report = {}, onSuccess = (f) => f }) => {
   const [mapLoading, setMapLoading] = useState(false);
   const [loading, setLoading] = useState({ type: "", state: false });
   const [getLoading, setGetLoading] = useState(false);
-
+  let categoryTitle;
+  const category = store.initials.categories.categories.map((item) => {
+    if (item.id == report.categoryId) {
+      return item;
+    } else {
+      const a = item.categories.map((itm) => {
+        if (itm.id == report.categoryId) {
+          categoryTitle = itm.title;
+          // return itm.id;
+        }
+      });
+    }
+  });
   // functions
   const handleChange = (name) => (e) => {
     const value = e.target.value;
@@ -68,10 +80,11 @@ const EditReportDialog = ({ report = {}, onSuccess = (f) => f }) => {
     });
     setValues({ ...values, medias: newMedias });
   };
+  console.log(report);
 
   const getPayload = () => {
     const payload = new FormData();
-    payload.append("id", report.id);
+    // payload.append("id", report.id);
     payload.append("comments", values.comments);
     payload.append("address.detail", values.address);
     payload.append("address.latitude", values.coordinates.latitude);
@@ -85,23 +98,50 @@ const EditReportDialog = ({ report = {}, onSuccess = (f) => f }) => {
       .forEach((media, i) => {
         payload.append(`medias[${i}].id`, media.id);
       });
+    console.log(values);
+    return {
+      categoryId: values.category.id,
+      comments: values.comments,
+      isIdentityVisible: values.isIdentityVisible,
+      visibility: 0,
+      address: {
+        regionId: values.regionId,
+        street: "",
+        valley: "",
+        detail: values.address,
+        number: "",
+        postalCode: "",
+        latitude: values.coordinates.latitude,
+        longitude: values.coordinates.longitude,
+        elevation: 0,
+      },
+      attachments: values.medias
+        .filter((media) => !media.isDeleted)
+        .forEach((media, i) => media),
+    };
     return payload;
   };
 
   const editReport = ({ withRefer = false } = {}) => {
     const payload = getPayload();
     setLoading({ type: withRefer ? "editAndRefer" : "edit", state: true });
-    callAPI({
-      caller: ReportsAPI.updateReport,
-      successStatus: 204,
-      payload,
-      successCallback: () => {
-        toast("درخواست با موفقیت ویرایش شد", { type: "success" });
-        onSuccess({ withRefer, report });
+    callAPI(
+      {
+        caller: ReportsAPI.updateReport,
+        successStatus: 204,
+        payload,
+        successCallback: () => {
+          toast("درخواست با موفقیت ویرایش شد", { type: "success" });
+          onSuccess({ withRefer, report });
+        },
+        requestEnded: () =>
+          setLoading({
+            type: withRefer ? "editAndRefer" : "edit",
+            state: false,
+          }),
       },
-      requestEnded: () =>
-        setLoading({ type: withRefer ? "editAndRefer" : "edit", state: false }),
-    });
+      report?.id
+    );
   };
 
   const editAndReferReport = () => {
@@ -139,17 +179,17 @@ const EditReportDialog = ({ report = {}, onSuccess = (f) => f }) => {
         payload: report.id,
         successCallback: (res) => {
           setValues({
-            comments: res.data.report.comments || "",
-            address: res.data.report?.address?.detail || "",
+            comments: res.data.comments || "",
+            address: res.data.address?.detail || "",
             coordinates: {
-              latitude: res.data.report?.address?.latitude || null,
-              longitude: res.data.report?.address?.longitude || null,
+              latitude: res.data.address?.latitude || null,
+              longitude: res.data.address?.longitude || null,
             },
-            visibility: res.data.report.visibility || 0,
-            isIdentityVisible: res.data.report.isIdentityVisible || false,
-            medias: res.data.report.medias || [],
-            regionId: res.data.report.address?.regionId || "",
-            category: res.data.report.category || {},
+            visibility: res.data.visibility || 0,
+            isIdentityVisible: res.data.isIdentityVisible || false,
+            medias: res.data.medias || [],
+            regionId: res.data.address?.regionId || "",
+            category: res.data.category || {},
           });
         },
         requestEnded: (res) => {
@@ -189,8 +229,8 @@ const EditReportDialog = ({ report = {}, onSuccess = (f) => f }) => {
                 value={
                   selected.length > 0
                     ? selected[0].title
-                    : values.category.title
-                    ? values.category.title
+                    : categoryTitle
+                    ? categoryTitle
                     : ""
                 }
               />

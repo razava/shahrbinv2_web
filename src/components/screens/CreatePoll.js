@@ -15,6 +15,8 @@ import styles from "../../stylesheets/polls.module.css";
 import { useHistory, useLocation } from "react-router-dom";
 import { Fragment } from "react";
 import { AppStore } from "../../store/AppContext";
+import QuillEditor from "../helpers/QuillEditor";
+import ReactQuill from "react-quill";
 
 const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
   const [store] = useContext(AppStore);
@@ -36,7 +38,43 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
   const [isEditing, setIsEditing] = useState({ id: null, bool: false });
   const [steps, setSteps] = useState(initialSteps);
   const [mode, setMode] = useState("create");
+  console.log(pollData);
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      ["bold", "italic", "underline", "strike", "blockquote"],
+      [{ size: [] }],
+      [{ font: ["monospace"] }],
+      [{ align: ["right", "center", "justify"] }],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["link", "image"],
+      [{ color: ["red", "#785412"] }],
+      [{ background: ["red", "#785412"] }],
+    ],
+  };
 
+  const formats = [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "bullet",
+    "link",
+    "color",
+    "image",
+    "background",
+    "align",
+    "size",
+    "font",
+  ];
+
+  const [code, setCode] = useState("hellllo");
+  const handleProcedureContentChange = (content, delta, source, editor) => {
+    setTempContent(content);
+  };
   useEffect(() => {
     if (pollData) {
       setMode("edit");
@@ -225,19 +263,20 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
     setEditor(false);
     setRadio(false);
     setTempContent("");
-    if (currentStep === 1) {
-      const isSuccess = await createPoll();
-      if (isSuccess) {
-        stepForward();
-      } else {
-        toast("در ساختن نظرسنجی مشکلی پیش آمد. لطفا دوباره امتحان نمایید.", {
-          type: "error",
-        });
-        return;
-      }
-    } else {
-      stepForward();
-    }
+    // if (currentStep === 1) {
+    //   const isSuccess = await createPoll();
+    //   if (isSuccess) {
+    //     stepForward();
+    //   } else {
+    //     toast("در ساختن نظرسنجی مشکلی پیش آمد. لطفا دوباره امتحان نمایید.", {
+    //       type: "error",
+    //     });
+    //     return;
+    //   }
+    // } else {
+    //   stepForward();
+    // }
+    stepForward();
   };
 
   const editStep = (id) => (e) => {
@@ -253,6 +292,12 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
   };
 
   const onEditStep = (value, role, id) => {
+    console.log(
+      "🚀 ~ file: CreatePoll.js:258 ~ onEditStep ~ value, role, id:",
+      value,
+      role,
+      id
+    );
     if (role === "question") {
       setPollQuestion(value);
     } else if (role === "answer") {
@@ -282,9 +327,12 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
       };
     });
     const payload = {
-      id: pollId,
+      title: pollTitle,
+      pollType: Number(pollType),
+      // id: pollId,
       question: pollQuestion,
       choices,
+      isActive: true,
     };
     setPayload(payload);
     setPublishRequest(true);
@@ -300,9 +348,15 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
       })
     );
   };
+  console.log(steps);
+  console.log(pollAnswers);
+
+  console.log(pollQuestion);
+
+  console.log(pollAnswers);
 
   const [, publishLoading] = useMakeRequest(
-    PollAPI.publishPoll,
+    PollAPI.createPoll,
     204,
     publishRequest,
     payload,
@@ -318,7 +372,10 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
   return (
     <>
       {(loading || publishLoading) && <Loader />}
-      <div className="w100 mx-a px-4 frc" style={{height: window.innerHeight * 0.2}}>
+      <div
+        className="w100 mx-a px-4 frc"
+        style={{ height: window.innerHeight * 0.2, overflow: "auto" }}
+      >
         {mode === "create" && (
           <Button
             title="ایجاد نظرسنجی"
@@ -335,15 +392,18 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
           outline={!store.darkMode}
         />
       </div>
-      <div className="w100 mx-a px-4 of-auto-y scrollbar" style={{height: window.innerHeight * 0.8}}>
+      <div
+        className="w100 mx-a px-4 of-auto-y scrollbar"
+        style={{ height: window.innerHeight * 0.8 }}
+      >
         {steps
           .filter((step) => step.finished)
           .map((step, i) => {
             if (step.type === "editor") {
               return (
-                <Fragment key={i}>
+                <div key={i}>
                   <div className={styles.stepTitle}>{step.title}</div>
-                  <EditorContainer
+                  {/* <EditorContainer
                     isReadOnly={!step.writable}
                     content={
                       step.role === "question"
@@ -355,6 +415,17 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
                     setContent={(value) =>
                       onEditStep(value, step.role, step.id)
                     }
+                  /> */}
+
+                  <QuillEditor
+                    readOnly={!step.writable}
+                    data={
+                      step.role === "question"
+                        ? pollQuestion
+                        : pollAnswers[step.id - 4]
+                    }
+                    mode="step"
+                    setData={(data) => onEditStep(data, step.role, step.id)}
                   />
                   {step.role === "answer" && (
                     <input
@@ -373,7 +444,7 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
                       ? "تایید"
                       : "ویرایش"}
                   </Button>
-                </Fragment>
+                </div>
               );
             } else if (step.type === "input") {
               return (
@@ -391,12 +462,26 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
           })}
         {editor && (
           <>
+            {/* {console.log(tempContent)} */}
             <div className={styles.stepTitle}>{steps[currentStep].title}</div>
-            <EditorContainer
+            {/* <EditorContainer
               content={tempContent}
               setContent={setTempContent}
               pollId={pollId}
+            /> */}
+            <ReactQuill
+              theme="snow"
+              modules={modules}
+              formats={formats}
+              value={tempContent}
+              onChange={handleProcedureContentChange}
             />
+            {/* <QuillEditor
+              key={"fdsfsdf"}
+              data={tempContent}
+              setData={(data) => setTempContent(data)}
+            /> */}
+            <div></div>
             {steps[currentStep].role === "answer" && (
               <input
                 type="text"

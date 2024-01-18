@@ -1,13 +1,32 @@
-import React from "react";
-import { convertserverTimeToDateString } from "../../../helperFuncs";
+import React, { useEffect, useState } from "react";
+import { callAPI, convertserverTimeToDateString } from "../../../helperFuncs";
 import Accordion from "../../helpers/Accordion/Accordion";
 import Tabs from "../../helpers/Tabs";
 import ShowAttachments from "./ShowAttachments";
+import { ReportsAPI } from "../../../apiCalls";
 
 const minHeight = 120;
+const modal = document && document.getElementById("modal-root");
 
 const ReportHistory = ({ data }) => {
   console.log(data);
+  const [reportHistory, setReportHistory] = useState([]);
+  useEffect(() => {
+    if (data) {
+      getData();
+    }
+  }, [data]);
+  const getData = () => {
+    // setLoading(true);
+    console.log("data");
+    callAPI({
+      caller: ReportsAPI.getReportHistory,
+      payload: data?.id,
+      successCallback: (res) => setReportHistory(res.data),
+      errorCallback: () => modal.classList.remove("active"),
+      // requestEnded: () => setLoading(false),
+    });
+  };
   const renderAccordionContent = (item, index) => {
     return (
       <>
@@ -27,11 +46,15 @@ const ReportHistory = ({ data }) => {
     );
   };
 
-  const accordionData = data?.history.map((d, i) => ({
+  const accordionData = reportHistory.map((d, i) => ({
     title: (
       <>
-        <span>{i + 1} - {d.message}</span>
-        <span className="f1 ts-light">{convertserverTimeToDateString(d.dateTime)}</span>
+        <span>
+          {i + 1} - {d.message}
+        </span>
+        <span className="f1 ts-light">
+          {convertserverTimeToDateString(d.dateTime)}
+        </span>
       </>
     ),
     content: renderAccordionContent(d, i),

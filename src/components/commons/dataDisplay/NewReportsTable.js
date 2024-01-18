@@ -5,6 +5,7 @@ import DialogToggler from "../../helpers/DialogToggler";
 import {
   callAPI,
   defaultFilters,
+  doesExist,
   getUserRoles,
   hasRole,
   isTimePassed,
@@ -63,7 +64,7 @@ const NewReportsTable = ({ roleId = null, onRefer = (f) => f }) => {
       // dispatch({ type: "setFilters", payload: defaultFilters });
     };
   }, [roleId, page, limit, store.filters]);
-
+  console.log(data);
   const getTasks = (roleId) => {
     setLoading(true);
     callAPI(
@@ -121,7 +122,27 @@ const NewReportsTable = ({ roleId = null, onRefer = (f) => f }) => {
       modalRoot.classList.remove("active");
     }
   };
-
+  let categoryTitle;
+  const findCategory = (row) => {
+    const category = store.initials.categories.categories.map((item) => {
+      if (item.id == row.categoryId) {
+        categoryTitle = item.title;
+        return item;
+      } else {
+        const a = item.categories.map((itm) => {
+          if (itm.id == row.categoryId) {
+            categoryTitle = itm.title;
+          }
+        });
+      }
+    });
+    return categoryTitle;
+  };
+  reportColumn[1] = {
+    name: "زیر‌گروه موضوعی",
+    grow: 2,
+    cell: (row) => <span>{doesExist(findCategory(row))}</span>,
+  };
   // variables
   const conditionalRowStyles = [
     {

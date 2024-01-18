@@ -19,6 +19,8 @@ import TreeSystem from "../dialogs/TreeSystem";
 import Button from "../../helpers/Button";
 import Radio from "../../helpers/Radio/Radio";
 import { AppStore } from "../../../store/AppContext";
+import { useQuery } from "@tanstack/react-query";
+import { getReportById } from "../../../api/commonApi";
 
 const ConfirmReportDialog = ({
   report,
@@ -26,12 +28,29 @@ const ConfirmReportDialog = ({
   verifiedCallBack = (f) => f,
 }) => {
   // store
+  console.log(report.id);
   const [store] = useContext(AppStore);
   const regions = store.initials.regions;
-
+  const { data: ReportData, isLoading } = useQuery({
+    queryKey: ["ReportData", report.id],
+    queryFn: () => getReportById(report.id),
+  });
+  console.log(ReportData);
   // states
+  let categoryTitle;
+  store.initials.categories.categories.map((item) => {
+    if (item.id == report.categoryId) {
+      categoryTitle = item.title;
+      return item;
+    } else {
+      const a = item.categories.map((itm) => {
+        if (itm.id == report.categoryId) {
+          categoryTitle = itm.title;
+        }
+      });
+    }
+  });
   const [comments, setComments] = useState("");
-  const [categoryTitle, setCategoryTitle] = useState("");
   const [categoryId, setCategoryId] = useState(null);
   const [addressDetail, setAddressDetail] = useState("");
   const [regionId, setRegionId] = useState("");
@@ -48,6 +67,7 @@ const ConfirmReportDialog = ({
   const [mapLoading, setMapLoading] = useState(false);
   const [categoryDialog, setCategoryDialog] = useState(false);
 
+  const [categoryTitle2, setCategoryTitle2] = useState(categoryTitle);
   const onTextChange = (name) => (e) => {
     let value = e.target ? e.target.value : e;
     if (name === "comments") {
@@ -60,27 +80,29 @@ const ConfirmReportDialog = ({
   };
 
   useEffect(() => {
-    if (report) {
-      setComments(report.comments);
-      setCategoryTitle(report.category && report.category.title);
-      setCategoryId(report.category && report.category.id);
-      setAddressDetail(report.address && report.address.detail);
+    if (ReportData) {
+      console.log(ReportData);
+      setComments(ReportData.comments);
+      // setCategoryTitle(ReportData.category && ReportData.category.title);
+      setCategoryId(ReportData.categoryId);
+      setAddressDetail(ReportData.address && ReportData.address.detail);
       setCoordinates({
-        latitude: report.address && report.address.latitude,
-        longitude: report.address && report.address.longitude,
+        latitude: ReportData.address && ReportData.address.latitude,
+        longitude: ReportData.address && ReportData.address.longitude,
       });
-      setMedias(report.medias);
-      setRegionId(report.address?.regionId || "");
+      setMedias(ReportData.medias);
+      setRegionId(ReportData.address?.regionId || "");
+      console.log(ReportData.medias);
       setTempMedias(
-        report?.medias
-          ? report.medias.map((media) => {
+        ReportData?.medias
+          ? ReportData.medias.map((media) => {
               return { ...media, isDeleted: false };
             })
           : []
       );
     }
-  }, []);
-
+  }, [ReportData]);
+  console.log(tempMedias);
   const saveLocation = (address, coordinates, geofences) => {
     console.log(geofences);
     const regionId = findRegionId(regions, geofences);
@@ -122,36 +144,65 @@ const ConfirmReportDialog = ({
     payload.append("categoryId", categoryId);
     payload.append("visibility", isPublic);
     payload.append("id", report.id);
+    console.log(tempMedias);
     tempMedias
       .filter((media) => !media.isDeleted)
       .forEach((media, i) => {
         payload.append(`medias[${i}].id`, media.id);
       });
 
-    setPayload(payload);
+    // setPayload(payload);
+    setPayload({
+      categoryId: categoryId,
+      comments: comments,
+      address: {
+        regionId: regionId,
+        street: "",
+        valley: "",
+        detail: addressDetail,
+        number: "",
+        postalCode: "",
+        latitude: coordinates.latitude,
+        longitude: coordinates.longitude,
+        elevation: 0,
+      },
+      attachments: tempMedias
+        .filter((media) => !media.isDeleted)
+        .map((media, i) => media.id),
+      id: report.id,
+      visibility: isPublic,
+    });
     setVerifyRequest(true);
   };
 
   const [, loading] = useMakeRequest(
-    ReportsAPI.registerByOperator,
+    ReportsAPI.confirmRequestByOperator,
     200,
     verifyRequset,
     payload,
     (res) => {
       setVerifyRequest(false);
+      console.log(res);
       if (res && res.status === 200) {
+        console.log(res);
         setDialog(false);
         // modalRoot.classList.remove("active");
         verifiedCallBack(report);
       } else if (serverError(res)) return;
       else if (unKnownError(res)) return;
-    }
+    },
+    report.id
   );
 
   const onCategoriesSelected = (selecteds) => {
-    const selected = selecteds[0];
-    setCategoryTitle(selected.title);
-    setCategoryId(selected.id);
+    if (selecteds.length > 0) {
+      const selected = selecteds[0];
+      setCategoryTitle2(selected.title);
+      setCategoryId(selected.id);
+    } else {
+      setCategoryTitle2("");
+      setCategoryId(null);
+    }
   };
 
   const onVisibilityChange = (name) => (e) =>
@@ -171,123 +222,128 @@ const ConfirmReportDialog = ({
       title: "خصوصی",
     },
   ];
+  console.log(ReportData);
   return (
     <>
-      <div className={"w90 mxa frc row"}>
-        <div className="w100 mxa row frc">
-          <TextInput
-            wrapperClassName={"col-md-6 col-sm-12"}
-            value={addressDetail}
-            onChange={onTextChange}
-            name={"addressDetail"}
-            title="آدرس"
-            required={false}
-            icon="fas fa-map-marker-alt"
-            iconClassName="f15 text-color"
-            inputClassName="px2 pointer"
-            onClick={() => setMapDialog(true)}
-          >
-            <DialogToggler
-              condition={mapDialog}
-              setCondition={setMapDialog}
-              loading={mapLoading}
-              width={600}
-              height={600}
-              isUnique={false}
-              outSideClick={false}
-              fixedDimension={true}
-              id="select-on-map-confirm"
-            >
-              <SelectOnMapDialog
-                condition={mapDialog}
-                setCondition={setMapDialog}
-                setLoading={setMapLoading}
-                defaultCoordinates={coordinates}
-                saveChanges={saveLocation}
-                defaultAddress={addressDetail}
-                height={500 - 40}
-              />
-            </DialogToggler>
-          </TextInput>
-
-          <TreeSystem
-            isStatic
-            staticData={store.initials.categories}
-            condition={categoryDialog}
-            setCondition={setCategoryDialog}
-            onChange={onCategoriesSelected}
-            defaultSelected={[{ id: categoryId }]}
-            singleSelect={true}
-            onClose={() => setCategoryDialog(false)}
-            renderToggler={(selected) => (
+      {ReportData && (
+        <>
+          <div className={"w90 mxa frc row"}>
+            <div className="w100 mxa row frc">
               <TextInput
-                placeholder="انتخاب کنید."
-                title="گروه موضوعی"
-                readOnly={true}
-                onClick={() => setCategoryDialog(true)}
-                wrapperClassName="col-md-6 col-sm-12 col-12"
-                inputClassName="pointer"
+                wrapperClassName={"col-md-6 col-sm-12"}
+                value={addressDetail}
+                onChange={onTextChange}
+                name={"addressDetail"}
+                title="آدرس"
                 required={false}
-                value={
-                  selected.length > 0
-                    ? selected[0].title
-                    : categoryTitle
-                    ? categoryTitle
-                    : ""
-                }
-              />
-            )}
-          ></TreeSystem>
-        </div>
+                icon="fas fa-map-marker-alt"
+                iconClassName="f15 text-color"
+                inputClassName="px2 pointer"
+                onClick={() => setMapDialog(true)}
+              >
+                <DialogToggler
+                  condition={mapDialog}
+                  setCondition={setMapDialog}
+                  loading={mapLoading}
+                  width={600}
+                  height={600}
+                  isUnique={false}
+                  outSideClick={false}
+                  fixedDimension={true}
+                  id="select-on-map-confirm"
+                >
+                  <SelectOnMapDialog
+                    condition={mapDialog}
+                    setCondition={setMapDialog}
+                    setLoading={setMapLoading}
+                    defaultCoordinates={coordinates}
+                    saveChanges={saveLocation}
+                    defaultAddress={addressDetail}
+                    height={500 - 40}
+                  />
+                </DialogToggler>
+              </TextInput>
+              {console.log(categoryId)}
+              <TreeSystem
+                isStatic
+                staticData={store.initials.categories}
+                condition={categoryDialog}
+                setCondition={setCategoryDialog}
+                onChange={onCategoriesSelected}
+                defaultSelected={[{ id: categoryId }]}
+                singleSelect={true}
+                onClose={() => setCategoryDialog(false)}
+                renderToggler={(selected) => (
+                  <TextInput
+                    placeholder="انتخاب کنید."
+                    title="گروه موضوعی"
+                    readOnly={true}
+                    onClick={() => setCategoryDialog(true)}
+                    wrapperClassName="col-md-6 col-sm-12 col-12"
+                    inputClassName="pointer"
+                    required={false}
+                    value={
+                      selected.length > 0
+                        ? selected[0].title
+                        : categoryTitle2
+                        ? categoryTitle2
+                        : ""
+                    }
+                  />
+                )}
+              ></TreeSystem>
+            </div>
 
-        <div className={"w100 mxa frc row"}>
-          <SelectBox
-            staticData
-            options={store.initials.regions}
-            name="regionId"
-            value={regionId}
-            handleChange={onTextChange}
-            handle={["name"]}
-            label="منطقه"
-            wrapperClassName="col-md-6 col-sm-12 col-12"
-          />
-          <Radio
-            name="visibility"
-            id="visibility"
-            title={"نوع انتشار"}
-            options={visibilityOptions}
-            defaultStyles={true}
-            onChange={onVisibilityChange}
-            wrapperClassName="col-md-6 col-sm-12 col-12"
-          />
-        </div>
-        <div className="w100 mxa">
-          <Textarea
-            wrapperClassName="col-md-12"
-            inputClassName="flex-auto mh150"
-            value={showComments(comments)}
-            handleChange={onTextChange}
-            name="comments"
-            title="توضیحات"
-          />
-        </div>
-        <div className={"w90 mxa px1"}>
-          <label className={styles.infoLabel}>پیوست ها</label>
-          <ShowAttachments
-            medias={tempMedias}
-            isDeletable={true}
-            deleteHandler={deleteHandler}
-          />
-        </div>
-      </div>
-      <div className="w100 mxa fre py1 px2 border-t-light mt1">
-        <Button
-          title="تایید"
-          className="py1 br05 bg-primary"
-          onClick={verifyReport}
-          loading={loading}
-        />
-      </div>
+            <div className={"w100 mxa frc row"}>
+              <SelectBox
+                staticData
+                options={store.initials.regions}
+                name="regionId"
+                value={regionId}
+                handleChange={onTextChange}
+                handle={["name"]}
+                label="منطقه"
+                wrapperClassName="col-md-6 col-sm-12 col-12"
+              />
+              <Radio
+                name="visibility"
+                id="visibility"
+                title={"نوع انتشار"}
+                options={visibilityOptions}
+                defaultStyles={true}
+                onChange={onVisibilityChange}
+                wrapperClassName="col-md-6 col-sm-12 col-12"
+              />
+            </div>
+            <div className="w100 mxa">
+              <Textarea
+                wrapperClassName="col-md-12"
+                inputClassName="flex-auto mh150"
+                value={showComments(comments)}
+                handleChange={onTextChange}
+                name="comments"
+                title="توضیحات"
+              />
+            </div>
+            <div className={"w90 mxa px1"}>
+              <label className={styles.infoLabel}>پیوست ها</label>
+              <ShowAttachments
+                medias={tempMedias}
+                isDeletable={true}
+                deleteHandler={deleteHandler}
+              />
+            </div>
+          </div>
+          <div className="w100 mxa fre py1 px2 border-t-light mt1">
+            <Button
+              title="تایید"
+              className="py1 br05 bg-primary"
+              onClick={verifyReport}
+              loading={loading}
+            />
+          </div>
+        </>
+      )}
     </>
   );
 };

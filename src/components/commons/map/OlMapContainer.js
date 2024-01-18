@@ -47,7 +47,7 @@ function OlMapContainer({
     onMapClick();
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     if (map) {
       map.getView().setCenter(fromLonLat(center));
       feature.setCoordinates(fromLonLat(center));

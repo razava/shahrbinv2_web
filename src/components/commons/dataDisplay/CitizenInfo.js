@@ -4,23 +4,30 @@ import { doesExist } from "../../../helperFuncs";
 import Avatar from "./Avatar";
 import TextInput from "../../helpers/TextInput";
 import Textarea from "../../helpers/Textarea";
+import { useQuery } from "@tanstack/react-query";
+import { getCitizenInformation } from "../../../api/commonApi";
 
 const CitizenInfo = ({ data }) => {
+  const { data: citizenData, isLoading } = useQuery({
+    queryKey: ["citizenData", data.citizenId],
+    queryFn: () => getCitizenInformation(data.citizenId),
+  });
+  console.log(citizenData);
   return (
     <section className={styles.wrapper}>
       <figure className={styles.avatarContainer}>
         <Avatar
-          url={data?.avatar?.url}
-          placeholder={!data?.avatar}
+          url={citizenData?.avatar?.url}
+          placeholder={!citizenData?.avatar}
           size={6}
         />
       </figure>
       <section className={styles.infoList}>
         <TextInput
           value={
-            doesExist(data?.firstName) +
+            doesExist(citizenData?.firstName) +
             " " +
-            doesExist(data?.lastName)
+            doesExist(citizenData?.lastName)
           }
           readOnly={true}
           title="نام شهروند"
@@ -29,7 +36,7 @@ const CitizenInfo = ({ data }) => {
           required={false}
         />
         <TextInput
-          value={doesExist(data?.phoneNumber)}
+          value={doesExist(citizenData?.phoneNumber)}
           readOnly={true}
           title="تلفن همراه"
           wrapperClassName="mxa "
@@ -37,7 +44,7 @@ const CitizenInfo = ({ data }) => {
           required={false}
         />
         <Textarea
-          value={doesExist(data?.address?.detail)}
+          value={doesExist(citizenData?.address?.detail)}
           readOnly={true}
           title="آدرس شهروند"
           wrapperClassName="mxa "

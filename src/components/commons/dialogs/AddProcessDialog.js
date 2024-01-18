@@ -20,6 +20,7 @@ const AddProcessDialog = ({
   const [values, setValues] = useState({
     title: "",
     actorIds: [],
+    code: "",
   });
   const [defaultActors, setDefaultActors] = useState([]);
 
@@ -30,13 +31,18 @@ const AddProcessDialog = ({
   const [createRequest, setCreateRequest] = useState(false);
 
   const fillInputs = (data) => {
-    const actors =
-      data.stages.find((s) => s.name === "Executive")?.actors || [];
+    // const actors =
+    //   data.stages.find((s) => s.name === "Executive")?.actors || [];
+    console.log(data);
+    console.log(data.actorIds);
     setValues({
       title: data.title,
-      actorIds: actors,
+      actorIds: data.actorIds,
     });
-    setDefaultActors(actors);
+    const ac = data.actorIds.map((item) => {
+      return { id: item };
+    });
+    setDefaultActors(ac);
   };
 
   const getData = () => {
@@ -73,11 +79,12 @@ const AddProcessDialog = ({
     const payload = {
       title: values.title,
       actorIds,
+      code: values.code,
     };
     setPayload(payload);
     setCreateRequest(true);
   };
-
+  console.log(defaultActors);
   const [, loading] = useMakeRequest(
     isEditMode ? ProcessesAPI.updateProcess : ProcessesAPI.createProcess,
     isEditMode ? 204 : 201,
@@ -119,6 +126,17 @@ const AddProcessDialog = ({
             value={values.title}
             name="title"
             onChange={handleChange}
+          />
+        </div>
+        <div className="w100 mxa row">
+          <TextInput
+            value={values.code}
+            title="کد"
+            wrapperClassName="col-md-12"
+            inputClassName=""
+            name="code"
+            onChange={handleChange}
+            required={false}
           />
         </div>
       </form>

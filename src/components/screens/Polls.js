@@ -67,7 +67,7 @@ const Polls = ({ match }) => {
       queries
     );
   };
-
+  // console.log(data);
   const openCreatePollDialog = () => {
     setPollData(null);
     setCreatePollDialog(true);
@@ -80,6 +80,7 @@ const Polls = ({ match }) => {
   };
 
   const editPoll = (data) => {
+    console.log(data);
     setPollData(data);
     setCreatePollDialog(true);
   };
@@ -166,12 +167,12 @@ const Polls = ({ match }) => {
     }
   };
 
-  const changePollStatus = (id, action) => {
+  const changePollStatus = (id, isDeleted) => {
     setStatusLoading(true);
     callAPI(
       {
         caller: PollAPI.changePollStatus,
-        payload: action,
+        payload: { isDeleted: !isDeleted },
         successStatus: 204,
         successCallback: (res) => {
           toast("عملیات با موفقیت انجام شد.", { type: "success" });
@@ -222,7 +223,8 @@ const Polls = ({ match }) => {
         condition={createPollDialog}
         setCondition={setCreatePollDialog}
         width={window.innerWidth}
-        height={800}
+        // height={800}
+        fixHeight={800}
         isUnique={false}
         id="create-poll-dialog"
       >
@@ -239,7 +241,9 @@ const Polls = ({ match }) => {
         id="confirm-dialog"
       >
         <ConfirmDialog
-          onConfirm={() => changePollStatus(dialogData?.id, 3)}
+          onConfirm={() =>
+            changePollStatus(dialogData?.id, dialogData.isDeleted)
+          }
           onCancel={() => handleDialog("close", null)}
           message="آیا از انجام این عملیات اطمینان دارید؟"
         />

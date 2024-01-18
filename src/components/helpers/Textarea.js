@@ -13,6 +13,7 @@ const Textarea = ({
   labelClassName = "",
   readOnly = false,
   defaultStyles = true,
+  required = false,
 }) => {
   return (
     <div
@@ -34,14 +35,14 @@ const Textarea = ({
         </label>
       )}
       <textarea
+        required={required}
         value={value}
         name={name}
         id={name}
         style={{ resize: "vertical" }}
-        className={[
-          defaultStyles ? styles.input : "",
-          inputClassName,
-        ].join(" ")}
+        className={[defaultStyles ? styles.input : "", inputClassName].join(
+          " "
+        )}
         onChange={handleChange(name)}
         placeholder={placeholder}
         readOnly={readOnly}

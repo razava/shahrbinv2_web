@@ -36,7 +36,7 @@ const CategoryForm = ({ data }) => {
 
   // get data to select from
   const getOptions = () => {
-    const promises = data?.report?.category?.formElements
+    const promises = data?.category?.formElements
       .filter((f) => f.formElementType === 3 || f.formElementType === 2)
       .map((f) => {
         return new Promise((resolve, reject) => {
@@ -61,10 +61,10 @@ const CategoryForm = ({ data }) => {
   // get citizen request input values and store them
   const getCitizenValues = () => {
     let citizenValues = JSON.parse(
-      String(data?.report?.comments).replace(/\[JSON\]/, "")
+      String(data?.comments).replace(/\[JSON\]/, "")
     );
     // citizenValues = Array.isArray(citizenValues) ? citizenValues : [];
-    const formElements = data?.report?.category?.formElements;
+    const formElements = data?.category?.formElements;
     const textElements = formElements.filter((f) => f.formElementType === 1);
     const selectElements = formElements.filter((f) => f.formElementType === 2);
     const multiSelectElements = formElements.filter(
@@ -218,12 +218,12 @@ const CategoryForm = ({ data }) => {
       } else if (serverError(res)) return;
       else if (unKnownError(res)) return;
     },
-    data?.report?.id
+    data?.id
   );
   return (
     <>
       <div className="w90 mxa fcc">
-        {data?.report?.category?.formElements.map((formElement) => {
+        {data?.category?.formElements.map((formElement) => {
           if (formElement.formElementType === 2) {
             return (
               <SelectBox

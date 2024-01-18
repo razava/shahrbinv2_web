@@ -8,6 +8,7 @@ import { CommonAPI } from "./apiCalls";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import jalaliday from "jalaliday";
+import jwtDecode from "jwt-decode";
 
 moment.loadPersian({ usePersianDigits: true });
 dayjs.extend(jalaliday);
@@ -45,6 +46,8 @@ export const mapUrlToNav = (location, replace) => {
   else if (area === "/processes") return { processes: true };
   else if (area === "/violations") return { violations: true };
   else if (area === "/quickAccess") return { quickAccess: true };
+  else if (area === "/FAQ") return { FAQ: true };
+  else if (area === "/news") return { news: true };
   else if (area === "/allComplaints") return { allComplaints: true };
   else if (area === "/complaints") return { complaints: true };
   else if (area === "/organizationalUnits")
@@ -320,17 +323,35 @@ export const logout = (callback) => {
 };
 
 export const signUserIn = (res, history) => {
-  saveToLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN, res.data.token);
+  console.log(res);
+  const decoded = jwtDecode(res.data);
+  console.log(decoded, "tok");
+  console.log();
+  let time = new Date(decoded.exp);
+  const seconds = decoded.exp; // This is an example timestamp in seconds
+  const milliseconds = seconds * 1000; // Convert seconds to milliseconds
+  const date = new Date(milliseconds); // Create a date object from the milliseconds
+  const formattedDate = date.toISOString(); // Format the date object to ISO string
+  console.log(formattedDate);
+  // new Date().toISOString();
+  // ("2016-06-03T23:15:33.008Z");
+  saveToLocalStorage(
+    constants.SHAHRBIN_MANAGEMENT_INSTANCE_ID,
+    decoded["instance_id"]
+  );
+  saveToLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN, res.data);
   saveToLocalStorage(
     constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN_EXPIRATION,
-    res.data.expiration
+    formattedDate
   );
-  saveToLocalStorage(constants.SHAHRBIN_MANAGEMENT_USER_ROLES, res.data.roles);
-  saveToLocalStorage(
-    constants.SHAHRBIN_MANAGEMENT_LOGIN_TIME,
-    res.data.currentTime
-  );
-  const roles = res.data.roles;
+  saveToLocalStorage(constants.SHAHRBIN_MANAGEMENT_USER_ROLES, [
+    decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"],
+  ]);
+  const currentTime = new Date().toISOString();
+  saveToLocalStorage(constants.SHAHRBIN_MANAGEMENT_LOGIN_TIME, currentTime);
+  const roles =
+    decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+  console.log(roles);
   // const to = isManager(res.data.roles) ? appRoutes.infos : appRoutes.newReports;
   const to = hasRole(["Mayor", "Manager", "Admin"], roles)
     ? "/admin/infos"
@@ -339,6 +360,7 @@ export const signUserIn = (res, history) => {
     : hasRole(["ComplaintAdmin"], roles)
     ? "/admin/complaints-categories"
     : "/admin/newReports";
+  console.log(to);
   history.push(to);
 };
 
@@ -544,6 +566,8 @@ export const accessibilityByRoles = (path) => {
   if (path === "/admin/organizationalUnits") return ["Admin"];
   if (path === "/admin/violations") return ["Operator"];
   if (path === "/admin/quickAccess") return ["Admin"];
+  if (path === "/admin/FAQ") return ["Admin"];
+  if (path === "/admin/news") return ["Admin"];
   if (path === "/admin/complaints") return ["ComplaintInspector"];
   if (path === "/admin/allComplaints") return ["ComplaintInspector"];
   if (path === "/admin/complaints-categories") return ["ComplaintAdmin"];
@@ -804,8 +828,9 @@ export const callAPI = (
   ...args
 ) => {
   const token = getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN);
-  const instance =
-    getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_INSTANCE) || {id: 0};
+  const instance = getFromLocalStorage(
+    constants.SHAHRBIN_MANAGEMENT_INSTANCE
+  ) || { id: 0 };
   const source = axios.CancelToken.source();
   caller(token, payload, source, instance, ...args)
     .then((res) => {
@@ -847,6 +872,7 @@ export const constants = {
   SHAHRBIN_MANAGEMENT_USER_ROLES: "SHAHRBIN_MANAGEMENT_USER_ROLES",
   SHAHRBIN_MANAGEMENT_LOGIN_TIME: "SHAHRBIN_MANAGEMENT_LOGIN_TIME",
   SHAHRBIN_MANAGEMENT_INSTANCE: "SHAHRBIN_MANAGEMENT_INSTANCE",
+  SHAHRBIN_MANAGEMENT_INSTANCE_ID: "SHAHRBIN_MANAGEMENT_INSTANCE_ID",
 };
 
 export const appRoutes = {
@@ -866,6 +892,8 @@ export const appRoutes = {
   organizationalUnits: "/admin/organizationalUnits",
   violations: "/admin/violations",
   quickAccess: "/admin/quickAccess",
+  FAQ: "/admin/FAQ",
+  news: "/admin/news",
   complaintsCategories: "/admin/complaints-categories",
   complaintsUnits: "/admin/complaints-units",
   login: "/",
@@ -973,6 +1001,7 @@ export const getDatePickerFormat = (date) => {
 
 export const createQueryParams = (url, queries = {}) => {
   const myUrl = new URL(url);
+  // let params = new URLSearchParams()
   const {
     fromDate,
     toDate,
@@ -985,11 +1014,12 @@ export const createQueryParams = (url, queries = {}) => {
     perPage,
     statuses,
   } = queries;
+  console.log(query);
   if (page) myUrl.searchParams.append("PageNumber", page);
   if (perPage) myUrl.searchParams.append("PageSize", perPage);
   if (fromDate) myUrl.searchParams.append("SentFromDate", fromDate);
   if (toDate) myUrl.searchParams.append("SentToDate", toDate);
-  if (query) myUrl.searchParams.append("Query", query);
+  if (query) myUrl.searchParams.set("Query", query);
   if (categoryIds && categoryIds.length > 0)
     categoryIds.forEach((c) => myUrl.searchParams.append("CategoryIds", c));
   if (organs && organs.length > 0)
@@ -1002,7 +1032,8 @@ export const createQueryParams = (url, queries = {}) => {
     statuses.forEach((r) =>
       myUrl.searchParams.append("CurrentStates", r.value)
     );
-
+  const updatedUrl = myUrl.toString();
+  console.log(updatedUrl);
   return myUrl;
 };
 

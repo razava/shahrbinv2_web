@@ -19,6 +19,7 @@ const DialogToggler = ({
   data = {},
   width = 400,
   height,
+  fixHeight,
   children,
   isUnique = true,
   loading = false,
@@ -149,7 +150,7 @@ const DialogToggler = ({
         maxWidth: width + "px",
         width: "100%",
         maxHeight: height ? height + "px" : "auto",
-        height: height ? "100%" : "auto",
+        height: height ? "100%" : fixHeight ? fixHeight : "auto",
       }
     : {};
 

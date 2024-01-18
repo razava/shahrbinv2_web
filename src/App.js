@@ -9,6 +9,9 @@ import AuthorizeRoute from "./components/commons/authorization/AuthorizeRoute";
 import { appRoutes } from "./helperFuncs";
 import Progress from "./components/helpers/Progress/PageProgress";
 import useInitials from "./components/hooks/useInitials";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import FAQ from "./components/screens/FAQ";
+import News from "./components/screens/News";
 const NewReports = lazy(() => import("./components/screens/NewReports"));
 const RegisterReport = lazy(() =>
   import("./components/screens/RegisterReport")
@@ -37,94 +40,104 @@ const ComplaintsCategories = lazy(() =>
 const ComplaintsUnits = lazy(() =>
   import("./components/screens/ComplaintsUnits")
 );
-
+const queryClient = new QueryClient();
 const App = () => {
   useInitials();
   return (
     <>
-      <ToastContainer newestOnTop={true} rtl={true} className="f15" />
-      <div id="content">
-        <Suspense fallback={<Progress />}>
-          <Switch>
-            <Route path="/admin">
-              <Header />
-              <SideBar />
-              <Suspense fallback={<Progress />}>
-                <Layout>
-                  <Switch>
-                    <AuthorizeRoute
-                      path={appRoutes.newReports}
-                      component={NewReports}
-                    />
-                    <AuthorizeRoute
-                      path={appRoutes.complaints}
-                      component={Complaints}
-                    />
-                    <AuthorizeRoute
-                      path={appRoutes.allComplaints}
-                      component={AllComplaints}
-                    />
-                    <AuthorizeRoute path={appRoutes.infos} component={Infos} />
-                    <AuthorizeRoute
-                      path={appRoutes.registerReport}
-                      component={RegisterReport}
-                    />
-                    <AuthorizeRoute
-                      path={appRoutes.reports}
-                      component={Reports}
-                    />
-                    <AuthorizeRoute
-                      path={appRoutes.contractors}
-                      component={Contractors}
-                    />
-                    <AuthorizeRoute
-                      path={appRoutes.manageUsers}
-                      component={ManageUsers}
-                    />
-                    <AuthorizeRoute path={appRoutes.polls} component={Polls} />
-                    <AuthorizeRoute path={appRoutes.poll} component={Poll} />
-                    <AuthorizeRoute
-                      path={appRoutes.comments}
-                      component={Comments}
-                    />
-                    <AuthorizeRoute
-                      path={appRoutes.categories}
-                      component={AddCategory}
-                    />
-                    <AuthorizeRoute
-                      path={appRoutes.processes}
-                      component={Processes}
-                    />
-                    <AuthorizeRoute
-                      path={appRoutes.organizationalUnits}
-                      component={OrganizationalUnits}
-                    />
-                    <AuthorizeRoute
-                      path={appRoutes.violations}
-                      component={Violations}
-                    />
-                    <AuthorizeRoute
-                      path={appRoutes.quickAccess}
-                      component={QuickAccess}
-                    />
-                    <AuthorizeRoute
-                      path={appRoutes.complaintsCategories}
-                      component={ComplaintsCategories}
-                    />
-                    <AuthorizeRoute
-                      path={appRoutes.complaintsUnits}
-                      component={ComplaintsUnits}
-                    />
-                  </Switch>
-                </Layout>
-              </Suspense>
-            </Route>
+      <QueryClientProvider client={queryClient}>
+        <ToastContainer newestOnTop={true} rtl={true} className="f15" />
+        <div id="content">
+          <Suspense fallback={<Progress />}>
+            <Switch>
+              <Route path="/admin">
+                <Header />
+                <SideBar />
+                <Suspense fallback={<Progress />}>
+                  <Layout>
+                    <Switch>
+                      <AuthorizeRoute
+                        path={appRoutes.newReports}
+                        component={NewReports}
+                      />
+                      <AuthorizeRoute
+                        path={appRoutes.complaints}
+                        component={Complaints}
+                      />
+                      <AuthorizeRoute
+                        path={appRoutes.allComplaints}
+                        component={AllComplaints}
+                      />
+                      <AuthorizeRoute
+                        path={appRoutes.infos}
+                        component={Infos}
+                      />
+                      <AuthorizeRoute
+                        path={appRoutes.registerReport}
+                        component={RegisterReport}
+                      />
+                      <AuthorizeRoute
+                        path={appRoutes.reports}
+                        component={Reports}
+                      />
+                      <AuthorizeRoute
+                        path={appRoutes.contractors}
+                        component={Contractors}
+                      />
+                      <AuthorizeRoute
+                        path={appRoutes.manageUsers}
+                        component={ManageUsers}
+                      />
+                      <AuthorizeRoute
+                        path={appRoutes.polls}
+                        component={Polls}
+                      />
+                      <AuthorizeRoute path={appRoutes.poll} component={Poll} />
+                      <AuthorizeRoute
+                        path={appRoutes.comments}
+                        component={Comments}
+                      />
+                      <AuthorizeRoute
+                        path={appRoutes.categories}
+                        component={AddCategory}
+                      />
+                      <AuthorizeRoute
+                        path={appRoutes.processes}
+                        component={Processes}
+                      />
+                      <AuthorizeRoute
+                        path={appRoutes.organizationalUnits}
+                        component={OrganizationalUnits}
+                      />
+                      <AuthorizeRoute
+                        path={appRoutes.violations}
+                        component={Violations}
+                      />
+                      <AuthorizeRoute
+                        path={appRoutes.quickAccess}
+                        component={QuickAccess}
+                      />
+                      <AuthorizeRoute path={appRoutes.FAQ} component={FAQ} />
+                      <AuthorizeRoute path={appRoutes.news} component={News} />
+                      <AuthorizeRoute
+                        path={appRoutes.complaintsCategories}
+                        component={ComplaintsCategories}
+                      />
+                      <AuthorizeRoute
+                        path={appRoutes.complaintsUnits}
+                        component={ComplaintsUnits}
+                      />
+                    </Switch>
+                  </Layout>
+                </Suspense>
+              </Route>
 
-            <Route path={appRoutes.login} component={Login} />
-            <Route component={NotFound} />
-          </Switch>
-        </Suspense>
-      </div>
+              <Route path={appRoutes.login} component={Login} />
+              <Route component={NotFound} />
+            </Switch>
+          </Suspense>
+        </div>
+      </QueryClientProvider>
     </>
   );
 };

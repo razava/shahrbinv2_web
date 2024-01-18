@@ -6,7 +6,8 @@ import { useHistory, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "./Loader";
 import styles from "../../stylesheets/polls.module.css";
-
+import { constants, getFromLocalStorage } from "../../helperFuncs";
+// import { Base64UploadAdapter } from "@ckeditor/ckeditor5-upload";
 const EditorContainer = ({
   content,
   setContent,
@@ -21,6 +22,7 @@ const EditorContainer = ({
   const [makeSaveRequest, setMakeSaveRequest] = useState(false);
 
   const handleEditorChange = (event, editor) => {
+    console.log(editor.getData());
     setContent(editor.getData());
   };
 
@@ -34,17 +36,16 @@ const EditorContainer = ({
           disabled={isReadOnly}
           config={{
             isReadOnly: isReadOnly,
-            ckfinder: {
-              headers: {
-                "X-CSRF-TOKEN": "CSRF-Token",
-                Authorization: `Bearer `,
-              },
-              uploadUrl: `${
-                process.env.NODE_ENV === "development"
-                  ? ""
-                  : process.env.REACT_APP_API_URL
-              }/api/Polls/${pollId}/Attach`,
-            },
+            // plugins: [Base64UploadAdapter],
+            // ckfinder: {
+            //   headers: {
+            //     "X-CSRF-TOKEN": "CSRF-Token",
+            //     Authorization: `Bearer ${getFromLocalStorage(
+            //       constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN
+            //     )}`,
+            //   },
+            //   uploadUrl: `${process.env.REACT_APP_API_URL}/api/Files/${pollId}/Attach`,
+            // },
             language: {
               ui: "fa",
               content: "fa",

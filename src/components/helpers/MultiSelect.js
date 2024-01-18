@@ -51,7 +51,20 @@ const MultiSelect = ({
   const [loading, setLoading] = useState(false);
 
   const [isActive, setIsActive] = useClick(clickRef, "click", [selectListRef]);
+  let flatData = [];
+  const flat = (data) => {
+    data.categories.map((item) => {
+      flatData.push(item);
+      if (item.categories) {
+        flat(item);
+      }
+    });
+  };
+  const getFlatData = (Data) => {
+    flat(Data);
 
+    return flatData;
+  };
   const getData = () => {
     setLoading(true);
     callAPI(
@@ -59,14 +72,20 @@ const MultiSelect = ({
         caller: caller,
         requestEnded: () => setLoading(false),
         successCallback: (res) => {
-          setData(res.data);
+          if (id == "categories") {
+            const flatData = getFlatData(res.data);
+            console.log(flatData);
+            setData(flatData);
+          } else {
+            setData(res.data);
+          }
         },
         errorCallback: (res) => setOptions([]),
       },
       ...requestArgs
     );
   };
-
+  console.log(data);
   const formatData = (data, shouldUpdate = true) => {
     const options = data.map((d, i) => {
       return { ...d, selected: false };

@@ -6,9 +6,11 @@
   "homepage": "https://admin.parsicgroup.ir/",
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^3.0.2",
+    "@ckeditor/ckeditor5-upload": "^40.2.0",
     "@hassanmojab/react-modern-calendar-datepicker": "^3.1.7",
     "@microsoft/signalr": "^5.0.6",
     "@moji7798/ckeditor5-custom-build": "^0.0.3",
+    "@tanstack/react-query": "^4.29.3",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
     "@testing-library/user-event": "^12.6.2",
@@ -22,16 +24,17 @@
     "moment-jalaali": "^0.9.2",
     "nprogress": "^0.2.0",
     "ol": "^6.5.0",
-    "react": "^17.0.1",
+    "react": "^18.2.0",
     "react-chartjs-2": "^4.0.0",
     "react-data-table-component": "^7.0.0-alpha-5",
     "react-data-table-component-extensions": "^1.5.2",
     "react-datepicker2": "^3.3.13",
-    "react-dom": "^17.0.1",
+    "react-dom": "^18.2.0",
     "react-lazy-load-image-component": "^1.5.1",
     "react-mapbox-gl": "^5.1.1",
     "react-multi-select-component": "^3.1.2",
     "react-portal": "^4.2.1",
+    "react-quill": "^2.0.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^5.0.1",
     "react-toastify": "^7.0.2",
@@ -64,6 +67,7 @@
     ]
   },
   "devDependencies": {
-    "react-error-overlay": "^6.0.9"
+    "react-error-overlay": "^6.0.9",
+    "tailwindcss": "^3.3.6"
   }
 }

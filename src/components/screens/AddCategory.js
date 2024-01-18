@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { ConfigurationsAPI } from "../../apiCalls";
+import { CommonAPI, ConfigurationsAPI, ProcessesAPI } from "../../apiCalls";
 import {
   callAPI,
   defaultFilters,
@@ -57,20 +57,65 @@ const AddCategory = ({ match }) => {
     getCategories();
   }, [store.filters]);
 
+  let flatData = [];
+  const flat = (data) => {
+    data.categories.map((item) => {
+      flatData.push(item);
+      if (item.categories) {
+        flat(item);
+      }
+    });
+  };
+  const getFlatData = (Data) => {
+    flat(Data);
+
+    return flatData;
+  };
+  const getAllBranches = (item) => {
+    const children = [];
+    item.forEach((child) => {
+      console.log(item);
+      children.push(child);
+      children.push(...getAllBranches(child));
+    });
+    return children;
+  };
+
+  function flatten(data) {
+    let result = [];
+
+    while (data.categories && data.categories.length != 0) {
+      data.categories.map((item) => {
+        result.push(item);
+        data = item.categories;
+      });
+    }
+
+    return result;
+  }
+
   const getCategories = () => {
+    console.log(queries);
     setLoading(true);
     callAPI(
       {
         caller: ConfigurationsAPI.getAllCategories,
-        successCallback: (res) => setData(res.data),
+        successCallback: (res) => {
+          console.log(res.data);
+          const flatData = getFlatData(res.data);
+          console.log(flatData);
+          setData(flatData);
+        },
         requestEnded: () => setLoading(false),
       },
       queries
     );
   };
-
+  console.log(data);
   //   open category details dialog
+
   const openDialog = (category) => {
+    console.log(category);
     setCurrentCategory(category.category);
     setDialogData(category);
     setDialog(true);
@@ -127,9 +172,8 @@ const AddCategory = ({ match }) => {
     },
     {
       id: `category-${2}`,
-      title: (row) => (row?.category.isDeleted ? "فعال کردن" : "غیر‌فعال کردن"),
-      icon: (row) =>
-        row?.category.isDeleted ? "fas fa-recycle" : "fas fa-times",
+      title: (row) => (row?.isDeleted ? "فعال کردن" : "غیر‌فعال کردن"),
+      icon: (row) => (row?.isDeleted ? "fas fa-recycle" : "fas fa-times"),
       onClick: (row) => deleteCategory(row.id),
     },
   ];
@@ -158,7 +202,7 @@ const AddCategory = ({ match }) => {
 
   const condStyle = [
     {
-      when: (row) => row?.category.isDeleted,
+      when: (row) => row?.isDeleted,
       style: {
         backgroundColor: "#ddd",
         color: "#333",
@@ -189,10 +233,7 @@ const AddCategory = ({ match }) => {
         isUnique={false}
         id="add-category-dialog"
       >
-        <AddCategoryDialog
-          onSuccess={onCategoryCreated}
-          mode={"create"}
-        />
+        <AddCategoryDialog onSuccess={onCategoryCreated} mode={"create"} />
       </DialogToggler>
 
       <DialogToggler
@@ -203,7 +244,7 @@ const AddCategory = ({ match }) => {
         id="edit-category-dialog"
       >
         <AddCategoryDialog
-          onSuccess={onCategoryCreated}
+          onSuccess={onCategoryEdited}
           mode={"edit"}
           defaltValues={currentCategory}
           categoryId={dialogData?.id}

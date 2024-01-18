@@ -34,6 +34,7 @@ const useInitials = () => {
             caller: CommonAPI.getSubjectGroups,
             successCallback: (res) => {
               resolve(res.data);
+              console.log(res.data);
             },
             errorCallback: (err) => {
               reject(err);

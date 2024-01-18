@@ -15,6 +15,9 @@ import SelectBox from "../../helpers/SelectBox";
 import TextInput from "../../helpers/TextInput";
 import useMakeRequest from "../../hooks/useMakeRequest";
 import Avatar from "./Avatar";
+import { postFiles } from "../../../api/commonApi";
+import { useMutation } from "@tanstack/react-query";
+import { updateAvatar } from "../../../api/AuthenticateApi";
 
 const modalRoot = document && document.getElementById("modal-root");
 
@@ -24,32 +27,51 @@ const ProfileForm = ({ data, setDialog }) => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    userName: "",
-    phoneNumber: "",
-    address: "",
+    // userName: "",
+    phoneNumber2: "",
+    // address: "",
     education: "",
     title: "",
+    organization: "",
   });
   const [preview, setPreview] = useState(undefined);
   const [showPreview, setShowPreview] = useState(false);
   const [file, setFile] = useState(null);
   const [payload, setPayload] = useState(undefined);
   const [makeRequest, setMakeRequest] = useState(false);
-
+  console.log(data);
   useEffect(() => {
+    const education = data?.education;
     setFormData({
       ...formData,
       firstName: data.firstName ? data.firstName : "",
       lastName: data.lastName ? data.lastName : "",
-      userName: data.userName ? data.userName : "",
-      phoneNumber: data.phoneNumber ? data.phoneNumber : "",
-      address: data.address ? data.address.detail : "",
-      education: data.education ? data.education.id : "",
+      // userName: data.userName ? data.userName : "",
+      phoneNumber2: education ? education : "",
+      education: 0,
       title: data.title ? data.title : "",
     });
   }, [data]);
 
+  const AvatarMutation = useMutation({
+    mutationKey: ["Avatar"],
+    mutationFn: updateAvatar,
+    onSuccess: (res) => {
+      // setFile(res.id);
+    },
+    onError: (err) => {},
+  });
+  const uploadMutation = useMutation({
+    mutationKey: ["Avatar"],
+    mutationFn: updateAvatar,
+    onSuccess: (res) => {
+      toast("عکس پروفایل با موفقیت به روز رسانی شد.", { type: "success" });
+    },
+    onError: (err) => {},
+  });
+
   const handleChange = (name, onlyDigit) => (e) => {
+    console.log("chh");
     let value = e.target.value;
     if (onlyDigit) {
       value = fixDigit(value, true).replace(/[^-0-9]/, "");
@@ -59,7 +81,10 @@ const ProfileForm = ({ data, setDialog }) => {
 
   const handleAvatarSelect = (e) => {
     const file = e.target.files[0];
-    setFile(file);
+    const formData = new FormData();
+    formData.append("File", file);
+    formData.append("AttachmentType", 1);
+    uploadMutation.mutate(formData)
     readFile(file);
   };
 
@@ -79,8 +104,11 @@ const ProfileForm = ({ data, setDialog }) => {
     payload.delete("education");
     payload.set("address.detail", formData.address);
     payload.set("educationId", formData.education);
-    payload.set("avatarFile", file);
-    setPayload(payload);
+
+    // payload.set("avatarFile", file);
+    // console.log(payload);
+    console.log(formData);
+    setPayload(formData);
     setMakeRequest(true);
   };
 

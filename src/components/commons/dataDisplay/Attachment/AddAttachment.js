@@ -9,21 +9,42 @@ import {
 } from "../../../../helperFuncs";
 import ShowAttachments from "../ShowAttachments";
 import DialogButtons from "../../dialogs/DialogButtons";
+import { useMutation } from "@tanstack/react-query";
+import { postFiles } from "../../../../api/commonApi";
 
 const AddAttachment = ({
   open = false,
   setOpen = (f) => f,
   onAdd = (f) => f,
   reset = false,
-  id="add-attachment"
+  id = "add-attachment",
 }) => {
   // refrences
   const fileInputRef = useRef(null);
 
   //   states
   const [attachments, setAttachments] = useState([]);
-  const [isOpen, setIsOpen] = useState(open);
-
+  const [data, setData] = useState(false);
+  const uploadMutation = useMutation({
+    mutationKey: ["File"],
+    mutationFn: postFiles,
+    onSuccess: (res) => {
+      // let newAttachmnets = attachments;
+      // newAttachmnets = [...attachments];
+      let newAttachmnets = attachments;
+      newAttachmnets = [
+        ...newAttachmnets,
+        {
+          file: data,
+          id: res.id,
+        },
+      ];
+      console.log(newAttachmnets);
+      setAttachments(newAttachmnets);
+    },
+    onError: (err) => {},
+  });
+  console.log(attachments);
   // functions
   const openFilePicker = () => {
     fileInputRef.current.click();
@@ -64,15 +85,13 @@ const AddAttachment = ({
   };
 
   const addFiles = (files) => {
-    let newAttachmnets = attachments;
-    newAttachmnets = [
-      ...newAttachmnets,
-      ...files.map((file, i) => ({
-        file,
-        id: `attach-${attachments.length + (i + 1)}`,
-      })),
-    ];
-    setAttachments(newAttachmnets);
+    console.log(files);
+    setData(files[0]);
+    const formData = new FormData();
+    formData.append("File", files[0]);
+    formData.append("AttachmentType", 1);
+    uploadMutation.mutate(formData);
+    console.log("fig");
   };
 
   const onRemoveFile = (attach) => {
@@ -88,7 +107,6 @@ const AddAttachment = ({
   const clear = () => {
     setAttachments([]);
   };
-
   // effects
   useEffect(() => {
     if (reset) {
@@ -101,15 +119,15 @@ const AddAttachment = ({
         condition={open}
         setCondition={setOpen}
         width={600}
-        id={id}
-        dialogId={id}
+        id="add-attachment"
+        // dialogId={id}
       >
         <input
           type={"file"}
           className="d-none"
           ref={fileInputRef}
           onChange={onAddFile}
-          multiple
+          // multiple
         />
         <div className="w90 mxa">
           <ShowAttachments
@@ -119,7 +137,6 @@ const AddAttachment = ({
             preview={false}
           />
         </div>
-
         <DialogButtons
           primaryTitle="تایید"
           onPrimaryClick={onConfirm}

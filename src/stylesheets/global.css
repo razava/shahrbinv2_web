@@ -1,5 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 @import url("./darkmode.css");
-
 * {
   margin: 0;
   padding: 0;
@@ -1131,3 +1133,7 @@ ul {
     font-size: 7px;
   }
 }
+
+/* .ql-editor {
+  text-align: right;
+} */

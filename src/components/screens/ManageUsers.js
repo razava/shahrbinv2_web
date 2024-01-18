@@ -242,7 +242,7 @@ const ManageUsers = ({ match }) => {
         dialogId={dialogData?.id}
         data={dialogData}
         width={500}
-        height={300}
+        height={400}
         id="roles-dialog"
       >
         <RolesDialog userId={dialogData?.id} setCondition={setRolesDialog} />

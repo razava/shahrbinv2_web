@@ -5,16 +5,15 @@ import {
   createQueryParams,
 } from "./helperFuncs";
 
-const prefix =
-  process.env.REACT_APP_API_URL;
-    // ? "https://192.168.1.11"
-   // "https://192.168.1.130:3749"
+const prefix = process.env.REACT_APP_API_URL;
+// ? "https://192.168.1.11"
+// "https://192.168.1.130:3749"
 // https://shahrbin.ashkezar.ir:8181
 // const prefix = process.env.REACT_APP_API_URL;
 
 export class ReportsAPI {
   static getTasks(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/Task?fromRoleId=${
+    const initialUrl = `${prefix}/api/${instance?.id}/StaffReport?fromRoleId=${
       payload ? payload : ""
     }`;
     const wholeUrl = createQueryParams(initialUrl, queries);
@@ -28,8 +27,33 @@ export class ReportsAPI {
       .catch((err) => err.response);
   }
 
+  static getReportHistory(token, payload, source, instance, queries) {
+    const initialUrl = `${prefix}/api/${instance?.id}/StaffReport/ReportHistory/${payload}`;
+    const wholeUrl = createQueryParams(initialUrl, queries);
+    return axios
+      .get(wholeUrl, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((res) => res)
+      .catch((err) => err.response);
+  }
+  static getPossibleTransitions(token, payload, source, instance, queries) {
+    const initialUrl = `${prefix}/api/${instance?.id}/StaffReport/PossibleTransitions/${payload}`;
+    const wholeUrl = createQueryParams(initialUrl, queries);
+    return axios
+      .get(wholeUrl, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((res) => res)
+      .catch((err) => err.response);
+  }
+
   static getReports(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/Info/Report`;
+    const initialUrl = `${prefix}/api/${instance?.id}/StaffReport/AllReports`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -114,7 +138,7 @@ export class ReportsAPI {
 
   static getTask(token, id, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Task/${id}`, {
+      .get(`${prefix}/api/${instance?.id}/StaffReport/${id}`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -149,7 +173,7 @@ export class ReportsAPI {
 
   static getPossibleSources(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Task/PossibleSources`, {
+      .get(`${prefix}/api/${instance?.id}/StaffReport/PossibleSources`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -160,19 +184,23 @@ export class ReportsAPI {
 
   static createTransition(token, payload, source, instance, id) {
     return axios
-      .post(`${prefix}/api/${instance?.id}/Task/${id}`, payload, {
-        headers: {
-          Authorization: "Bearer " + token,
-          "Content-Type": "application/json",
-        },
-      })
+      .post(
+        `${prefix}/api/${instance?.id}/StaffReport/MakeTransition/${id}`,
+        payload,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((res) => res)
       .catch((err) => err.response);
   }
 
   static createStage(token, payload, source, instance, id) {
     return axios
-      .post(`${prefix}/api/${instance?.id}/Task/Review/${id}`, payload, {
+      .post(`${prefix}/api/${instance?.id}/StaffReport/Review/${id}`, payload, {
         headers: {
           Authorization: "Bearer " + token,
           "Content-Type": "application/json",
@@ -185,15 +213,30 @@ export class ReportsAPI {
   static registerByOperator(token, payload, source, instance) {
     return axios
       .post(
-        `${prefix}/api/${instance?.id}/Report/RegisterByOperator`,
+        `${prefix}/api/${instance?.id}/StaffReport/RegisterByOperator`,
         payload,
         {
           headers: {
             Authorization: "Bearer " + token,
-            "Content-Type": "multipart/form-data",
           },
         }
       )
+      .then((res) => res)
+      .catch((err) => {
+        if (axios.isCancel(err)) {
+          console.log("Request canceled", err.message);
+        } else {
+          return err.response;
+        }
+      });
+  }
+  static confirmRequestByOperator(token, payload, source, instance, id) {
+    return axios
+      .put(`${prefix}/api/${instance?.id}/StaffReport/Accept/${id}`, payload, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
       .then((res) => res)
       .catch((err) => {
         if (axios.isCancel(err)) {
@@ -207,7 +250,7 @@ export class ReportsAPI {
   static sendMessageToCitizen(token, payload, source, instance, id) {
     return axios
       .post(
-        `${prefix}/api/${instance?.id}/Task/MessageToCitizen/${id}`,
+        `${prefix}/api/${instance?.id}/StaffReport/MessageToCitizen/${id}`,
         payload,
         {
           headers: {
@@ -227,7 +270,7 @@ export class ReportsAPI {
   }
 
   static getComments(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/Task/Comments`;
+    const initialUrl = `${prefix}/api/${instance?.id}/StaffReport/Comments`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -248,8 +291,8 @@ export class ReportsAPI {
 
   static updateComment(token, payload, source, instance, commentId) {
     return axios
-      .put(
-        `${prefix}/api/${instance?.id}/Task/Comments/${commentId}`,
+      .post(
+        `${prefix}/api/${instance?.id}/StaffReport/ReplyComment/${commentId}`,
         payload,
         {
           headers: {
@@ -270,27 +313,8 @@ export class ReportsAPI {
 
   static deleteComment(token, payload, source, instance, commentId) {
     return axios
-      .delete(`${prefix}/api/${instance?.id}/Task/Comments/${commentId}`, {
-        headers: {
-          Authorization: "Bearer " + token,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => res)
-      .catch((err) => {
-        if (axios.isCancel(err)) {
-          console.log("Request canceled", err.message);
-        } else {
-          return err.response;
-        }
-      });
-  }
-
-  static updateCitizenRequest(token, payload, source, instance, id) {
-    return axios
-      .put(
-        `${prefix}/api/${instance?.id}/Report/UpdateComments/${id}`,
-        payload,
+      .delete(
+        `${prefix}/api/${instance?.id}/StaffReport/Comment/${commentId}`,
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -308,12 +332,30 @@ export class ReportsAPI {
       });
   }
 
-  static updateReport(token, payload, source, instance) {
+  static updateCitizenRequest(token, payload, source, instance, id) {
     return axios
-      .put(`${prefix}/api/${instance?.id}/Report`, payload, {
+      .put(`${prefix}/api/${instance?.id}/StaffReport/Comment/${id}`, payload, {
         headers: {
           Authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => res)
+      .catch((err) => {
+        if (axios.isCancel(err)) {
+          console.log("Request canceled", err.message);
+        } else {
+          return err.response;
+        }
+      });
+  }
+
+  static updateReport(token, payload, source, instance, id) {
+    return axios
+      .put(`${prefix}/api/${instance?.id}/StaffReport/${id}`, payload, {
+        headers: {
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
         },
       })
       .then((res) => res)
@@ -351,8 +393,10 @@ export class DistrictAPI {
 
 export class CommonAPI {
   static getSubjectGroups(token, payload, source, instance) {
+    const Instance =
+      getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_INSTANCE_ID) || {};
     return axios
-      .get(`${prefix}/api/${instance?.id}/Common/Categories`, {
+      .get(`${prefix}/api/${Instance}/StaffCommon/Categories`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -363,7 +407,7 @@ export class CommonAPI {
 
   static getEducationList(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Common/Educations`, {
+      .get(`${prefix}/api/${instance?.id}/StaffCommon/Educations`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -395,26 +439,31 @@ export class CommonAPI {
   }
 
   static getYazdRegions(token, payload, source, instance) {
+    const instanceId =
+      getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_INSTANCE_ID) || {};
+    const cityId = getFromLocalStorage(
+      constants.SHAHRBIN_MANAGEMENT_INSTANCE
+    ).cityId;
     return axios
-      .get(
-        `${prefix}/api/${instance?.id}/Common/RegionsByName/${process.env.REACT_APP_REGION_FA}`,
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
-      )
+      .get(`${prefix}/api/${instanceId}/StaffCommon/Regions/${cityId}`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
       .then((res) => res)
       .catch((err) => err.response);
   }
 
   static getRegions(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Common/Regions/${instance.cityId}`, {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      })
+      .get(
+        `${prefix}/api/${instance?.id}/StaffCommon/Regions/${instance.cityId}`,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
       .then((res) => res)
       .catch((err) => err.response);
   }
@@ -429,21 +478,28 @@ export class CommonAPI {
       .then((res) => res)
       .catch((err) => err.response);
   }
+
+  static postFiles(token, payload, source, instance) {
+    return axios
+      .get(`${prefix}/api/Files`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((res) => res)
+      .catch((err) => err.response);
+  }
 }
 
 export class AuthenticateAPI {
   static signin(token, payload, source, instance) {
     return axios
-      .post(
-        `${prefix}/api/${instance?.id}/Authenticate/LoginAdminUser`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          cancelToken: source.token,
-        }
-      )
+      .post(`${prefix}/api/Authenticate/LoginStaff`, payload, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cancelToken: source.token,
+      })
       .then((res) => res)
       .catch((err) => {
         if (axios.isCancel(err)) {
@@ -455,17 +511,13 @@ export class AuthenticateAPI {
   }
   static resetPassword(token, payload, source, instance, id) {
     return axios
-      .put(
-        `${prefix}/api/${instance?.id}/Authenticate/Password/${id}`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-          cancelToken: source.token,
-        }
-      )
+      .put(`${prefix}/api/Authenticate/ChangePassword/${id}`, payload, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        cancelToken: source.token,
+      })
       .then((res) => res)
       .catch((err) => {
         if (axios.isCancel(err)) {
@@ -478,13 +530,17 @@ export class AuthenticateAPI {
 
   static changePassword(token, payload, source, instance) {
     return axios
-      .put(`${prefix}/api/${instance?.id}/Authenticate/Password`, payload, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        cancelToken: source.token,
-      })
+      .put(
+        `${prefix}/api/${instance?.id}/Authenticate/ChangePassword`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          cancelToken: source.token,
+        }
+      )
       .then((res) => res)
       .catch((err) => {
         if (axios.isCancel(err)) {
@@ -589,17 +645,13 @@ export class AuthenticateAPI {
 
   static registerWithRoles(token, payload, source, instance) {
     return axios
-      .post(
-        `${prefix}/api/${instance?.id}/Authenticate/registerWithRoles`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-          cancelToken: source.token,
-        }
-      )
+      .post(`${prefix}/api/${instance?.id}/AdminUserManagement`, payload, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        cancelToken: source.token,
+      })
       .then((res) => res)
       .catch((err) => {
         if (axios.isCancel(err)) {
@@ -611,8 +663,11 @@ export class AuthenticateAPI {
   }
 
   static getuserRegions(token, id, source, instance) {
+    const instanceId = getFromLocalStorage(
+      constants.SHAHRBIN_MANAGEMENT_INSTANCE_ID
+    );
     return axios
-      .get(`${prefix}/api/${instance?.id}/Authenticate/Regions/${id}`, {
+      .get(`${prefix}/api/${instanceId}/AdminUserManagement/Regions/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -631,7 +686,7 @@ export class AuthenticateAPI {
 
 export class UserInfoAPI {
   static getAllUsers(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/Authenticate/GetAllUsers`;
+    const initialUrl = `${prefix}/api/${instance?.id}/AdminUserManagement/AllUsers`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -670,7 +725,7 @@ export class UserInfoAPI {
 
   static getRoles(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Authenticate/Roles`, {
+      .get(`${prefix}/api/${instance?.id}/StaffCommon/Roles`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -688,7 +743,7 @@ export class UserInfoAPI {
 
   static getUserRoles(token, id, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Authenticate/Roles/${id}`, {
+      .get(`${prefix}/api/${instance?.id}/AdminUserManagement/Roles/${id}`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -706,8 +761,8 @@ export class UserInfoAPI {
 
   static saveUserRegions(token, payload, source, instance, id) {
     return axios
-      .post(
-        `${prefix}/api/${instance?.id}/Authenticate/Regions/${id}`,
+      .put(
+        `${prefix}/api/${instance?.id}/AdminUserManagement/Regions/${id}`,
         payload,
         {
           headers: {
@@ -728,12 +783,16 @@ export class UserInfoAPI {
 
   static saveRoles(token, payload, source, instance, id) {
     return axios
-      .post(`${prefix}/api/${instance?.id}/Authenticate/Roles/${id}`, payload, {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-        cancelToken: source.token,
-      })
+      .put(
+        `${prefix}/api/${instance?.id}/AdminUserManagement/Roles/${id}`,
+        payload,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+          cancelToken: source.token,
+        }
+      )
       .then((res) => res)
       .catch((err) => {
         if (axios.isCancel(err)) {
@@ -768,7 +827,7 @@ export class UserInfoAPI {
 
   static getUser(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/UserInformation`, {
+      .get(`${prefix}/api/Authenticate/Profile`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -785,11 +844,12 @@ export class UserInfoAPI {
   }
 
   static updateUser(token, payload, source, instance) {
+    console.log(payload);
     return axios
-      .put(`${prefix}/api/UserInformation`, payload, {
+      .put(`${prefix}/api/Authenticate/Profile`, payload, {
         headers: {
           Authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data",
+          // "Content-Type": "multipart/form-data",
         },
         cancelToken: source.token,
       })
@@ -805,10 +865,9 @@ export class UserInfoAPI {
 
   static updateUserById(token, payload, source, instance, id) {
     return axios
-      .put(`${prefix}/api/UserInformation/${id}`, payload, {
+      .put(`${prefix}/api/${instance?.id}/AdminUserManagement/${id}`, payload, {
         headers: {
           Authorization: "Bearer " + token,
-          "Content-Type": "multipart/form-data",
         },
         cancelToken: source.token,
       })
@@ -856,7 +915,7 @@ export class InfoAPI {
 
   static getListCharts(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Info/ListCharts`, {
+      .get(`${prefix}/api/${instance?.id}/StaffInfo/ListCharthh`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -896,7 +955,7 @@ export class InfoAPI {
 
   static getReportById(token, id, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Info/Report/${id}`, {
+      .get(`${prefix}/api/${instance?.id}/StaffReport/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -915,7 +974,7 @@ export class InfoAPI {
 
   static getExecutives(token, id, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Info/Executives`, {
+      .get(`${prefix}/api/${instance?.id}/StaffCommon/Executives`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -936,7 +995,7 @@ export class InfoAPI {
 export class PollAPI {
   static createPoll(token, payload, source, instance) {
     return axios
-      .post(`${prefix}/api/${instance?.id}/Polls`, payload, {
+      .post(`${prefix}/api/${instance?.id}/AdminPolls`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -954,7 +1013,7 @@ export class PollAPI {
 
   static publishPoll(token, payload, source, instance, id) {
     return axios
-      .put(`${prefix}/api/${instance?.id}/Polls/Edit/${id}`, payload, {
+      .put(`${prefix}/api/${instance?.id}/AdminPolls/Edit/${id}`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -971,7 +1030,7 @@ export class PollAPI {
   }
 
   static getAllPolls(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/Polls/All`;
+    const initialUrl = `${prefix}/api/${instance?.id}/AdminPolls/All`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -993,17 +1052,13 @@ export class PollAPI {
 
   static changePollStatus(token, payload, source, instance, id) {
     return axios
-      .put(
-        `${prefix}/api/${instance?.id}/Polls/Status/${id}?pollState=${payload}`,
-        null,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-          cancelToken: source.token,
-        }
-      )
+      .put(`${prefix}/api/${instance?.id}/AdminPolls/Edit/${id}`, payload, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        cancelToken: source.token,
+      })
       .then((res) => res)
       .catch((err) => {
         if (axios.isCancel(err)) {
@@ -1016,7 +1071,7 @@ export class PollAPI {
 
   static getPollResults(token, payload, source, instance, id) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Polls/Summary/${id}`, {
+      .get(`${prefix}/api/${instance?.id}/AdminPolls/Summary/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1055,7 +1110,7 @@ export class ParsiMap {
 export class ActorsAPI {
   static getActorRegions(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Actors/Regions`, {
+      .get(`${prefix}/api/${instance?.id}/StaffCommon/UserRegions`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1093,7 +1148,7 @@ export class OrganizationalUnitAPI {
 
   static createUnit(token, payload, source, instance) {
     return axios
-      .post(`${prefix}/api/${instance?.id}/OrganizationalUnit`, payload, {
+      .post(`${prefix}/api/${instance?.id}/AdminOrganizationalUnit`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1105,19 +1160,23 @@ export class OrganizationalUnitAPI {
 
   static updateUnit(token, payload, source, instance, id) {
     return axios
-      .put(`${prefix}/api/${instance?.id}/OrganizationalUnit/${id}`, payload, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      })
+      .put(
+        `${prefix}/api/${instance?.id}/AdminOrganizationalUnit/${id}`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
       .then((res) => res)
       .catch((err) => err.response);
   }
 
   static getUnit(token, payload, source, instance, id) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/OrganizationalUnit/${id}`, {
+      .get(`${prefix}/api/${instance?.id}/AdminOrganizationalUnit/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1128,7 +1187,7 @@ export class OrganizationalUnitAPI {
   }
 
   static getAllOrgans(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/OrganizationalUnit/All`;
+    const initialUrl = `${prefix}/api/${instance?.id}/AdminOrganizationalUnit/All`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -1169,7 +1228,7 @@ export class ProcessesAPI {
 
   static getProcessById(token, payload, source, instance, id) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Processes/${id}`, {
+      .get(`${prefix}/api/${instance?.id}/AdminProcesses/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1181,7 +1240,7 @@ export class ProcessesAPI {
 
   static createProcess(token, payload, source, instance) {
     return axios
-      .post(`${prefix}/api/${instance?.id}/Processes`, payload, {
+      .post(`${prefix}/api/${instance?.id}/AdminProcesses`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1193,7 +1252,7 @@ export class ProcessesAPI {
 
   static updateProcess(token, payload, source, instance, id) {
     return axios
-      .put(`${prefix}/api/${instance?.id}/Processes/${id}`, payload, {
+      .put(`${prefix}/api/${instance?.id}/AdminProcesses/${id}`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1205,7 +1264,7 @@ export class ProcessesAPI {
 
   static getExecutives(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Processes/Executives`, {
+      .get(`${prefix}/api/${instance?.id}/AdminProcesses/Executives`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1219,7 +1278,7 @@ export class ProcessesAPI {
 export class ConfigurationsAPI {
   static getCategories(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Configurations/Categories`, {
+      .get(`${prefix}/api/${instance?.id}/StaffCommon/Categories`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1230,7 +1289,7 @@ export class ConfigurationsAPI {
   }
 
   static getAllCategories(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/Configurations/AllCategories`;
+    const initialUrl = `${prefix}/api/${instance?.id}/AdminCategory/All`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -1244,12 +1303,12 @@ export class ConfigurationsAPI {
   }
 
   static getProcesses(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/Configurations/Processes`;
+    const initialUrl = `${prefix}/api/${instance?.id}/AdminProcesses`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
         headers: {
-          "Content-Type": "application/json",
+          // "Content-Type": "application/json",
           Authorization: "Bearer " + token,
         },
       })
@@ -1259,7 +1318,7 @@ export class ConfigurationsAPI {
 
   static createCategory(token, payload, source, instance) {
     return axios
-      .post(`${prefix}/api/${instance?.id}/Configurations/Category`, payload, {
+      .post(`${prefix}/api/${instance?.id}/AdminCategory`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1271,31 +1330,24 @@ export class ConfigurationsAPI {
 
   static deleteCategory(token, payload, source, instance) {
     return axios
-      .delete(
-        `${prefix}/api/${instance?.id}/Configurations/Category/${payload}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-        }
-      )
+      .delete(`${prefix}/api/${instance?.id}/AdminCategory/${payload}`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
       .then((res) => res)
       .catch((err) => err.response);
   }
 
   static updateCategory(token, payload, source, instance, id) {
     return axios
-      .put(
-        `${prefix}/api/${instance?.id}/Configurations/Category/${id}`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-        }
-      )
+      .put(`${prefix}/api/${instance?.id}/AdminCategory/${id}`, payload, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
       .then((res) => res)
       .catch((err) => err.response);
   }
@@ -1303,7 +1355,7 @@ export class ConfigurationsAPI {
 
 export class ViolationAPI {
   static getViolations(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/Violation`;
+    const initialUrl = `${prefix}/api/${instance?.id}/StaffReport/Violations`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -1331,7 +1383,7 @@ export class ViolationAPI {
 
 export class QuickAccessAPI {
   static getAccesses(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/QuickAccess`;
+    const initialUrl = `${prefix}/api/${instance?.id}/AdminQuickAccess`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -1346,7 +1398,7 @@ export class QuickAccessAPI {
 
   static createAccess(token, payload, source, instance) {
     return axios
-      .post(`${prefix}/api/${instance?.id}/QuickAccess`, payload, {
+      .post(`${prefix}/api/${instance?.id}/AdminQuickAccess`, payload, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + token,
@@ -1358,7 +1410,7 @@ export class QuickAccessAPI {
 
   static editAccess(token, payload, source, instance, id) {
     return axios
-      .put(`${prefix}/api/${instance?.id}/QuickAccess/${id}`, payload, {
+      .put(`${prefix}/api/${instance?.id}/AdminQuickAccess/${id}`, payload, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + token,
@@ -1370,7 +1422,7 @@ export class QuickAccessAPI {
 
   static deleteAccess(token, payload, source, instance) {
     return axios
-      .delete(`${prefix}/api/${instance?.id}/QuickAccess/${payload}`, {
+      .delete(`${prefix}/api/${instance?.id}/AdminQuickAccess/${payload}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1383,7 +1435,7 @@ export class QuickAccessAPI {
 
 export class InstanceManagementAPI {
   static getInstances(token, payload, source, instance) {
-    const initialUrl = `${prefix}/api/InstanceManagement`;
+    const initialUrl = `${prefix}/api/${instance?.id}/StaffCommon/ShahrbinInstances`;
     return axios
       .get(initialUrl, {
         headers: {
@@ -1396,7 +1448,7 @@ export class InstanceManagementAPI {
   }
 
   static getInstanceById(token, payload, source, instance) {
-    const initialUrl = `${prefix}/api/InstanceManagement/${payload}`;
+    const initialUrl = `${prefix}/api/${payload}/StaffCommon/MyShahrbinInstance`;
     return axios
       .get(initialUrl, {
         headers: {

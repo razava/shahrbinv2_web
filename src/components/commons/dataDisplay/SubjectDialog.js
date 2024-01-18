@@ -30,11 +30,12 @@ const SubjectDialog = ({
     null,
     (res) => {
       if (res.status === 200) {
+        console.log(res.data);
         setSelectBoxes([
           {
-            categories: res.data.categories,
+            categories: res.data[0].categories,
             level: level,
-            title: res.data.title,
+            title: res.data[0].title,
           },
         ]);
         setData(res.data.categories);

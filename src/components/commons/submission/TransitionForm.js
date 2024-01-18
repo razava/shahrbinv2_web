@@ -86,6 +86,7 @@ const TransitionForm = ({
     const actors = selectedActors.map((a, i) => {
       return { id: a.value };
     });
+    console.log(actors);
     let payload = new FormData();
     payload = mapObjectToFormData(
       // add form data to payload
@@ -107,6 +108,14 @@ const TransitionForm = ({
     actors.forEach((actor, i) => {
       payload.append(`actors[${i}].id`, actor.id);
     });
+    return {
+      transitionId: transition.transitionId,
+      reasonId: reasonId,
+      toActorId: actors[0].id,
+      attachments: attachments.map((item) => item.id),
+      comment: comment,
+      id: data.id,
+    };
     return payload;
   };
 

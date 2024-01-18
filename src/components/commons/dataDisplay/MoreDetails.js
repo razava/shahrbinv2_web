@@ -12,7 +12,7 @@ const MoreDetails = ({ data }) => {
         <div className={styles.infoList}>
           <div className="w90 mxa frc wrap">
             <TextInput
-              value={convertserverTimeToDateString(data?.report?.sent)}
+              value={convertserverTimeToDateString(data?.sent)}
               readOnly={true}
               title="تاریخ ایجاد"
               wrapperClassName="mxa flex-1"
@@ -20,7 +20,7 @@ const MoreDetails = ({ data }) => {
               required={false}
             />
             <TextInput
-              value={convertserverTimeToDateString(data?.report?.deadline)}
+              value={convertserverTimeToDateString(data?.deadline)}
               readOnly={true}
               title="زمان اتمام"
               wrapperClassName="mxa flex-1"
@@ -31,7 +31,7 @@ const MoreDetails = ({ data }) => {
           <div className="w90 mxa frc wrap">
             <TextInput
               value={convertserverTimeToDateString(
-                data?.report?.responseDeadline
+                data?.responseDeadline
               )}
               readOnly={true}
               title="زمان پاسخگویی"
@@ -40,7 +40,7 @@ const MoreDetails = ({ data }) => {
               required={false}
             />
             <TextInput
-              value={doesExist(data?.report?.rating)}
+              value={doesExist(data?.rating)}
               readOnly={true}
               title="امتیاز شهروند"
               wrapperClassName="mxa flex-1"
@@ -50,7 +50,7 @@ const MoreDetails = ({ data }) => {
           </div>
           <div className="w90 mxa frc wrap">
             <TextInput
-              value={doesExist(data?.report?.visibility === 0 ? "عمومی" : "خصوصی")}
+              value={doesExist(data?.visibility === 0 ? "عمومی" : "خصوصی")}
               readOnly={true}
               title="وضعیت انتشار"
               wrapperClassName="mxa flex-1"
@@ -59,7 +59,7 @@ const MoreDetails = ({ data }) => {
             />
             <TextInput
               value={doesExist(
-                data?.report?.isIdentityVisible ? "قابل رویت" : "مخفی"
+                data?.isIdentityVisible ? "قابل رویت" : "مخفی"
               )}
               readOnly={true}
               title="اطلاعات هویتی شهروند"
@@ -70,7 +70,7 @@ const MoreDetails = ({ data }) => {
           </div>
           <div className="w90 mxa frc wrap">
             <TextInput
-              value={doesExist(data?.report?.likes)}
+              value={doesExist(data?.likes)}
               readOnly={true}
               title="تعداد پسند‌ها"
               wrapperClassName="mxa flex-1"
@@ -78,7 +78,7 @@ const MoreDetails = ({ data }) => {
               required={false}
             />
             <TextInput
-              value={doesExist(data?.report?.commentsCount)}
+              value={doesExist(data?.commentsCount)}
               readOnly={true}
               title="تعداد نظر‌ها"
               wrapperClassName="mxa flex-1"
@@ -95,7 +95,7 @@ const MoreDetails = ({ data }) => {
               پیوست ها{" "}
             </label>
             <hr className="w100 border-t-light" />
-            <ShowAttachments medias={data?.report?.medias} isDeletable={false} />
+            <ShowAttachments medias={data?.medias} isDeletable={false} />
           </div>
         </div>
       </section>

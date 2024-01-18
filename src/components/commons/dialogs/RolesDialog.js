@@ -21,7 +21,7 @@ const RolesDialog = ({ userId, setCondition }) => {
   const handleRoleChange = (items = []) => {
     const newRoles = roles.map((role) => ({
       ...role,
-      isInRole: items.findIndex((item) => item === role.roleName) !== -1,
+      isIn: items.findIndex((item) => item === role.roleName) !== -1,
     }));
     setRoles(newRoles);
   };
@@ -44,14 +44,14 @@ const RolesDialog = ({ userId, setCondition }) => {
 
   const [, saveLoading] = useMakeRequest(
     UserInfoAPI.saveRoles,
-    200,
+    204,
     makeRequest,
-    roles,
+    { roles: roles },
     (res) => {
       setMakeRequest(false);
       setCondition(false);
       modalRoot.classList.remove("active");
-      if (res.status === 200) {
+      if (res.status === 204) {
         toast("تغییرات با موفقیت ذخیره شد.", { type: "success" });
       } else if (serverError(res)) return;
       else if (unKnownError(res)) return;
@@ -63,16 +63,16 @@ const RolesDialog = ({ userId, setCondition }) => {
       <CheckBoxGroup
         items={roles.map((role) => ({
           id: role.roleName,
-          label: role.displayName,
-          checked: role.isInRole,
+          label: role.roleTitle,
+          checked: role.isIn,
           wrapperClassName: "w30 d-flex al-c ju-s my1",
-          labelClassName: "f12 my05"
+          labelClassName: "f12 my05",
         }))}
         onChange={handleRoleChange}
-        wrapperClassName="px1"
+        wrapperClassName="px1 !mb-36"
         title="نقش‌ها"
       />
-      <div className="w100 mxa fre py1 px2 border-t-light mt1 absolute b0">
+      <div className="w100 mxa fre py1 px2 border-t-light mt2 absolute b0">
         <Button
           title="ذخیره تغییرات"
           className="py1 br05 bg-primary"

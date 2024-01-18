@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Tabs from "../../helpers/Tabs";
 import "../../../stylesheets/tabs.css";
 import TransitionForm from "./TransitionForm";
@@ -11,10 +11,26 @@ import StageForm from "./StageForm";
 const Referral = ({ data, onNext = (f) => f }) => {
   // flags
   const [loading, setLoading] = useState(false);
-
+  const [Data, setData] = useState([]);
+  useEffect(() => {
+    if (data) {
+      getData();
+    }
+  }, [data]);
+  const getData = () => {
+    // setLoading(true);
+    callAPI({
+      caller: ReportsAPI.getPossibleTransitions,
+      payload: data?.id,
+      successCallback: (res) => setData(res.data),
+      // errorCallback: () => modal.classList.remove("active"),
+      // requestEnded: () => setLoading(false),
+    });
+  };
   // prepare and send user request
   const createTransition = (payload) => {
     setLoading(true);
+    console.log(payload);
     callAPI(
       {
         caller: ReportsAPI.createTransition,
@@ -27,22 +43,22 @@ const Referral = ({ data, onNext = (f) => f }) => {
           toast("درخواست با موفقیت ارجاع داده شد.", { type: "success" });
         },
       },
-      data?.report?.id
+      data?.id
     );
   };
 
   return (
     <>
-      {data.possibleTransitions.length > 0 && (
+      {Data.length > 0 && (
         <Tabs mainClass="finalize-report-tab" activeClass="active">
-          {data.possibleTransitions.map((transition, i) => (
+          {Data.map((transition, i) => (
             <article
               label={transition.stageTitle}
               id={transition.transitionId}
               key={i}
             >
               <TransitionForm
-                data={data}
+                data={Data}
                 transition={transition}
                 createTransition={createTransition}
                 createLoading={loading}

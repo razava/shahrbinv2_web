@@ -31,6 +31,7 @@ const TreeSystem = ({
   onClose,
   renderToggler = (f) => f,
   reset = false,
+  mode,
 }) => {
   // refs
   const searchInputRef = useRef(null);
@@ -89,19 +90,26 @@ const TreeSystem = ({
     });
     return flatData;
   };
-
+  console.log(defaultSelecteds);
   const handleSelecting = ({ value, item }) => {
     if (singleSelect) {
+      console.log(item);
       const children = getAllBranches(item);
+      // console.log(children);
       const isNode = !children.length;
       if (isNode) {
         if (value) {
+          console.log(value);
           setSelecteds([item]);
         } else {
-          setSelecteds([]);
+          setSelecteds([item]);
         }
       }
+      if (mode == "Add") {
+        setSelecteds([item]);
+      }
     } else {
+      console.log("111");
       const children = getAllBranches(item);
       if (value) {
         setSelecteds([...selecteds, ...children, item]);
@@ -129,7 +137,11 @@ const TreeSystem = ({
   };
 
   const isSelected = (item) => {
+    // console.log(item);
     const children = getAllBranches(item);
+    if (mode == "Add") {
+      return !!selecteds.find((s) => s.id === item.id);
+    }
     return children.length > 0
       ? children.some((c) => selecteds.find((s) => s.id === c.id))
       : !!selecteds.find((s) => s.id === item.id);
@@ -214,6 +226,7 @@ const TreeSystem = ({
   }, [condition, searchInputRef.current]);
   return (
     <>
+      {console.log(selecteds)}
       {renderToggler(selecteds, flatData)}
       <DialogToggler
         condition={condition}

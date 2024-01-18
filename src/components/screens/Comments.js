@@ -44,7 +44,7 @@ const Comments = ({ match }) => {
   const [sendAnswerRequest, setSendAnwserRequest] = useState(false);
   const [deleteCommentRequest, setDeleteCommentRequest] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  
   const queries = {
     page,
     perPage,
@@ -102,9 +102,9 @@ const Comments = ({ match }) => {
   const sendAnswer = (e) => {
     const payload = {
       comment: anwserText,
-      reportId: dialogData?.reportId,
-      isSeen: true,
-      isVerified: true,
+      // reportId: dialogData?.reportId,
+      // isSeen: true,
+      // isVerified: true,
     };
     setPayload(payload);
     setSendAnwserRequest(true);
@@ -116,12 +116,12 @@ const Comments = ({ match }) => {
 
   const [, sendLoading] = useMakeRequest(
     ReportsAPI.updateComment,
-    204,
+    200,
     sendAnswerRequest,
     payload,
     (res) => {
       setSendAnwserRequest(false);
-      if (res && res.status === 204) {
+      if (res && res.status === 200) {
         toast("پاسخ شما با موفقیت ارسال شد", { type: "success" });
         setAnswerDialog(false);
         setDialogData(null);

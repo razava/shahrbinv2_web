@@ -33,6 +33,7 @@ const Filters = ({
   };
 
   const onFilter = (payload) => {
+    console.log(payload);
     setDialog(false);
     modalRoot.classList.remove("active");
     dispatch({ type: "setFilters", payload });

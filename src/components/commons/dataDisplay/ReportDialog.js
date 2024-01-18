@@ -24,6 +24,7 @@ const ReportDialog = ({
 }) => {
   // data states
   const [data, setData] = useState({});
+  // const [ReportHistory, setReportHistory] = useState({});
   const [defaultTab, setDefaultTab] = useState("reportDetails");
 
   // flags
@@ -54,55 +55,57 @@ const ReportDialog = ({
   return (
     <>
       {loading && <Loader absolute={true} />}
-      <section className={styles.filters}>
-        <Tabs
-          mainClass="filter-tab"
-          activeClass="active"
-          contentClassName="scrollbar"
-          onTabChange={onTabChange}
-          defaultActiveId={defaultTab}
-        >
-          <article label="جزییات درخواست" id="reportDetails">
-            <ReportDetails data={data} />
-          </article>
-          <article label="جزییات بیشتر" id="moreDetails">
-            <MoreDetails data={data} />
-          </article>
-          {data?.report?.category?.formElements.length > 0 && (
-            <article label="فرم" id="form">
-              <CategoryForm data={data} />
+      {data != {} && (
+        <section className={styles.filters}>
+          <Tabs
+            mainClass="filter-tab"
+            activeClass="active"
+            contentClassName="scrollbar"
+            onTabChange={onTabChange}
+            defaultActiveId={defaultTab}
+          >
+            <article label="جزییات درخواست" id="reportDetails">
+              <ReportDetails data={data} />
             </article>
-          )}
-          <article label="اطلاعات شهروند" id="citizenInfo">
-            <CitizenInfo data={data?.report?.citizen} />
-          </article>
-          <article label="تاریخچه درخواست" id="reportHistory">
-            <ReportHistory data={data} />
-          </article>
-          <article label="محل روی نقشه" id="location">
-            <OlMapContainer
-              center={[
-                data?.report?.address?.longitude || 54.3569,
-                data?.report?.address?.latitude || 31.8974,
-              ]}
-              width={"100%"}
-              height={550}
-              zoom={15}
-              clickable={false}
-            />
-          </article>
-          {!readOnly && (
-            <article label="ارجاع" id="finalize">
-              <Referral
-                data={data}
-                setDialog={setDialog}
-                refresh={refresh}
-                onNext={onNext}
+            <article label="جزییات بیشتر" id="moreDetails">
+              <MoreDetails data={data} />
+            </article>
+            {data?.category?.formElements.length > 0 && (
+              <article label="فرم" id="form">
+                <CategoryForm data={data} />
+              </article>
+            )}
+            <article label="اطلاعات شهروند" id="citizenInfo">
+              <CitizenInfo data={data} />
+            </article>
+            <article label="تاریخچه درخواست" id="reportHistory">
+              <ReportHistory data={data} />
+            </article>
+            <article label="محل روی نقشه" id="location">
+              <OlMapContainer
+                center={[
+                  data?.address?.longitude || 54.3569,
+                  data?.address?.latitude || 31.8974,
+                ]}
+                width={"100%"}
+                height={550}
+                zoom={15}
+                clickable={false}
               />
             </article>
-          )}
-        </Tabs>
-      </section>
+            {!readOnly && (
+              <article label="ارجاع" id="finalize">
+                <Referral
+                  data={data}
+                  setDialog={setDialog}
+                  refresh={refresh}
+                  onNext={onNext}
+                />
+              </article>
+            )}
+          </Tabs>
+        </section>
+      )}
     </>
   );
 };

@@ -39,7 +39,7 @@ const TextInput = ({
   autoFocus,
   renderInfo,
   min="",
-  max=""
+  max="",
 }) => {
   const inputRef = useRef(null);
   const wrapperRef = useRef(null);

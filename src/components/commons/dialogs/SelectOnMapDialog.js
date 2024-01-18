@@ -38,7 +38,7 @@ const SelectOnMapDialog = ({
   const [geofences, setGeoFences] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  console.log(store.initials.instance);
   useEffect(() => {
     if (condition) {
       setCoordinates({

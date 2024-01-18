@@ -39,7 +39,7 @@ const MyPieChart = ({ width = 400, height = 400, data = [], title = "" }) => {
               outerRadius={100}
               innerRadius={50}
               fill={COLORS[i]}
-              label={({ value }) => value}
+              label={({ value }) => (value * 100).toString() + "%"}
               labelLine={true}
             >
               {pie.map((entry, index) => (
@@ -51,7 +51,9 @@ const MyPieChart = ({ width = 400, height = 400, data = [], title = "" }) => {
             </Pie>
           ))}
           <Tooltip
-            formatter={(value, name, props) => [`${name}: ${fixDigit(value)}`]}
+            formatter={(value, name, props) => [
+              `${name}: ${(value * 100).toString() + "%"}`,
+            ]}
           />
           <Legend formatter={renderLegend} />
         </PieChart>

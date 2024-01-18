@@ -50,7 +50,7 @@ const FilterDialog = ({
 
   const [categoryDialog, setCategoryDialog] = useState(false);
   const [excelLoading, setExcelLoading] = useState(false);
-
+  console.log(filterData);
   const { fromDate, toDate, query } = filterData;
   const lastStatuses = [
     {
@@ -245,7 +245,7 @@ const FilterDialog = ({
                   onChange={setRoles}
                   isStatic={false}
                   wrapperClassName="col-md-12"
-                  nameKey="displayName"
+                  nameKey="roleTitle"
                   valueKey="roleName"
                   maxHeight={300}
                   isInDialog={true}
@@ -299,6 +299,7 @@ const FilterDialog = ({
                   wrapperClassName="col-md-12"
                   defaultSelecteds={regions}
                   isInDialog={true}
+                  nameKey="regionName"
                   id="regions-list"
                 />
               )}

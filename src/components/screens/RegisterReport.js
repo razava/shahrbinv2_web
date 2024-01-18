@@ -3,8 +3,10 @@ import { CommonAPI, ReportsAPI } from "../../apiCalls";
 import {
   callAPI,
   closeModal,
+  constants,
   findRegionId,
   fixDigit,
+  getFromLocalStorage,
   getRegions,
 } from "../../helperFuncs";
 import { AppStore } from "../../store/AppContext";
@@ -94,6 +96,9 @@ const RegisterReport = () => {
   };
 
   const registerReport = (e) => {
+    const regionId = getFromLocalStorage(
+      constants.SHAHRBIN_MANAGEMENT_INSTANCE
+    ).cityId;
     const validation = validate();
     if (validation.state) {
       const payload = new FormData();
@@ -115,7 +120,29 @@ const RegisterReport = () => {
       attachments.forEach((attachment) => {
         payload.append("attachments", attachment.file);
       });
-      callRegister(payload);
+      // callRegister(payload);
+      console.log(regionId);
+      callRegister({
+        categoryId: categoryId,
+        comments: values.comments,
+        phoneNumber: fixDigit(values.phoneNumber, true),
+        firstName: values.firstName,
+        lastName: values.lastName,
+        isIdentityVisible: isIdentityVisible,
+        address: {
+          regionId: regionId,
+          street: "",
+          valley: "",
+          detail: values.address,
+          number: "",
+          postalCode: "",
+          latitude: values.coordinates.latitude,
+          longitude: values.coordinates.longitude,
+          elevation: 0,
+        },
+        attachments: attachments.forEach((attachment) => attachment.id),
+        visibility: isPublic,
+      });
     } else {
       toast(validation.message, { type: "error" });
     }
@@ -126,8 +153,9 @@ const RegisterReport = () => {
     callAPI({
       caller: ReportsAPI.registerByOperator,
       payload,
+      successStatus: 201,
       successCallback: (res) => {
-        setReportId(res.data);
+        setReportId(res.data.id);
         childData.current = { id: res.data };
         modalRoot.classList.add("active");
         clearValues();

@@ -6,6 +6,7 @@ import {
   callAPI,
   constants,
   defaultFilters,
+  doesExist,
   getFromLocalStorage,
   hasRole,
   reportColumn,
@@ -27,9 +28,25 @@ const modalRoot = document && document.getElementById("modal-root");
 
 const Reports = ({ match }) => {
   const [store, dispatch] = useContext(AppStore);
-
   // data states
+  console.log(store);
   const [data, setData] = useState([]);
+  let categoryTitle;
+  const findCategory = (row) => {
+    const category = store.initials.categories.categories.map((item) => {
+      if (item.id == row.categoryId) {
+        categoryTitle = item.title;
+        return item;
+      } else {
+        const a = item.categories.map((itm) => {
+          if (itm.id == row.categoryId) {
+            categoryTitle = itm.title;
+          }
+        });
+      }
+    });
+    return categoryTitle;
+  };
 
   // main states
   const [page, setPage] = useState(1);
@@ -41,6 +58,7 @@ const Reports = ({ match }) => {
   const [dialog, setDialog] = useState(false);
   const [editDialog, setEditDialog] = useState(false);
   const [loading, setLoading] = useState(true);
+  console.log(reportColumn);
 
   const queries = {
     page,
@@ -80,6 +98,12 @@ const Reports = ({ match }) => {
       },
       queries
     );
+  };
+
+  reportColumn[1] = {
+    name: "زیر‌گروه موضوعی",
+    grow: 2,
+    cell: (row) => <span>{doesExist(findCategory(row))}</span>,
   };
 
   const openDialog = (row) => {

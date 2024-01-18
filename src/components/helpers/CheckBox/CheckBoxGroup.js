@@ -10,7 +10,7 @@ const CheckBoxGroup = ({
   labelClassName = "",
 }) => {
   const [checkeds, setCheckeds] = useState([]);
-
+  console.log(items);
   const handleChange = (value, id) => {
     const exists = checkeds.findIndex((c) => c === id) !== -1;
     if (exists) {

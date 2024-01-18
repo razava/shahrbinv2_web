@@ -16,37 +16,38 @@ const RolesDialog = ({ userId, setCondition }) => {
   const [payload, setPayload] = useState(null);
 
   const handleRegionChange = (items = []) => {
+    console.log(items);
     const newRegions = regions.map((region) => ({
       ...region,
-      selected: items.findIndex((item) => item === region.id) !== -1,
+      isIn: items.includes(region.regionId),
     }));
     setRegions(newRegions);
   };
 
   const saveRegions = (e) => {
-    const regionIds = regions.filter((r) => r.selected).map((r) => r.id);
-    const payload = {
-      regionIds,
-      id: userId,
-    };
-    setPayload(payload);
+    // const regionIds = regions.filter((r) => r.selected).map((r) => r.id);
+    // const payload = {
+    //   regionIds,
+    //   id: userId,
+    // };
+    setPayload(regions);
     setMakeRequest(true);
   };
 
   const getNeccessaryData = () => {
-    const regionsPromise = new Promise((resolve, reject) => {
-      const token = getAuthToken();
-      return CommonAPI.getYazdRegions(token).then((res) => {
-        if (res && res.status === 200) resolve(res.data);
-        else if (serverError(res)) {
-          reject([]);
-          return;
-        } else if (unKnownError(res)) {
-          reject([]);
-          return;
-        }
-      });
-    });
+    // const regionsPromise = new Promise((resolve, reject) => {
+    //   const token = getAuthToken();
+    //   return CommonAPI.getYazdRegions(token).then((res) => {
+    //     if (res && res.status === 200) resolve(res.data);
+    //     else if (serverError(res)) {
+    //       reject([]);
+    //       return;
+    //     } else if (unKnownError(res)) {
+    //       reject([]);
+    //       return;
+    //     }
+    //   });
+    // });
     const userRegionsPromise = new Promise((resolve, reject) => {
       const token = getAuthToken();
       return AuthenticateAPI.getuserRegions(token, userId).then((res) => {
@@ -61,20 +62,22 @@ const RolesDialog = ({ userId, setCondition }) => {
       });
     });
 
-    return Promise.all([regionsPromise, userRegionsPromise]);
+    return Promise.all([userRegionsPromise]);
   };
 
   const handleData = async () => {
     setLoading(true);
     try {
       const res = await getNeccessaryData();
-      let regions = res[0];
-      regions.forEach((region) => {
-        const exists = res[1].find((r) => r === region.id);
-        if (exists) region.selected = true;
-        else region.selected = false;
-      });
-      setRegions(regions);
+      console.log(res);
+      // let regions = res[0];
+      // regions.forEach((region) => {
+      //   const exists = res[1].find((r) => r === region.id);
+      //   if (exists) region.selected = true;
+      //   else region.selected = false;
+      // });
+      // setRegions(regions);
+      setRegions(res[0]);
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -103,7 +106,7 @@ const RolesDialog = ({ userId, setCondition }) => {
     },
     userId
   );
-
+  console.log(regions);
   return (
     <>
       {loading && (
@@ -111,26 +114,33 @@ const RolesDialog = ({ userId, setCondition }) => {
           <Loader absolute />
         </div>
       )}
-      <CheckBoxGroup
-        items={regions.map((region) => ({
-          id: region.id,
-          label: region.name,
-          checked: region.selected,
-          wrapperClassName: "w30 d-flex al-c ju-s my1",
-          labelClassName: "f12 my05",
-        }))}
-        onChange={handleRegionChange}
-        wrapperClassName="px1 mh100"
-        title="نقش‌ها"
-      />
-      <div className="w100 mxa fre py1 px2 border-t-light mt1">
-        <Button
-          title="ذخیره تغییرات"
-          className="py1 br05 bg-primary"
-          onClick={saveRegions}
-          loading={saveLoading}
-        />
-      </div>
+      {regions.length > 0 && (
+        <>
+          {regions.map((item) => {
+            console.log(item);
+          })}
+          <CheckBoxGroup
+            items={regions.map((region) => ({
+              id: region.regionId,
+              label: region.regionName,
+              checked: region.isIn,
+              wrapperClassName: "w30 d-flex al-c ju-s my1",
+              labelClassName: "f12 my05",
+            }))}
+            onChange={handleRegionChange}
+            wrapperClassName="px1 mh100"
+            title="مناطق"
+          />
+          <div className="w100 mxa fre py1 px2 border-t-light mt1">
+            <Button
+              title="ذخیره تغییرات"
+              className="py1 br05 bg-primary"
+              onClick={saveRegions}
+              loading={saveLoading}
+            />
+          </div>
+        </>
+      )}
     </>
   );
 };
