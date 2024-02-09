@@ -151,7 +151,7 @@ const TransitionForm = ({
       value: a.id,
     };
   };
-
+  
   const sendMessageToCitizen = () => {
     // function to handle message to citizen request
     const payload = { message: messageToCitizen };
@@ -165,7 +165,7 @@ const TransitionForm = ({
           toast("پیام شما با موفقیت به شهروند ارسال شد.", { type: "success" }),
         requestEnded: () => setLoading(false),
       },
-      data?.report?.id
+      data?.id
     );
   };
 
@@ -230,7 +230,7 @@ const TransitionForm = ({
           />
         </div>
         {/* a box used to send a message to citizen. visibility based on transition type */}
-        {transition?.canSendMessageToCitizen && (
+        {/* {transition?.canSendMessageToCitizen && (
           <div className={["w90 mxa mt1"].join(" ")}>
             <Textarea
               name="messageToCitizen"
@@ -247,7 +247,7 @@ const TransitionForm = ({
               loading={loading}
             />
           </div>
-        )}
+        )} */}
         {/* add and show attachments */}
         <div className="w90 frc mxa mt1">
           <AttachmentToggle onAddAttachment={onAddAttachment} />

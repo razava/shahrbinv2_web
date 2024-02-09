@@ -17,6 +17,7 @@ import TreeSystem from "./TreeSystem";
 import AppContext, { AppStore } from "../../../store/AppContext";
 import { getCategoryById } from "../../../api/AdminApi";
 import { useQuery } from "@tanstack/react-query";
+import SelectBox2 from "../../helpers/SelectBox2";
 
 const objectionValues = [
   {
@@ -73,7 +74,7 @@ const AddCategoryDialog = ({
   const [categoryId2, setCategoryId2] = useState(store.initials.categories.id);
   // main states
   let categoryTitle;
-  store.initials.categories.categories.map((item) => {
+  store.initials.categories?.categories?.map((item) => {
     if (item.id == categoryId) {
       categoryTitle = item.title;
       return item;
@@ -167,7 +168,7 @@ const AddCategoryDialog = ({
     if (parentId == 1) return "";
     const categories = store.initials.categories;
     let categoryTitle;
-    store.initials.categories.categories.map((item) => {
+    store.initials.categories?.categories?.map((item) => {
       if (item.id == parentId) {
         categoryTitle = item.title;
         return item;
@@ -213,7 +214,7 @@ const AddCategoryDialog = ({
     },
     categoryId
   );
-  
+
   const defaultSelected =
     data?.parentId != 1
       ? [{ id: data?.parentId, title: findParenTitle(data?.parentId) }]
@@ -277,7 +278,6 @@ const AddCategoryDialog = ({
               )}
             ></TreeSystem>
           </div>
-
           <div className="w100 mxa row">
             <SelectBox
               value={values.processId}
@@ -289,6 +289,7 @@ const AddCategoryDialog = ({
               handleChange={handleChange}
               required={false}
             />
+
             <SelectBox
               value={values.objectionAllowed}
               label="امکان تجدید نظر"

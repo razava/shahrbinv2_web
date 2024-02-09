@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { callAPI } from "../../../helperFuncs";
 import StageForm from "./StageForm";
 
-const Referral = ({ data, onNext = (f) => f }) => {
+const Referral = ({ data, refresh, onNext = (f) => f }) => {
   // flags
   const [loading, setLoading] = useState(false);
   const [Data, setData] = useState([]);
@@ -41,6 +41,7 @@ const Referral = ({ data, onNext = (f) => f }) => {
         },
         successCallback: () => {
           toast("درخواست با موفقیت ارجاع داده شد.", { type: "success" });
+          refresh();
         },
       },
       data?.id
@@ -58,7 +59,7 @@ const Referral = ({ data, onNext = (f) => f }) => {
               key={i}
             >
               <TransitionForm
-                data={Data}
+                data={data}
                 transition={transition}
                 createTransition={createTransition}
                 createLoading={loading}

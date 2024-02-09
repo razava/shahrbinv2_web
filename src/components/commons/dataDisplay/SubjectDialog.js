@@ -139,7 +139,7 @@ const SubjectDialog = ({
   return (
     <>
       {loading && <Loader absolute={true} />}
-      <div className="fcc py4" style={{width: 400}}>
+      <div className="fcc py4" style={{ width: 400 }}>
         <h1>انتخاب گروه موضوعی</h1>
         {selecteds.length > 0 &&
           (multiple ? (

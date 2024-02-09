@@ -7,10 +7,12 @@ import ReportDetails from "./ReportDetails";
 import Referral from "../submission/Referral";
 import Loader from "../../helpers/Loader";
 import ReportHistory from "./ReportHistory";
-import { callAPI } from "../../../helperFuncs";
+import { callAPI, getUserRoles, hasRole } from "../../../helperFuncs";
 import OlMapContainer from "../map/OlMapContainer";
 import CategoryForm from "./CategoryForm";
 import MoreDetails from "./MoreDetails";
+import ReportComments from "./ReportComments";
+import MessageToCitizen from "../submission/MessageToCitizen";
 
 const modal = document && document.getElementById("modal-root");
 
@@ -24,6 +26,7 @@ const ReportDialog = ({
 }) => {
   // data states
   const [data, setData] = useState({});
+  const [role, setRoles] = useState([]);
   // const [ReportHistory, setReportHistory] = useState({});
   const [defaultTab, setDefaultTab] = useState("reportDetails");
 
@@ -51,6 +54,14 @@ const ReportDialog = ({
   const onTabChange = (tab) => {
     setDefaultTab(tab);
   };
+  useEffect(() => {
+    const roles = localStorage.getItem("SHAHRBIN_MANAGEMENT_USER_ROLES");
+    setRoles(roles);
+  }, []);
+
+  console.log(role);
+  const userRoles = getUserRoles();
+  const isExecutive = hasRole(userRoles, ["Executive"]);
 
   return (
     <>
@@ -81,6 +92,9 @@ const ReportDialog = ({
             <article label="تاریخچه درخواست" id="reportHistory">
               <ReportHistory data={data} />
             </article>
+            <article label="نظرات شهروندان" id="reportComments">
+              <ReportComments data={data} />
+            </article>
             <article label="محل روی نقشه" id="location">
               <OlMapContainer
                 center={[
@@ -93,6 +107,12 @@ const ReportDialog = ({
                 clickable={false}
               />
             </article>
+
+            {!readOnly && isExecutive && (
+              <article label="پاسخ به شهروند" id="messageToCitizen">
+                <MessageToCitizen data={data} />
+              </article>
+            )}
             {!readOnly && (
               <article label="ارجاع" id="finalize">
                 <Referral

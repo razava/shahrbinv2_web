@@ -72,7 +72,7 @@ const RegisterForm = ({
       // Object.keys(editedFormData).forEach((key) => {
       //   payload.append(key, editedFormData[key]);
       // });
-      payload = editedFormData
+      payload = editedFormData;
       console.log(payload);
     } else {
       const selectedRoles = roles.map((role) => role.roleName);

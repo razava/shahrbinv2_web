@@ -84,7 +84,7 @@ const ProfileForm = ({ data, setDialog }) => {
     const formData = new FormData();
     formData.append("File", file);
     formData.append("AttachmentType", 1);
-    uploadMutation.mutate(formData)
+    uploadMutation.mutate(formData);
     readFile(file);
   };
 

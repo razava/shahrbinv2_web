@@ -13,7 +13,7 @@ const useInitials = () => {
   // store
   const [store, dispatch] = useContext(AppStore);
   const token = getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN);
-
+  
   // functions
   const getInitials = async (instance_id) => {
     let instance = {};
@@ -29,6 +29,7 @@ const useInitials = () => {
           instance = res.data;
           saveToLocalStorage(constants.SHAHRBIN_MANAGEMENT_INSTANCE, instance);
         }
+        console.log("2222");
         const categoryPromise = new Promise((resolve, reject) => {
           callAPI({
             caller: CommonAPI.getSubjectGroups,
@@ -73,7 +74,9 @@ const useInitials = () => {
   useEffect(() => {
     let instance_id;
     if (token) {
+      console.log(5555);
       instance_id = jwt_decode(token).instance_id;
+      console.log(jwt_decode(token));
       getInitials(instance_id);
     }
   }, [token]);

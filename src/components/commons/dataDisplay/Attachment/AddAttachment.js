@@ -44,7 +44,7 @@ const AddAttachment = ({
     },
     onError: (err) => {},
   });
-  console.log(attachments);
+  
   // functions
   const openFilePicker = () => {
     fileInputRef.current.click();

@@ -44,7 +44,7 @@ const Comments = ({ match }) => {
   const [sendAnswerRequest, setSendAnwserRequest] = useState(false);
   const [deleteCommentRequest, setDeleteCommentRequest] = useState(false);
   const [loading, setLoading] = useState(true);
-  
+
   const queries = {
     page,
     perPage,

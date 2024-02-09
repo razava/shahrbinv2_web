@@ -25,9 +25,40 @@ export async function makeFAQ(Data) {
   return data.data;
 }
 
-export async function editFAQ({Data, id}) {
+export async function editFAQ({ Data, id }) {
   const data = await axios.put(`/api/${instanceId}/StaffFaq/${id}`, Data, {
     headers: { Authorization: `Bearer ${Token}` },
   });
+  return data.data;
+}
+
+export async function getReportHistory(id) {
+  const data = await axios.get(
+    `/api/${instanceId}/StaffReport/ReportHistory/${id}`,
+    {
+      headers: { Authorization: `Bearer ${Token}` },
+    }
+  );
+  return data.data;
+}
+
+export async function getReportComments(ReportId) {
+  const data = await axios.get(
+    `/api/${instanceId}/StaffReport/ReportComments/${ReportId}`,
+    {
+      headers: { Authorization: `Bearer ${Token}` },
+    }
+  );
+  return data.data;
+}
+
+export async function postMessageToCitizen({ id, payload }) {
+  const data = await axios.post(
+    `/api/${instanceId}/StaffReport/MessageToCitizen/${id}`,
+    payload,
+    {
+      headers: { Authorization: `Bearer ${Token}` },
+    }
+  );
   return data.data;
 }

@@ -1134,6 +1134,11 @@ ul {
   }
 }
 
+@media print {
+  @page {
+    margin: 10px;
+  }
+}
 /* .ql-editor {
   text-align: right;
 } */
