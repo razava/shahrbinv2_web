@@ -15,9 +15,10 @@ import SelectBox from "../../helpers/SelectBox";
 import Textarea from "../../helpers/Textarea";
 import TreeSystem from "./TreeSystem";
 import AppContext, { AppStore } from "../../../store/AppContext";
-import { getCategoryById } from "../../../api/AdminApi";
+import { editForm, getCategoryById } from "../../../api/AdminApi";
 import { useQuery } from "@tanstack/react-query";
 import SelectBox2 from "../../helpers/SelectBox2";
+import Loader from "../../helpers/Loader";
 
 const objectionValues = [
   {
@@ -32,6 +33,7 @@ const objectionValues = [
 
 const AddCategoryDialog = ({
   onSuccess = (f) => f,
+  setLoading = (f) => f,
   mode = "create",
   defaltValues,
   categoryId,
@@ -61,6 +63,7 @@ const AddCategoryDialog = ({
     duration: "",
     description: "",
     objectionAllowed: "",
+    form: "",
   });
   const [processes, setProcesses] = useState([]);
   const [parents, setParents] = useState([]);
@@ -126,6 +129,19 @@ const AddCategoryDialog = ({
   // console.log(defaltValues);
   const fillInputs = () => {
     parentId.current = data.parentId;
+    console.log(data.form, "ab");
+    const ab = {
+      title: data.title,
+      processId: data.processId,
+      order: data.order,
+      code: data.code,
+      responseDuration: data.responseDuration / 24,
+      duration: data.duration / 24,
+      description: data.description,
+      objectionAllowed: data.objectionAllowed ? 1 : 0,
+      formId: data.formId ? data.formId : "",
+    };
+    console.log(ab);
     setValues({
       title: data.title,
       processId: data.processId,
@@ -135,11 +151,13 @@ const AddCategoryDialog = ({
       duration: data.duration / 24,
       description: data.description,
       objectionAllowed: data.objectionAllowed ? 1 : 0,
+      formId: data.form ? data.form : "",
     });
   };
 
   useEffect(() => {
     if (isEditMode && data) {
+      console.log("9999999999999999999999999999999");
       fillInputs();
     }
 
@@ -160,11 +178,10 @@ const AddCategoryDialog = ({
       if (options?.onlyDigits) {
         value = String(value).replace(/\D/g, "");
       }
+      console.log("zzz");
       setValues({ ...values, [name]: value });
     };
-  console.log(store.initials);
   const findParenTitle = (parentId) => {
-    console.log(parentId);
     if (parentId == 1) return "";
     const categories = store.initials.categories;
     let categoryTitle;
@@ -180,7 +197,6 @@ const AddCategoryDialog = ({
         });
       }
     });
-    console.log(categoryTitle);
     return categoryTitle;
   };
   const createCategory = () => {
@@ -195,7 +211,7 @@ const AddCategoryDialog = ({
     setPayload(payload);
     setCreateRequest(true);
   };
-
+  console.log(values);
   const [, loading] = useMakeRequest(
     isEditMode
       ? ConfigurationsAPI.updateCategory
@@ -219,6 +235,8 @@ const AddCategoryDialog = ({
     data?.parentId != 1
       ? [{ id: data?.parentId, title: findParenTitle(data?.parentId) }]
       : [];
+
+  console.log(values);
   return (
     <>
       <>
@@ -247,7 +265,6 @@ const AddCategoryDialog = ({
             isInDialog={true}
             id="categories"
           /> */}
-            {console.log(data?.parentId)}
             <TreeSystem
               isStatic
               staticData={store.initials.categories}
@@ -345,10 +362,20 @@ const AddCategoryDialog = ({
             />
           </div>
           <div className="w100 mxa row">
+            <SelectBox
+              value={values.formId}
+              label="فرم"
+              caller={ConfigurationsAPI.getForms}
+              wrapperClassName="col-md-6 col-sm-12"
+              inputClassName=""
+              name="formId"
+              handleChange={handleChange}
+              required={false}
+            />
             <Textarea
               value={values.description}
               title="توضیحات"
-              wrapperClassName="col-md-12"
+              wrapperClassName="col-md-6 col-sm-12"
               inputClassName=""
               name="description"
               handleChange={handleChange}

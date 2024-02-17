@@ -1,0 +1,61 @@
+.controller {
+  padding: 20px;
+  position: relative;
+  border-bottom: 1px solid #ddd;
+  margin: 0 25px;
+  cursor: grab;
+  user-select: none;
+  transition: all 0.3s;
+  box-sizing: border-box;
+  min-height: 80px;
+  background-color: white;
+  box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.02);
+  margin-bottom: 20px;
+  border-radius: 15px;
+}
+
+.controller.isContainer {
+  background-color: #ddd;
+}
+
+.controller .controls {
+  opacity: 0;
+  z-index: -10;
+  transition: all 0.3s;
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: white;
+  background-color: #7209b7;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  border-radius: 10px 0 0 0;
+  font-size: 1.3rem;
+  transform: rotateX(90deg);
+}
+
+.controller:hover .controls {
+  opacity: 1;
+  z-index: 10;
+  transform: rotateX(0);
+}
+
+.control {
+  cursor: pointer;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  border-radius: 50%;
+  margin: 0 2px;
+}
+
+.control:hover {
+  background-color: white;
+  color: purple;
+}

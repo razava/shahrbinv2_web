@@ -1,0 +1,127 @@
+.wrapper {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--glass);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1300;
+  visibility: hidden;
+}
+
+.container {
+  background-color: var(--white);
+  border-radius: var(--br-md);
+  box-shadow: rgb(0 0 0 / 20%) 0px 11px 15px -7px,
+    rgb(0 0 0 / 14%) 0px 24px 38px 3px, rgb(0 0 0 / 12%) 0px 9px 46px 8px;
+  min-width: 320px;
+  transition: all 0.3s;
+  position: absolute;
+  pointer-events: none;
+  padding-bottom: 60px;
+}
+
+.container.notVisible {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.container.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.container.onTop {
+  pointer-events: visible;
+}
+
+.container.loading {
+  background-color: var(--white);
+}
+
+.header {
+  padding: var(--pd-sm) 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 10px;
+  border-bottom: 2px solid var(--muteBg);
+  padding: 10px;
+}
+
+.header h1 {
+  flex: 1;
+  margin: 0;
+  color: var(--black);
+  font-size: 1.5rem;
+}
+
+.closeButton {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  color: var(--dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  transition: all 0.3s;
+  background-color: transparent;
+  border: 10px solid transparent;
+}
+
+.closeButton:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.buttons {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-top: 1px solid #ddd;
+}
+
+.button {
+  max-width: 100px !important;
+  height: 40px !important;
+  margin: 0 5px !important;
+  color: var(--white) !important;
+  border: none !important;
+  background-color: var(--purple) !important;
+}
+
+.button.primary {
+  background-color: var(--purple) !important;
+}
+
+.button.error {
+  background-color: var(--red) !important;
+}
+
+.loaderWrapper {
+  background-color: var(--white);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2000;
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

@@ -35,7 +35,7 @@ const SelectBox = ({
     null,
     (res) => {
       if (res.status === 200 && res.data.length === 1) {
-        handleChange(name)(res.data[0]?.id);
+        // handleChange(name)(res.data[0]?.id);
       }
     }
   );

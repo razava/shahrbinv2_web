@@ -10,6 +10,8 @@ import "./stylesheets/datatable.css";
 import "./stylesheets/loader.css";
 import mapboxgl from "mapbox-gl";
 import AppContext from "./store/AppContext";
+import AppContext2 from "./formStore/store";
+import { createRoot } from "react-dom/client";
 
 const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
 
@@ -18,15 +20,17 @@ mapboxgl.setRTLTextPlugin(
   null
 );
 
-ReactDOM.render(
-  <BrowserRouter basename={baseUrl}>
-    <AppContext>
-      <App />
-    </AppContext>
-  </BrowserRouter>,
-  document.getElementById("root")
-);
+const root = createRoot(document.getElementById("root"));
 
+root.render(
+  <BrowserRouter basename={baseUrl}>
+    <AppContext2>
+      <AppContext>
+        <App />
+      </AppContext>
+    </AppContext2>
+  </BrowserRouter>
+);
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals

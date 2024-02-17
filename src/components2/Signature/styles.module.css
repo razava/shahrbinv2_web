@@ -1,0 +1,16 @@
+.signatureD {
+  max-width: 400px;
+  width: 100%;
+}
+
+.canvas {
+  background-color: var(--gray-scale-6);
+  cursor: pointer;
+}
+
+.label {
+  font-size: 1.4rem;
+  color: var(--gray-scale-4);
+  margin-bottom: 10px;
+  display: flex;
+}

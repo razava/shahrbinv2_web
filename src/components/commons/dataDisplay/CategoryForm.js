@@ -84,7 +84,7 @@ const CategoryForm = ({ data }) => {
     const plateNumberValues = {};
     const textAreaValues = {};
     textElements.forEach((e) => {
-      textValues[e.name] = citizenValues[e.name] || "";
+      textValues[e.name] =   [e.name] || "";
     });
     selectElements.forEach((e) => {
       selectValues[e.name] = citizenValues[e.name] || "";

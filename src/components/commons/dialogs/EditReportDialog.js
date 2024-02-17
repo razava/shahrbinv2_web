@@ -14,6 +14,10 @@ import TextInput from "../../helpers/TextInput";
 import ShowAttachments from "../dataDisplay/ShowAttachments";
 import SelectOnMapDialog from "./SelectOnMapDialog";
 import TreeSystem from "./TreeSystem";
+// import CategoryForm2 from "../dataDisplay/CategoryForm2";
+import { getReportById } from "../../../api/commonApi";
+import { useQuery } from "@tanstack/react-query";
+import CategoryForm2 from "../dataDisplay/CategoryForm2";
 
 const EditReportDialog = ({ report = {}, onSuccess = (f) => f }) => {
   // store
@@ -169,6 +173,12 @@ const EditReportDialog = ({ report = {}, onSuccess = (f) => f }) => {
     },
   ];
 
+  //queries
+  const { data: ReportData, isLoading } = useQuery({
+    queryKey: ["ReportData", report.id],
+    queryFn: () => getReportById(report.id),
+  });
+
   // effetcs
   useEffect(() => {
     if (report.id) {
@@ -199,6 +209,8 @@ const EditReportDialog = ({ report = {}, onSuccess = (f) => f }) => {
       });
     }
   }, [report]);
+
+  console.log(ReportData?.media);
   return (
     <>
       <>
@@ -311,7 +323,9 @@ const EditReportDialog = ({ report = {}, onSuccess = (f) => f }) => {
             wrapperClassName="col-sm-12"
           />
         </div>
-
+        <div className=" w-full mxa">
+          {ReportData?.form && <CategoryForm2 data={ReportData} />}
+        </div>
         <div className={"w90 mxa px1"}>
           <label className={"text-secondary f15"}>پیوست ها</label>
           <ShowAttachments

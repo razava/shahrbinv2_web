@@ -1,0 +1,11 @@
+.dropZone {
+  width: calc(100% - 50px);
+  border: 2px dashed gray;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #777;
+  margin: 20px auto;
+}

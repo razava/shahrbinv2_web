@@ -12,6 +12,7 @@ import useInitials from "./components/hooks/useInitials";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import FAQ from "./components/screens/FAQ";
 import News from "./components/screens/News";
+import NewForm from "./components/screens/NewForm";
 const NewReports = lazy(() => import("./components/screens/NewReports"));
 const RegisterReport = lazy(() =>
   import("./components/screens/RegisterReport")
@@ -40,6 +41,7 @@ const ComplaintsCategories = lazy(() =>
 const ComplaintsUnits = lazy(() =>
   import("./components/screens/ComplaintsUnits")
 );
+const Form = lazy(() => import("./components/screens/Forms"));
 const queryClient = new QueryClient();
 const App = () => {
   useInitials();
@@ -119,6 +121,7 @@ const App = () => {
                       />
                       <AuthorizeRoute path={appRoutes.FAQ} component={FAQ} />
                       <AuthorizeRoute path={appRoutes.news} component={News} />
+                      <AuthorizeRoute path={appRoutes.forms} component={Form} />
                       <AuthorizeRoute
                         path={appRoutes.complaintsCategories}
                         component={ComplaintsCategories}
@@ -132,6 +135,7 @@ const App = () => {
                 </Suspense>
               </Route>
 
+              <Route path={appRoutes.newForm} component={NewForm} />
               <Route path={appRoutes.login} component={Login} />
               <Route component={NotFound} />
             </Switch>

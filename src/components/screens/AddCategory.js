@@ -37,6 +37,7 @@ const AddCategory = ({ match }) => {
   const [addCategoryDialog, setAddCategoryDialog] = useState(false);
   const [createLoading, setCreateLoading] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [editLoading, setEditLoading] = useState(true);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const queries = {
@@ -241,11 +242,13 @@ const AddCategory = ({ match }) => {
         setCondition={setDialog}
         width={700}
         isUnique={false}
+        // loading={editLoading}
         id="edit-category-dialog"
       >
         <AddCategoryDialog
           onSuccess={onCategoryEdited}
           mode={"edit"}
+          setLoading={setEditLoading}
           defaltValues={currentCategory}
           categoryId={dialogData?.id}
           category={currentCategory}

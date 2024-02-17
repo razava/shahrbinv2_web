@@ -1,0 +1,160 @@
+.dialogContainer {
+  max-width: 700px;
+  width: 100%;
+  background-color: white;
+  height: auto;
+  min-height: 400px;
+  padding-bottom: 50px;
+  transition: all 0.3s;
+}
+
+.dialogHeader {
+  margin: 0 auto;
+}
+
+.dialogCloseButton {
+}
+
+.editTabs {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 40px;
+  position: relative;
+  z-index: 1;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.editTab {
+  flex: 1;
+  height: 100%;
+  position: relative;
+  z-index: 3;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  color: #000;
+}
+
+.activeEditTab {
+  color: white;
+}
+
+.editTabIndicator {
+  border-radius: 0;
+  background-color: #7209b7;
+}
+
+.editFields {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.group {
+  padding: 10px;
+  width: 90%;
+  margin: 20px auto;
+}
+
+.group.fit {
+  grid-column: 1 / -1;
+}
+
+.label {
+  font-size: 1.2rem;
+  color: gray;
+}
+
+.icon {
+  width: 25px;
+  height: 25px;
+  color: var(--white);
+  background-color: var(--purple);
+  border-radius: 5px;
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+.buttonGroup {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+.options {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.colorInput {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.2);
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.otherOptions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+/* options */
+.options {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 10px;
+}
+
+.optionInput {
+  max-width: 100px;
+  width: 100%;
+  margin: 0 5px;
+}
+
+.optionInputIcon {
+  font-size: 1.5rem;
+  margin: 0 3px;
+  cursor: pointer;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: 5px solid transparent;
+  transition: all 0.3s;
+}
+
+.optionInputIcon.clone:hover {
+  border: 5px solid #7209b720;
+  background-color: #7209b720;
+}
+
+.optionInputIcon.close:hover {
+  border: 5px solid #d9042920;
+}
+
+.optionInputIcon.clone {
+  color: #7209b7;
+}
+
+.optionInputIcon.close {
+  color: #d90429;
+}

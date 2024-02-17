@@ -90,7 +90,7 @@ const TreeSystem = ({
     });
     return flatData;
   };
-  console.log(defaultSelecteds);
+
   const handleSelecting = ({ value, item }) => {
     if (singleSelect) {
       console.log(item);
@@ -226,7 +226,6 @@ const TreeSystem = ({
   }, [condition, searchInputRef.current]);
   return (
     <>
-      {console.log(selecteds)}
       {renderToggler(selecteds, flatData)}
       <DialogToggler
         condition={condition}
@@ -249,7 +248,6 @@ const TreeSystem = ({
             wrapperClassName="mxa"
             forwardInputRef={searchInputRef}
           />
-          {console.log(displayedData)}
           {displayedData.map((item) => (
             <TreeItem
               key={item.id}

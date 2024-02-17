@@ -1276,6 +1276,18 @@ export class ProcessesAPI {
 }
 
 export class ConfigurationsAPI {
+  static getForms(token, payload, source, instance) {
+    return axios
+      .get(`${prefix}/api/${instance?.id}/AdminForms`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((res) => res)
+      .catch((err) => err.response);
+  }
+
   static getCategories(token, payload, source, instance) {
     return axios
       .get(`${prefix}/api/${instance?.id}/StaffCommon/Categories`, {

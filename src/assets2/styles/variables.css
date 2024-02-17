@@ -1,0 +1,42 @@
+[data-color-mode="dark"],
+[data-color-mode="light"] {
+  --purple: #6363fc;
+
+  --orange: #fca311;
+
+  --red: #ba181b;
+
+  --green: #006400;
+
+  --lightGreen: #06d6a0;
+
+  --black: hsl(0, 0%, 0%);
+  --black-scale-1: hsl(0, 0%, 10%);
+  --black-scale-2: hsl(0, 0%, 20%);
+  --black-scale-3: hsl(0, 0%, 30%);
+  --black-scale-4: hsl(0, 0%, 40%);
+  --black-scale-5: hsl(0, 0%, 50%);
+  --black-scale-6: hsl(0, 0%, 60%);
+  --black-scale-7: hsl(0, 0%, 70%);
+  --black-scale-8: hsl(0, 0%, 80%);
+  --black-scale-9: hsl(0, 0%, 90%);
+
+  --white: hsl(0, 0%, 100%);
+  --white-scale-1: hsl(240, 2%, 90%);
+  --white-scale-2: #dee2e6;
+  --white-scale-3: hsl(235, 100%, 96%);
+  --white-scale-4: hsl(212, 27%, 89%);
+  --white-scale-7: hsl(235, 6%, 58%);
+
+  --gray: hsl(0, 0%, 35%);
+  --gray-scale-1: hsl(0, 0%, 42%);
+  --gray-scale-2: hsl(0, 0%, 47%);
+  --gray-scale-4: hsl(0, 0%, 71%);
+  --gray-scale-5: hsl(0, 0%, 85%);
+  --gray-scale-6: hsl(0, 0%, 92%);
+  --gray-scale-10: hsl(0, 0%, 29%);
+}
+
+[data-color-mode="light"] {
+
+}

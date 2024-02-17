@@ -40,7 +40,6 @@ const useMakeRequest = (
     const instance =
       getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_INSTANCE) || {};
     setLoading(true);
-    console.log(instance);
     caller(token, payload, source, instance, ...rest)
       .then((res) => {
         setLoading(false);

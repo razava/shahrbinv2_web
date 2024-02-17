@@ -1,0 +1,23 @@
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+.modalWrapper{
+    @apply p-3 m-2
+}
+.modal {
+  @apply font-bold text-2xl mt-3;
+}
+
+.previewButton {
+  @apply appearance-none p-3 font-bold hover:scale-110 transition fixed bottom-10 left-14 bg-yellow-300 text-black shadow-md rounded-md border-none text-lg;
+}
+
+.header{
+    @apply mt-10
+}
+
+.customModal {
+  background: #b2dbbf;
+  max-width: 500px;
+  width: 100%;
+}

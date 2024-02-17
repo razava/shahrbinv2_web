@@ -1,0 +1,9 @@
+.container {
+  width: 100%;
+}
+
+.label {
+  font-size: 1.4rem;
+  color: var(--gray-scale-2);
+  margin-bottom: 10px;
+}

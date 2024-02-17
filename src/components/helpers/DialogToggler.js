@@ -30,7 +30,7 @@ const DialogToggler = ({
 }) => {
   const [store, dispatch] = useContext(AppStore);
   const pageRoot = document && document.getElementById("content");
-
+  console.log(loading);
   const dialogRef = useRef(null);
   const isOnTopRef = useRef(null);
   const modalLengthRef = useRef(null);

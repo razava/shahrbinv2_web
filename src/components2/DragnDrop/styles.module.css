@@ -1,0 +1,44 @@
+.dragndrop {
+  width: 100%;
+}
+
+.dnd_group {
+  flex: 1;
+  width: 100%;
+}
+
+.drag_item {
+  opacity: 1;
+  transition: all 0.3s;
+  /* position: absolute; */
+  width: 100%;
+  /* transform: scale(1); */
+}
+
+.drag_item.dragging {
+  opacity: 0;
+  /* transform: scale(1.01); */
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+.innerContainer {
+  background-color: #ddd;
+  padding: 20px;
+  position: relative;
+  border-bottom: 1px solid #ddd;
+  margin: 0 25px;
+  cursor: grab;
+  user-select: none;
+  transition: all 0.3s;
+  box-sizing: border-box;
+  min-height: 80px;
+  box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.02);
+  margin-bottom: 20px;
+  border-radius: 15px;
+}
+
+.dragItem {
+  width: 100%;
+  position: absolute;
+}

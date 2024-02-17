@@ -1,0 +1,10 @@
+.activeIndicator {
+  height: 100%;
+  background-color: white;
+  border-radius: 10px;
+  position: absolute;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  transition: all 0.3s;
+}

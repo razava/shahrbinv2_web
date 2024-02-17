@@ -1,0 +1,86 @@
+.categoryD {
+  max-width: 600px;
+  width: 100%;
+}
+
+.addD {
+  padding: 20px;
+  max-width: 300px;
+  width: 100%;
+  padding-bottom: 60px;
+}
+
+.treeSystem {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 20px;
+  padding-bottom: 50px;
+}
+
+.treeItem {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.treeItemContent {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+}
+
+.treeItemToggle {
+  cursor: pointer;
+  margin-left: 10px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--purple);
+  color: var(--white);
+  border-radius: 4px;
+}
+
+.space {
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+}
+
+.treeItemTitle {
+  color: var(--black);
+  font-size: 1.2rem;
+}
+
+.treeItemInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: var(--purple);
+  color: var(--white);
+  font-size: 1.2rem;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  top: 0;
+}
+
+/* toggle */
+.toggleInput {
+  cursor: pointer;
+}
+
+.addIcon {
+  background-color: var(--lightGreen);
+  color: var(--white);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin: 0 10px;
+  cursor: pointer;
+}

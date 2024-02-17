@@ -1,0 +1,20 @@
+.message {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  background-color: var(--gray-scale-6);
+  padding: 20px;
+}
+
+.messageTitle {
+  color: var(--black);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.messageDescription {
+  font-size: 1.4rem;
+  color: var(--gray);
+  margin-top: 10px;
+}

@@ -4,11 +4,12 @@ import DatePicker, {
   Calendar,
 } from "@hassanmojab/react-modern-calendar-datepicker";
 import "@hassanmojab/react-modern-calendar-datepicker/lib/DatePicker.css";
-import useClick from "../../hooks/useClick";
+// import useClick from "../../";
 import TextInput from "../TextInput";
 import { fixDigit } from "../../../helperFuncs";
 import useResize from "../../hooks/useResize";
 import { AppStore } from "../../../store/AppContext";
+import useClick from "../../hooks/useClick";
 
 const modalSelectListWrapper =
   document && document.getElementById("modal-selectlist");

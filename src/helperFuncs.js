@@ -48,6 +48,7 @@ export const mapUrlToNav = (location, replace) => {
   else if (area === "/quickAccess") return { quickAccess: true };
   else if (area === "/FAQ") return { FAQ: true };
   else if (area === "/news") return { news: true };
+  else if (area === "/forms") return { forms: true };
   else if (area === "/allComplaints") return { allComplaints: true };
   else if (area === "/complaints") return { complaints: true };
   else if (area === "/organizationalUnits")
@@ -568,6 +569,8 @@ export const accessibilityByRoles = (path) => {
   if (path === "/admin/quickAccess") return ["Admin"];
   if (path === "/admin/FAQ") return ["Admin"];
   if (path === "/admin/news") return ["Admin"];
+  if (path === "/admin/forms") return ["Admin"];
+  if (path === "/newForm") return ["Admin"];
   if (path === "/admin/complaints") return ["ComplaintInspector"];
   if (path === "/admin/allComplaints") return ["ComplaintInspector"];
   if (path === "/admin/complaints-categories") return ["ComplaintAdmin"];
@@ -894,6 +897,8 @@ export const appRoutes = {
   quickAccess: "/admin/quickAccess",
   FAQ: "/admin/FAQ",
   news: "/admin/news",
+  forms: "/admin/forms",
+  newForm: "/newForm",
   complaintsCategories: "/admin/complaints-categories",
   complaintsUnits: "/admin/complaints-units",
   login: "/",

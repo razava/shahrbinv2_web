@@ -21,6 +21,7 @@ import Radio from "../../helpers/Radio/Radio";
 import { AppStore } from "../../../store/AppContext";
 import { useQuery } from "@tanstack/react-query";
 import { getReportById } from "../../../api/commonApi";
+import CategoryForm2 from "./CategoryForm2";
 
 const ConfirmReportDialog = ({
   report,
@@ -325,6 +326,9 @@ const ConfirmReportDialog = ({
                 title="توضیحات"
               />
             </div>
+            {/* <div className=" w-full mxa">
+              {ReportData.category?.form && <CategoryForm2 data={ReportData} />}
+            </div> */}
             <div className={"w90 mxa px1"}>
               <label className={styles.infoLabel}>پیوست ها</label>
               <ShowAttachments
