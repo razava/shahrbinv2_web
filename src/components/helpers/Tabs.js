@@ -25,7 +25,7 @@ const Tabs = ({
   useEffect(() => {
     setActiveTab(defaultActiveId ? defaultActiveId : children[0].props.id);
   }, [children.length, defaultActiveId]);
-
+  
   return (
     <>
       <div className={`${mainClass}s ${wrapperClassName}`}>

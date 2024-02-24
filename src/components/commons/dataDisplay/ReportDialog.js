@@ -13,6 +13,8 @@ import CategoryForm from "./CategoryForm";
 import MoreDetails from "./MoreDetails";
 import ReportComments from "./ReportComments";
 import MessageToCitizen from "../submission/MessageToCitizen";
+import CategoryForm2 from "./CategoryForm2";
+import Notes from "./Notes";
 
 const modal = document && document.getElementById("modal-root");
 
@@ -62,7 +64,7 @@ const ReportDialog = ({
   console.log(role);
   const userRoles = getUserRoles();
   const isExecutive = hasRole(userRoles, ["Executive"]);
-
+  
   return (
     <>
       {loading && <Loader absolute={true} />}
@@ -86,6 +88,13 @@ const ReportDialog = ({
                 <CategoryForm data={data} />
               </article>
             )}
+            {data?.form ? (
+              <article label="فرم" id="formmm">
+                <CategoryForm2 data={data} />
+              </article>
+            ) : (
+              false
+            )}
             <article label="اطلاعات شهروند" id="citizenInfo">
               <CitizenInfo data={data} />
             </article>
@@ -94,6 +103,9 @@ const ReportDialog = ({
             </article>
             <article label="نظرات شهروندان" id="reportComments">
               <ReportComments data={data} />
+            </article>
+            <article label="یادداشت ها" id="notes">
+              <Notes data={data} />
             </article>
             <article label="محل روی نقشه" id="location">
               <OlMapContainer

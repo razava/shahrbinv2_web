@@ -21,7 +21,7 @@ export async function postFiles(Data) {
 
 export async function EditProfile(Data) {
   const data = await axios.put(
-    `/api/${instanceId}/Authenticate/Profile`,
+    `/api/${instanceId}/Authenticate`,
     Data,
     {
       headers: { Authorization: `Bearer ${Token}` },

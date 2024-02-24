@@ -26,10 +26,12 @@ const modalRoot2 = document && document.getElementById("modal2-root");
 
 const NewReportsTable = ({ roleId = null, onRefer = (f) => f }) => {
   const userRoles = getUserRoles();
-  const isConfirm = hasRole(["Operator"], userRoles) && !roleId;
-  const isEditable = !!hasRole(["Operator"], userRoles) && !!roleId;
+  const isConfirm = hasRole(["Operator"], userRoles) && roleId == "NEW";
+  const isEditable = hasRole(["Operator"], userRoles) && roleId !== "NEW";
   const fromRoleId = useRef(roleId);
-
+  console.log(isEditable);
+  console.log(roleId);
+  console.log(!roleId);
   // store
   const [store, dispatch] = useContext(AppStore);
 
@@ -109,6 +111,7 @@ const NewReportsTable = ({ roleId = null, onRefer = (f) => f }) => {
     setDialog(true);
     setDialogData(row);
     onRefer();
+    getTasks(roleId);
   };
 
   const onEditDialogClose = ({ withRefer, report } = {}) => {
@@ -138,11 +141,13 @@ const NewReportsTable = ({ roleId = null, onRefer = (f) => f }) => {
     });
     return categoryTitle;
   };
-  reportColumn[1] = {
-    name: "زیر‌گروه موضوعی",
-    grow: 2,
-    cell: (row) => <span>{doesExist(findCategory(row))}</span>,
-  };
+
+  // reportColumn[1] = {
+  //   name: "زیر‌گروه موضوعی",
+  //   grow: 2,
+  //   cell: (row) => <span>{doesExist(findCategory(row))}</span>,
+  // };
+
   // variables
   const conditionalRowStyles = [
     {
@@ -205,6 +210,7 @@ const NewReportsTable = ({ roleId = null, onRefer = (f) => f }) => {
   const closeDialog = () => {
     setDialog(false);
     modalRoot.classList.remove("active");
+    setConfirmDialog(false);
   };
 
   const onPageChange = (page) => {
@@ -227,6 +233,7 @@ const NewReportsTable = ({ roleId = null, onRefer = (f) => f }) => {
     getTasks(fromRoleId.current);
   };
 
+  console.log(confirmDialog);
   // eefects
 
   useSignalR(onNewReport);

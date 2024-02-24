@@ -33,7 +33,7 @@ const CheckBox = ({
   //   states
   //  ** flags
   const [isChecked, setIsChecked] = useState(checked);
-
+  console.log(isChecked);
   // styles
   const sizeStyle = getSizeStyle(size);
   const checkBoxWrapperClassName = [
@@ -62,10 +62,9 @@ const CheckBox = ({
     onChange({ title, checked: !isChecked }, name);
   };
 
-  //   effects
-  // useEffect(() => {
-  //   setIsChecked(checked);
-  // }, [checked]);
+  useEffect(() => {
+    setIsChecked(checked);
+  }, [checked]);
 
   //   renders
   const renderLabel = () =>

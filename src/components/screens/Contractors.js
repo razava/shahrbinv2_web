@@ -34,13 +34,13 @@ const Contractors = () => {
   const [contractorDialog, setContractorDialog] = useState(false);
 
   const [data] = useMakeRequest(
-    UserInfoAPI.getAllUsers,
+    UserInfoAPI.getContractors,
     200,
     makeRequest,
     null,
     (res) => {
       setLoading(false);
-      if (res.status === 200) {
+      if (res.status === 201 || res.status === 200) {
         if (res.headers["x-pagination"]) {
           const paginationData = JSON.parse(
             res.headers["x-pagination"]
@@ -152,7 +152,13 @@ const Contractors = () => {
       >
         <RegisterForm
           setCondition={setContractorDialog}
-          fields={["phoneNumber", "firstName", "lastName", "organization"]}
+          fields={[
+            "phoneNumber",
+            "firstName",
+            "lastName",
+            "organization",
+            "title",
+          ]}
           caller={AuthenticateAPI.registerContractor}
           successCallback={successCallback}
         />

@@ -66,9 +66,13 @@ export async function postForm(payload) {
 }
 
 export async function editForm({ id, payload }) {
-  const data = await axios.put(`/api/${instanceId()}/AdminForms/${id}`, payload, {
-    headers: { Authorization: `Bearer ${Token}` },
-  });
+  const data = await axios.put(
+    `/api/${instanceId()}/AdminForms/${id}`,
+    payload,
+    {
+      headers: { Authorization: `Bearer ${Token}` },
+    }
+  );
   return data.data;
 }
 
@@ -76,5 +80,26 @@ export async function deleteForm(id) {
   const data = await axios.delete(`/api/${instanceId()}/AdminForms/${id}`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
+  return data.data;
+}
+
+export async function getOperatorCategories(id) {
+  const data = await axios.get(
+    `/api/${instanceId()}/AdminUserManagement/Categories/${id}`,
+    {
+      headers: { Authorization: `Bearer ${Token}` },
+    }
+  );
+  return data.data;
+}
+
+export async function putOperatorCategories({ id, payload }) {
+  const data = await axios.put(
+    `/api/${instanceId()}/AdminUserManagement/Categories/${id}`,
+    payload,
+    {
+      headers: { Authorization: `Bearer ${Token}` },
+    }
+  );
   return data.data;
 }

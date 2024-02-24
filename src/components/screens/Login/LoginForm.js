@@ -7,6 +7,8 @@ import { AuthenticateAPI } from "../../../apiCalls";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import Button from "../../helpers/Button";
+import { getCaptcha } from "../../../api/AuthenticateApi";
+import { useQuery } from "@tanstack/react-query";
 
 const LoginForm = () => {
   const _isMounted = useRef(true);
@@ -16,9 +18,18 @@ const LoginForm = () => {
   const [values, setValues] = useState({
     username: "",
     password: "",
+    captcha: "",
   });
   const [loading, setLoading] = useState(false);
-  const { username, password } = values;
+  const { username, password, captcha } = values;
+
+  //queries
+  const { data, isLoading, isSuccess, refetch } = useQuery({
+    queryKey: ["Captcha"],
+    queryFn: getCaptcha,
+  });
+
+  console.log(data);
 
   //   functions
   const handleChange = (name) => (e) => {
@@ -28,17 +39,32 @@ const LoginForm = () => {
 
   const login = (e) => {
     e.preventDefault();
-    if (!username || !password) {
+    if (!username || !password || !captcha) {
       toast("لطفا تمام فیلد ها را کامل نمایید.", { type: "error" }); // { /* => add error message object */}
       return;
     }
     setLoading(true);
-    const payload = { username, password };
+    const payload = {
+      username,
+      password,
+      captcha: { key: data.headers["captcha-key"], value: captcha },
+    };
     callAPI({
       caller: AuthenticateAPI.signin,
       payload,
-      successCallback: (res) => signUserIn(res, history),
-      requestEnded: () => setLoading(false),
+      successCallback: (res) => {
+        console.log(res);
+        if (res.data?.verificationToken) {
+          localStorage.setItem("verificationToken", res.data.verificationToken);
+          history.push("/verify");
+        } else {
+          signUserIn(res, history);
+        }
+      },
+      requestEnded: () => {
+        setLoading(false);
+        refetch();
+      },
     });
   };
 
@@ -48,6 +74,8 @@ const LoginForm = () => {
       _isMounted.current = false;
     };
   }, []);
+  //constants
+  const srcForImage = data ? URL.createObjectURL(data.data) : null;
   return (
     <>
       <section className={styles.loginFormWrapper}>
@@ -75,6 +103,27 @@ const LoginForm = () => {
               onChange={handleChange}
               disabled={loading}
             />
+            <div className=" w-full flex gap-2 items-center">
+              <div className=" w-1/2">
+                <LoginInput
+                  name="captcha"
+                  value={captcha}
+                  placeholder="کد امنیتی"
+                  icon="fas fa-ticket-alt"
+                  onChange={handleChange}
+                  disabled={loading}
+                />
+              </div>
+              <div className=" w-1/2 flex items-center h-full">
+                <img src={srcForImage} className=" rounded-sm h-16"></img>
+                <div
+                  onClick={refetch}
+                  className="cursor-pointer flex justify-center w-full"
+                >
+                  <i className="fas fa-sync-alt h-7 w-7"></i>
+                </div>
+              </div>
+            </div>
 
             <Button
               className={styles.loginBtn}

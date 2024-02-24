@@ -51,6 +51,7 @@ export const mapUrlToNav = (location, replace) => {
   else if (area === "/forms") return { forms: true };
   else if (area === "/allComplaints") return { allComplaints: true };
   else if (area === "/complaints") return { complaints: true };
+  else if (area === "/notes") return { notes: true };
   else if (area === "/organizationalUnits")
     return { organizationalUnits: true };
   return {};
@@ -191,7 +192,7 @@ export const reportColumn = [
   {
     name: "زیر‌گروه موضوعی",
     grow: 2,
-    cell: (row) => <span>{doesExist(row.category && row.category.title)}</span>,
+    cell: (row) => <span>{doesExist(row.categoryTitle)}</span>,
   },
   {
     name: "آخرین وضعیت",
@@ -324,23 +325,28 @@ export const logout = (callback) => {
 };
 
 export const signUserIn = (res, history) => {
-  console.log(res);
-  const decoded = jwtDecode(res.data);
-  console.log(decoded, "tok");
-  console.log();
+  const decoded = jwtDecode(res.data.authToken.jwtToken);
   let time = new Date(decoded.exp);
   const seconds = decoded.exp; // This is an example timestamp in seconds
   const milliseconds = seconds * 1000; // Convert seconds to milliseconds
   const date = new Date(milliseconds); // Create a date object from the milliseconds
   const formattedDate = date.toISOString(); // Format the date object to ISO string
   console.log(formattedDate);
-  // new Date().toISOString();
-  // ("2016-06-03T23:15:33.008Z");
   saveToLocalStorage(
     constants.SHAHRBIN_MANAGEMENT_INSTANCE_ID,
     decoded["instance_id"]
   );
-  saveToLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN, res.data);
+
+  saveToLocalStorage(
+    constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN,
+    res.data.authToken.jwtToken
+  );
+
+  saveToLocalStorage(
+    constants.SHAHRBIN_MANAGEMENT_AUTH_REFRESH_TOKEN,
+    res.data.authToken.refreshToken
+  );
+
   saveToLocalStorage(
     constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN_EXPIRATION,
     formattedDate
@@ -365,6 +371,49 @@ export const signUserIn = (res, history) => {
   history.push(to);
 };
 
+export const signUserAfterVerify = (res, history) => {
+  const decoded = jwtDecode(res.jwtToken);
+  let time = new Date(decoded.exp);
+  const seconds = decoded.exp; // This is an example timestamp in seconds
+  const milliseconds = seconds * 1000; // Convert seconds to milliseconds
+  const date = new Date(milliseconds); // Create a date object from the milliseconds
+  const formattedDate = date.toISOString(); // Format the date object to ISO string
+  console.log(formattedDate);
+  saveToLocalStorage(
+    constants.SHAHRBIN_MANAGEMENT_INSTANCE_ID,
+    decoded["instance_id"]
+  );
+
+  saveToLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN, res.jwtToken);
+
+  saveToLocalStorage(
+    constants.SHAHRBIN_MANAGEMENT_AUTH_REFRESH_TOKEN,
+    res.refreshToken
+  );
+
+  saveToLocalStorage(
+    constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN_EXPIRATION,
+    formattedDate
+  );
+  saveToLocalStorage(constants.SHAHRBIN_MANAGEMENT_USER_ROLES, [
+    decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"],
+  ]);
+  const currentTime = new Date().toISOString();
+  saveToLocalStorage(constants.SHAHRBIN_MANAGEMENT_LOGIN_TIME, currentTime);
+  const roles =
+    decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+  console.log(roles);
+  // const to = isManager(res.data.roles) ? appRoutes.infos : appRoutes.newReports;
+  const to = hasRole(["Mayor", "Manager", "Admin"], roles)
+    ? "/admin/infos"
+    : hasRole(["ComplaintInspector"], roles)
+    ? "/admin/complaints"
+    : hasRole(["ComplaintAdmin"], roles)
+    ? "/admin/complaints-categories"
+    : "/admin/newReports";
+  console.log(to);
+  history.push(to);
+};
 export const isManager = (userRoles) =>
   hasRole(["Mayor", "Manager", "Admin"], userRoles);
 
@@ -575,6 +624,7 @@ export const accessibilityByRoles = (path) => {
   if (path === "/admin/allComplaints") return ["ComplaintInspector"];
   if (path === "/admin/complaints-categories") return ["ComplaintAdmin"];
   if (path === "/admin/complaints-units") return ["ComplaintAdmin"];
+  if (path === "/admin/notes") return ["Operator"];
   if (String(path).toLowerCase().startsWith("/admin/poll/")) return ["Admin"];
 };
 
@@ -870,12 +920,21 @@ export const callAPI = (
 export const constants = {
   SHAHRBIN_MODE: "SHAHRBIN_MODE",
   SHAHRBIN_MANAGEMENT_AUTH_TOKEN: "SHAHRBIN_MANAGEMENT_AUTH_TOKEN",
+  SHAHRBIN_MANAGEMENT_AUTH_REFRESH_TOKEN:
+    "SHAHRBIN_MANAGEMENT_AUTH_REFRESH_TOKEN",
   SHAHRBIN_MANAGEMENT_AUTH_TOKEN_EXPIRATION:
     "SHAHRBIN_MANAGEMENT_AUTH_TOKEN_EXPIRATION",
   SHAHRBIN_MANAGEMENT_USER_ROLES: "SHAHRBIN_MANAGEMENT_USER_ROLES",
   SHAHRBIN_MANAGEMENT_LOGIN_TIME: "SHAHRBIN_MANAGEMENT_LOGIN_TIME",
   SHAHRBIN_MANAGEMENT_INSTANCE: "SHAHRBIN_MANAGEMENT_INSTANCE",
   SHAHRBIN_MANAGEMENT_INSTANCE_ID: "SHAHRBIN_MANAGEMENT_INSTANCE_ID",
+  SHAHRBIN_MANAGEMENT_PHONE_NUMBER_TOKEN:
+    "SHAHRBIN_MANAGEMENT_PHONE_NUMBER_TOKEN",
+  SHAHRBIN_MANAGEMENT_PHONE_NUMBER: "SHAHRBIN_MANAGEMENT_PHONE_NUMBER",
+  SHAHRBIN_MANAGEMENT_NEW_PHONE_NUMBER_TOKEN:
+    "SHAHRBIN_MANAGEMENT_NEW_PHONE_NUMBER_TOKEN",
+  SHAHRBIN_MANAGEMENT_NEW_PHONE_NUMBER: "SHAHRBIN_MANAGEMENT_NEW_PHONE_NUMBER",
+  SHAHRBIN_MANAGEMENT_HAS_PHONE_NUMBER: "SHAHRBIN_MANAGEMENT_HAS_PHONE_NUMBER",
 };
 
 export const appRoutes = {
@@ -902,6 +961,9 @@ export const appRoutes = {
   complaintsCategories: "/admin/complaints-categories",
   complaintsUnits: "/admin/complaints-units",
   login: "/",
+  verify: "/verify",
+  changePhoneNumber: "/changePhoneNumber",
+  notes: "/admin/notes",
 };
 
 export const randomColor = () =>

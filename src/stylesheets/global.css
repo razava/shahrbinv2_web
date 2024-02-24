@@ -1178,3 +1178,10 @@ ul {
   pointer-events: visible;
   background-color: rgba(0, 0, 0, 0.2);
 }
+
+.react-toggle--checked .react-toggle-track{
+  background-color: var(--primary) !important;
+}
+.react-toggle-track{
+  background-color: gray !important;
+}

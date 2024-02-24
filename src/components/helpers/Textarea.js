@@ -14,6 +14,7 @@ const Textarea = ({
   readOnly = false,
   defaultStyles = true,
   required = false,
+  resize = true,
 }) => {
   return (
     <div
@@ -39,7 +40,7 @@ const Textarea = ({
         value={value}
         name={name}
         id={name}
-        style={{ resize: "vertical" }}
+        style={{ resize: resize ? "vertical" : "none" }}
         className={[defaultStyles ? styles.input : "", inputClassName].join(
           " "
         )}

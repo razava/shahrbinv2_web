@@ -95,7 +95,6 @@ const DropDown = ({
         ref={toggleRef}
         style={style.toggle}
       >
-        {console.log(selecteds)}
         {renderToggle(
           options.filter((option) =>
             selecteds.find((s) => s.value === option.value)
@@ -133,17 +132,17 @@ const DropDown = ({
     }
   }, []);
 
-  options.map((option) => {
-    console.log(selecteds);
-    console.log(option.id);
-    selecteds.map((s) => {
-      console.log(s.id, option.id);
-      if (s.id == option.id) {
-        return 111;
-      }
-    });
-    console.log(!!selecteds.find((s) => s.id === option.id));
-  });
+  // options.map((option) => {
+  //   console.log(selecteds);
+  //   console.log(option.id);
+  //   selecteds.map((s) => {
+  //     console.log(s.id, option.id);
+  //     if (s.id == option.id) {
+  //       return 111;
+  //     }
+  //   });
+  //   console.log(!!selecteds.find((s) => s.id === option.id));
+  // });
 
   return (
     <>

@@ -22,6 +22,7 @@ const CheckBoxGroup = ({
   console.log(defaults);
   useEffect(() => {
     if (defaults) {
+      console.log("defaults", defaults);
       setValues(defaults);
     }
   }, []);
@@ -35,7 +36,7 @@ const CheckBoxGroup = ({
               key={option.id}
               {...option}
               onChange={(value) => handleChange(value, i)}
-              checked={values[i]}
+              checked={values[i]?.checked || false}
             />
           ))}
         </div>

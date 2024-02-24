@@ -35,20 +35,20 @@ const ReportDetails = ({ data }) => {
       }
     });
   }
-  let categoryTitle;
-  const category = store.initials.categories.categories.map((item) => {
-    if (item.id == data.categoryId) {
-      categoryTitle = item.title;
-      return item;
-    } else {
-      const a = item.categories.map((itm) => {
-        if (itm.id == data.categoryId) {
-          categoryTitle = itm.title;
-          return itm;
-        }
-      });
-    }
-  });
+  // let categoryTitle;
+  // const category = store.initials.categories.categories.map((item) => {
+  //   if (item.id == data.categoryId) {
+  //     categoryTitle = item.title;
+  //     return item;
+  //   } else {
+  //     const a = item.categories.map((itm) => {
+  //       if (itm.id == data.categoryId) {
+  //         categoryTitle = itm.title;
+  //         return itm;
+  //       }
+  //     });
+  //   }
+  // });
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
@@ -67,7 +67,7 @@ const ReportDetails = ({ data }) => {
             required={false}
           />
           <TextInput
-            value={doesExist(categoryTitle)}
+            value={doesExist(data?.categoryTitle)}
             readOnly={true}
             title="موضوع "
             wrapperClassName="mxa flex-1"
@@ -104,11 +104,7 @@ const ReportDetails = ({ data }) => {
           />
         </div>
         <Textarea
-          value={
-            data?.category?.formElements.length > 0
-              ? ""
-              : doesExist(data?.comments)
-          }
+          value={data?.form ? "" : doesExist(data?.comments)}
           readOnly={true}
           title="توضیحات"
           wrapperClassName="mxa"
@@ -144,7 +140,9 @@ const ReportDetails = ({ data }) => {
                 </div>
                 <div className=" flex gap-2">
                   <p>شماره درخواست:</p>
-                  <p className=" text-gray-500">{doesExist(categoryTitle)}</p>
+                  <p className=" text-gray-500">
+                    {doesExist(data?.categoryTitle)}
+                  </p>
                 </div>
               </div>
               <div className=" grid grid-cols-2 gap-2 w-full">

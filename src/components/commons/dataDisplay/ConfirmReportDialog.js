@@ -23,6 +23,8 @@ import { useQuery } from "@tanstack/react-query";
 import { getReportById } from "../../../api/commonApi";
 import CategoryForm2 from "./CategoryForm2";
 
+const modalRoot2 = document && document.getElementById("modal2-root");
+
 const ConfirmReportDialog = ({
   report,
   setDialog = (f) => f,
@@ -55,6 +57,7 @@ const ConfirmReportDialog = ({
   const [categoryId, setCategoryId] = useState(null);
   const [addressDetail, setAddressDetail] = useState("");
   const [regionId, setRegionId] = useState("");
+  const [priority, setPriority] = useState("");
   const [medias, setMedias] = useState([]);
   const [tempMedias, setTempMedias] = useState([]);
   const [isPublic, setIsPublic] = useState(0);
@@ -77,6 +80,8 @@ const ConfirmReportDialog = ({
       setAddressDetail(value);
     } else if (name === "regionId") {
       setRegionId(value);
+    } else if (name === "priority") {
+      setPriority(value);
     }
   };
 
@@ -122,6 +127,15 @@ const ConfirmReportDialog = ({
     });
     setTempMedias(newTempMedias);
   };
+
+  useEffect(() => {
+    if (ReportData) {
+      if (ReportData?.lastStatus == "پایان یافته") {
+        setDialog(false);
+        modalRoot2.classList.remove("active");
+      }
+    }
+  }, [ReportData]);
 
   const showComments = (comments) => {
     const isJSON = /JSON/.test(comments);
@@ -172,6 +186,7 @@ const ConfirmReportDialog = ({
         .map((media, i) => media.id),
       id: report.id,
       visibility: isPublic,
+      priority: priority ? Number(priority) : 0,
     });
     setVerifyRequest(true);
   };
@@ -223,7 +238,7 @@ const ConfirmReportDialog = ({
       title: "خصوصی",
     },
   ];
-  console.log(ReportData);
+  console.log(priority);
   return (
     <>
       {ReportData && (
@@ -296,6 +311,7 @@ const ConfirmReportDialog = ({
             </div>
 
             <div className={"w100 mxa frc row"}>
+              {console.log(store.initials.regions)}
               <SelectBox
                 staticData
                 options={store.initials.regions}
@@ -316,19 +332,41 @@ const ConfirmReportDialog = ({
                 wrapperClassName="col-md-6 col-sm-12 col-12"
               />
             </div>
-            <div className="w100 mxa">
-              <Textarea
-                wrapperClassName="col-md-12"
-                inputClassName="flex-auto mh150"
-                value={showComments(comments)}
+
+            <div className={"w100 mxa frc row"}>
+              <SelectBox
+                staticData
+                options={[
+                  { id: 0, title: "کم" },
+                  { id: 1, title: "عادی" },
+                  { id: 2, title: "زیاد" },
+                  { id: 3, title: "فوری" },
+                ]}
+                name="priority"
+                value={priority}
                 handleChange={onTextChange}
-                name="comments"
-                title="توضیحات"
+                handle={["title"]}
+                label="اولویت"
+                wrapperClassName="col-md-6 col-sm-12 col-12"
               />
             </div>
-            {/* <div className=" w-full mxa">
-              {ReportData.category?.form && <CategoryForm2 data={ReportData} />}
-            </div> */}
+
+            <div className=" w-full mxa">
+              {ReportData?.form ? (
+                <CategoryForm2 data={ReportData} />
+              ) : (
+                <div className="w100 mxa">
+                  <Textarea
+                    wrapperClassName="col-md-12"
+                    inputClassName="flex-auto mh150"
+                    value={showComments(comments)}
+                    handleChange={onTextChange}
+                    name="comments"
+                    title="توضیحات"
+                  />
+                </div>
+              )}
+            </div>
             <div className={"w90 mxa px1"}>
               <label className={styles.infoLabel}>پیوست ها</label>
               <ShowAttachments

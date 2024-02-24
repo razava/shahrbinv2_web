@@ -92,20 +92,20 @@ export default function CategoryForm2({ data, onChange }) {
               //   style={{ order: item.order }}
               className={` order-${item.order}`}
             >
-                  <CheckBoxGroup
-                      defaults={defaultValues[item.name]}
-                defaultSelecteds={[
-                  [
-                    {
-                      title: "گزینه 1",
-                      checked: true,
-                    },
-                    {
-                      title: "گزینه 2",
-                      checked: true,
-                    },
-                  ],
-                ]}
+              <CheckBoxGroup
+                defaults={defaultValues[item.name]}
+                // defaultSelecteds={[
+                //   [
+                //     {
+                //       title: "گزینه 1",
+                //       checked: true,
+                //     },
+                //     {
+                //       title: "گزینه 2",
+                //       checked: true,
+                //     },
+                //   ],
+                // ]}
                 name={item.name}
                 onChange={handleChange}
                 {...meta.props}

@@ -35,6 +35,7 @@ export const roles = {
   FAQ: ["Admin"],
   news: ["Admin"],
   forms: ["Admin"],
+  notes: ["Operator"],
 };
 
 export const links = [
@@ -197,5 +198,13 @@ export const links = [
     path: "complaints-units",
     roles: roles.complaintsUnits,
     order: 20,
+  },
+  {
+    id: "link-21",
+    title: "یادداشت ها",
+    icon: "fas fa-sticky-note",
+    path: "notes",
+    roles: roles.notes,
+    order: 21,
   },
 ];

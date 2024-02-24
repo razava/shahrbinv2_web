@@ -13,9 +13,9 @@ const prefix = process.env.REACT_APP_API_URL;
 
 export class ReportsAPI {
   static getTasks(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/StaffReport?fromRoleId=${
-      payload ? payload : ""
-    }`;
+    const initialUrl = `${prefix}/api/${
+      instance?.id ? instance?.id : 1
+    }/StaffReport?fromRoleId=${payload ? payload : ""}`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -494,7 +494,7 @@ export class CommonAPI {
 export class AuthenticateAPI {
   static signin(token, payload, source, instance) {
     return axios
-      .post(`${prefix}/api/Authenticate/LoginStaff`, payload, {
+      .post(`${prefix}/api/${instance?.id}/Authenticate/LoginStaff`, payload, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -577,7 +577,7 @@ export class AuthenticateAPI {
   static registerContractor(token, payload, source, instance) {
     return axios
       .post(
-        `${prefix}/api/${instance?.id}/Authenticate/RegisterContractor`,
+        `${prefix}/api/${instance?.id}/AdminUserManagement/RegisterContractor`,
         payload,
         {
           headers: {
@@ -687,6 +687,25 @@ export class AuthenticateAPI {
 export class UserInfoAPI {
   static getAllUsers(token, payload, source, instance, queries) {
     const initialUrl = `${prefix}/api/${instance?.id}/AdminUserManagement/AllUsers`;
+    const wholeUrl = createQueryParams(initialUrl, queries);
+    return axios
+      .get(wholeUrl, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+        cancelToken: source.token,
+      })
+      .then((res) => res)
+      .catch((err) => {
+        if (axios.isCancel(err)) {
+          console.log("Request canceled", err.message);
+        } else {
+          return err.response;
+        }
+      });
+  }
+  static getContractors(token, payload, source, instance, queries) {
+    const initialUrl = `${prefix}/api/${instance?.id}/AdminUserManagement/GetContractors`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -827,7 +846,7 @@ export class UserInfoAPI {
 
   static getUser(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/Authenticate/Profile`, {
+      .get(`${prefix}/api/${instance?.id}/Authenticate`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -846,7 +865,7 @@ export class UserInfoAPI {
   static updateUser(token, payload, source, instance) {
     console.log(payload);
     return axios
-      .put(`${prefix}/api/Authenticate/Profile`, payload, {
+      .put(`${prefix}/api/${instance?.id}/Authenticate`, payload, {
         headers: {
           Authorization: "Bearer " + token,
           // "Content-Type": "multipart/form-data",

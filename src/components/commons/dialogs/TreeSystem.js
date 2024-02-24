@@ -64,9 +64,15 @@ const TreeSystem = ({
   //     setSelecteds(confirmedSelecteds);
   //   }
   // }, [condition]);
-
   useEffect(() => {
-    setSelecteds(defaultSelecteds);
+    if (defaultSelecteds.length > 0) {
+      setSelecteds(defaultSelecteds)
+    }
+  },[defaultSelecteds])
+  console.log(selecteds);
+  console.log(defaultSelecteds);
+  useEffect(() => {
+    // setSelecteds(defaultSelecteds);
     if (isStatic) {
       const flatData = getFlatData(staticData);
       setFlatData(flatData);

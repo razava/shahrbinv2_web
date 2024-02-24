@@ -62,3 +62,52 @@ export async function postMessageToCitizen({ id, payload }) {
   );
   return data.data;
 }
+
+export async function getAllNotes() {
+  const data = await axios.get(`/api/${instanceId}/StaffReport/Notes`, {
+    headers: { Authorization: `Bearer ${Token}` },
+  });
+  return data.data;
+}
+
+export async function getReportNotes(reportId) {
+  const data = await axios.get(
+    `/api/${instanceId}/StaffReport/Notes/${reportId}`,
+    {
+      headers: { Authorization: `Bearer ${Token}` },
+    }
+  );
+  return data.data;
+}
+
+export async function postReportNote({ ReportId, payload }) {
+  const data = await axios.post(
+    `/api/${instanceId}/StaffReport/Notes/${ReportId}`,
+    payload,
+    {
+      headers: { Authorization: `Bearer ${Token}` },
+    }
+  );
+  return data.data;
+}
+
+export async function putReportNote({ noteId, payload }) {
+  const data = await axios.put(
+    `/api/${instanceId}/StaffReport/Notes/${noteId}`,
+    payload,
+    {
+      headers: { Authorization: `Bearer ${Token}` },
+    }
+  );
+  return data.data;
+}
+
+export async function deleteReportNote(noteId) {
+  const data = await axios.delete(
+    `/api/${instanceId}/StaffReport/Notes/${noteId}`,
+    {
+      headers: { Authorization: `Bearer ${Token}` },
+    }
+  );
+  return data.data;
+}

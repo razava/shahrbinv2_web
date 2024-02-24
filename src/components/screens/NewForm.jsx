@@ -73,6 +73,7 @@ function NewForm() {
           elements: formElements,
         },
       });
+      localStorage.removeItem("formBuilder");
     } else {
       formMutation.mutate({
         title: name,

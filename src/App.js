@@ -13,12 +13,16 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import FAQ from "./components/screens/FAQ";
 import News from "./components/screens/News";
 import NewForm from "./components/screens/NewForm";
+import Notes from "./components/screens/Notes";
+import Verify from "./components/screens/Verify";
+import ChangePhoneNumber from "./components/screens/Login/ChangePhoneNumber";
 const NewReports = lazy(() => import("./components/screens/NewReports"));
 const RegisterReport = lazy(() =>
   import("./components/screens/RegisterReport")
 );
 const ManageUsers = lazy(() => import("./components/screens/ManageUsers"));
 const Login = lazy(() => import("./components/screens/Login"));
+// const Verify = lazy(() => import("./components/screens/Verify"));
 const NotFound = lazy(() => import("./components/screens/NotFound"));
 const Infos = lazy(() => import("./components/screens/Infos"));
 const Reports = lazy(() => import("./components/screens/Reports"));
@@ -119,6 +123,10 @@ const App = () => {
                         path={appRoutes.quickAccess}
                         component={QuickAccess}
                       />
+                      <AuthorizeRoute
+                        path={appRoutes.notes}
+                        component={Notes}
+                      />
                       <AuthorizeRoute path={appRoutes.FAQ} component={FAQ} />
                       <AuthorizeRoute path={appRoutes.news} component={News} />
                       <AuthorizeRoute path={appRoutes.forms} component={Form} />
@@ -136,6 +144,11 @@ const App = () => {
               </Route>
 
               <Route path={appRoutes.newForm} component={NewForm} />
+              <Route path={appRoutes.verify} component={Verify} />
+              <Route
+                path={appRoutes.changePhoneNumber}
+                component={ChangePhoneNumber}
+              />
               <Route path={appRoutes.login} component={Login} />
               <Route component={NotFound} />
             </Switch>

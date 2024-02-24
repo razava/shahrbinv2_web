@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { CommonAPI, UserInfoAPI } from "../../../apiCalls";
 import {
+  constants,
   fixDigit,
   mapObjectToFormData,
   serverError,
@@ -18,27 +19,34 @@ import Avatar from "./Avatar";
 import { postFiles } from "../../../api/commonApi";
 import { useMutation } from "@tanstack/react-query";
 import { updateAvatar } from "../../../api/AuthenticateApi";
+import Toggle from "react-toggle";
+import "react-toggle/style.css"; // for ES6 modules
+import { set } from "nprogress";
+import { useHistory } from "react-router-dom";
 
 const modalRoot = document && document.getElementById("modal-root");
 
 const ProfileForm = ({ data, setDialog }) => {
   const [state, dispatch] = useContext(AppStore);
-
+  const history = useHistory();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     // userName: "",
-    phoneNumber2: "",
+    phoneNumber: "",
     // address: "",
     education: "",
     title: "",
     organization: "",
+    twoFactorEnabled: false,
   });
   const [preview, setPreview] = useState(undefined);
   const [showPreview, setShowPreview] = useState(false);
   const [file, setFile] = useState(null);
   const [payload, setPayload] = useState(undefined);
   const [makeRequest, setMakeRequest] = useState(false);
+  const [enable, setEnable] = useState(false);
+
   console.log(data);
   useEffect(() => {
     const education = data?.education;
@@ -47,9 +55,10 @@ const ProfileForm = ({ data, setDialog }) => {
       firstName: data.firstName ? data.firstName : "",
       lastName: data.lastName ? data.lastName : "",
       // userName: data.userName ? data.userName : "",
-      phoneNumber2: education ? education : "",
+      phoneNumber: data.phoneNumber ? data.phoneNumber : "",
       education: 0,
       title: data.title ? data.title : "",
+      twoFactorEnabled: data.twoFactorEnabled,
     });
   }, [data]);
 
@@ -98,12 +107,12 @@ const ProfileForm = ({ data, setDialog }) => {
   };
 
   const saveCahnges = (e) => {
-    let payload = new FormData();
-    payload = mapObjectToFormData(formData, payload);
-    payload.delete("address");
-    payload.delete("education");
-    payload.set("address.detail", formData.address);
-    payload.set("educationId", formData.education);
+    // let payload = new FormData();
+    // payload = mapObjectToFormData(formData, payload);
+    // payload.delete("address");
+    // payload.delete("education");
+    // payload.set("address.detail", formData.address);
+    // payload.set("educationId", formData.education);
 
     // payload.set("avatarFile", file);
     // console.log(payload);
@@ -180,7 +189,7 @@ const ProfileForm = ({ data, setDialog }) => {
           name="phoneNumber"
           value={formData.phoneNumber}
           // onChange={handleChange}
-          title="تلفن همراه"
+          title="شماره موبایل"
           required={false}
           wrapperClassName="rw3"
           onlyDigit={true}
@@ -212,8 +221,45 @@ const ProfileForm = ({ data, setDialog }) => {
           horizontal={false}
           wrapperClassName="rw3"
         />
+        {formData.phoneNumber ? (
+          <div className=" flex items-center gap-2 mt-2">
+            <Toggle
+              id="biscuit-status"
+              // className="profile-toggle"
+              defaultChecked={formData.twoFactorEnabled}
+              aria-labelledby="biscuit-label"
+              onChange={(e) => {
+                setFormData({
+                  ...formData,
+                  twoFactorEnabled: e.target.checked,
+                });
+              }}
+            />
+            <span id="biscuit-label" className=" text-lg">احراز هویت دو مرحله ای</span>
+          </div>
+        ) : (
+          <p>
+            جهت فعالسازی احراز هویت دو مرحله ای، باید ابتدا شماره موبایل خود را
+            فعال نمایید.
+          </p>
+        )}
       </form>
-      <div className="w100 mxa fre py1 px2 border-t-light mt1">
+      <div className="w100 mxa fre py1 px2 border-t-light mt1 gap-2">
+        <Button
+          title="تغییر شماره موبایل"
+          className="py1 br05 bg-white border-primary text-primary"
+          onClick={() => {
+            if (formData.phoneNumber) {
+              localStorage.setItem(
+                constants.SHAHRBIN_MANAGEMENT_HAS_PHONE_NUMBER,
+                true
+              );
+            }
+            history.push("/changePhoneNumber");
+            modalRoot.classList.remove("active");
+          }}
+          loading={loading}
+        />
         <Button
           title="ذخیره"
           className="py1 br05 bg-primary"
