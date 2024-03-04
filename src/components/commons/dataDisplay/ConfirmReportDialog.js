@@ -23,6 +23,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getReportById } from "../../../api/commonApi";
 import CategoryForm2 from "./CategoryForm2";
 
+const modalRoot = document && document.getElementById("modal-root");
 const modalRoot2 = document && document.getElementById("modal2-root");
 
 const ConfirmReportDialog = ({
@@ -130,9 +131,10 @@ const ConfirmReportDialog = ({
 
   useEffect(() => {
     if (ReportData) {
-      if (ReportData?.lastStatus == "پایان یافته") {
+      if (ReportData?.lastStatus !== "در انتظار تأیید در سامانه") {
         setDialog(false);
         modalRoot2.classList.remove("active");
+        modalRoot.classList.remove("active");
       }
     }
   }, [ReportData]);

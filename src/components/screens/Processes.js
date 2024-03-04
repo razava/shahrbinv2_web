@@ -18,6 +18,8 @@ import DropdownWrapper from "../helpers/DropdownWrapper";
 import Filters from "../helpers/Filters";
 import LayoutScrollable from "../helpers/Layout/LayoutScrollable";
 import MyDataTable from "../helpers/MyDataTable";
+import { deleteProcess } from "../../api/AdminApi";
+import { useMutation } from "@tanstack/react-query";
 
 const modalRoot = document && document.getElementById("modal-root");
 
@@ -85,6 +87,19 @@ const Processes = ({ match }) => {
     modalRoot.classList.remove("active");
     getProccesses();
   };
+  //queries
+  const deleteMutation = useMutation({
+    mutationKey: ["deleteProcess"],
+    mutationFn: deleteProcess,
+    onSuccess: (res) => {
+      getProccesses();
+    },
+    onError: (err) => {
+      if (err.response.status == 400) {
+        toast("فرایند، دسته بندی وابسته دارد.", { type: "error" });
+      }
+    },
+  });
 
   // renders
   const renderTableHeader = () => {
@@ -106,6 +121,12 @@ const Processes = ({ match }) => {
       title: "ویرایش",
       icon: "far fa-edit",
       onClick: (row) => openDialog(row),
+    },
+    {
+      id: `proccess-${2}`,
+      title: "حذف",
+      icon: "far fa-times",
+      onClick: (row) => deleteMutation.mutate(row.id),
     },
   ];
 

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Pie } from "react-chartjs-2";
+import { Pie, getElementAtEvent } from "react-chartjs-2";
 import { randomColor } from "../../../helperFuncs";
+import { backgroundColor, borderColor } from "../../../utils/constants";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 ChartJS.defaults.font.family = "iranyekan";
@@ -19,7 +20,16 @@ const COLORS = [
   "#70e000",
 ];
 
-const PieChart = ({ chartData, chartTitle, width, height, radius }) => {
+const PieChart = ({
+  chartData,
+  chartTitle,
+  width,
+  height,
+  radius,
+  onClickOnElement = (f) => f,
+}) => {
+  const chartRef = useRef();
+
   const options = {
     plugins: {
       title: {
@@ -50,32 +60,56 @@ const PieChart = ({ chartData, chartTitle, width, height, radius }) => {
 
   const series = chartData.series[0];
 
-  const labels = series.values.map((d) => d.item1);
+  const labels = series.values.map((d) => d.title);
   const data = {
     labels,
     datasets:
       chartData.series.length > 0
-        ? [
-            {
-              //   label: series.values.item1,
-              data: series.values.map((v) => v.item2),
+        ? chartData.series.map((s, i) => {
+            return {
+              label: chartData.series[0].values.map((v, j) => {
+                return v.title;
+              }),
+              data: chartData.series[0].values.map((v, j) => {
+                return chartData.series?.[i]?.values?.[j]?.value;
+              }),
               backgroundColor:
-                series.values.length > COLORS.length
+                series.values.length > borderColor.length
                   ? [
-                      ...COLORS,
-                      ...Array(series.values.length - COLORS.length).map((c) =>
-                        randomColor()
-                      ),
+                      ...borderColor,
+                      ...[
+                        ...Array(series.values.length - borderColor.length),
+                      ].map((c) => randomColor()),
                     ]
-                  : COLORS,
-            },
-          ]
+                  : borderColor,
+              // borderColor: NAMED_COLORS[i] || randomColor(),
+              // borderWidth: 1,
+              // borderSkipped: false,
+              customLabel: "3",
+            };
+          })
         : [],
+  };
+
+  // functions
+  const onClick = (e) => {
+    const [element] = getElementAtEvent(chartRef.current, e);
+    if (element) {
+      const item = chartData?.series?.[0]?.values?.[element.index];
+      onClickOnElement(item);
+    }
   };
 
   return (
     <>
-      <Pie data={data} options={options} width={width} height={height} />
+      <Pie
+        data={data}
+        options={options}
+        width={width}
+        height={height}
+        onClick={onClick}
+        ref={chartRef}
+      />
     </>
   );
 };

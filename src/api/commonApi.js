@@ -20,13 +20,9 @@ export async function postFiles(Data) {
 }
 
 export async function EditProfile(Data) {
-  const data = await axios.put(
-    `/api/${instanceId}/Authenticate`,
-    Data,
-    {
-      headers: { Authorization: `Bearer ${Token}` },
-    }
-  );
+  const data = await axios.put(`/api/${instanceId}/Authenticate`, Data, {
+    headers: { Authorization: `Bearer ${Token}` },
+  });
   return data.data;
 }
 
@@ -41,5 +37,19 @@ export async function getReportById(id) {
   const data = await axios.get(`/api/${instanceId}/StaffReport/${id}`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
+  return data.data;
+}
+
+export async function postConnectionId(id) {
+  const data = await axios.post(
+    `/api/${instanceId}/Messages/ConnectionId`,
+    id,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${Token}`,
+      },
+    }
+  );
   return data.data;
 }

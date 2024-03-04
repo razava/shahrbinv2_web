@@ -18,6 +18,8 @@ import DropdownWrapper from "../helpers/DropdownWrapper";
 import Filters from "../helpers/Filters";
 import LayoutScrollable from "../helpers/Layout/LayoutScrollable";
 import MyDataTable from "../helpers/MyDataTable";
+import { useMutation } from "@tanstack/react-query";
+import { deleteOrganizationalUnit } from "../../api/AdminApi";
 
 const modalRoot = document && document.getElementById("modal-root");
 
@@ -95,6 +97,20 @@ const OrganizationalUnits = ({ match }) => {
     }`;
   };
 
+  //queries
+  const deleteMutation = useMutation({
+    mutationKey: ["deleteOrg"],
+    mutationFn: deleteOrganizationalUnit,
+    onSuccess: (res) => {
+      getAllOrgans();
+    },
+    onError: (err) => {
+      if (err.response.status == 400) {
+        toast("واحد سازمانی، دسته بندی وابسته دارد.", { type: "error" });
+      }
+    },
+  });
+
   // renders
   const renderTableHeader = () => {
     return (
@@ -115,6 +131,12 @@ const OrganizationalUnits = ({ match }) => {
       title: "ویرایش",
       icon: "far fa-edit",
       onClick: (row) => openDialog(row),
+    },
+    {
+      id: `orginaztion-2`,
+      title: "حذف",
+      icon: "far fa-times",
+      onClick: (row) => deleteMutation.mutate(row.id),
     },
   ];
 

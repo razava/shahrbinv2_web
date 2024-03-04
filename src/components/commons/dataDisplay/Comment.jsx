@@ -1,15 +1,15 @@
 import React from "react";
 import { convertserverTimeToDateString } from "../../../helperFuncs";
+import PHImage from "../../../assets/Images/item_profilepic_placeholder.png";
 
 export default function Comment({ data }) {
   console.log(data.dateTime);
+  const avatarUrl = `${process.env.REACT_APP_API_URL}/${data?.user.avatar?.url4}`;
+  const Avatar = data?.user?.avatar?.url4 ? avatarUrl : PHImage;
   return (
     <div className=" border border-solid border-gray-300 w-full flex flex-col rounded-md p-6">
       <div className=" flex gap-2">
-        <img
-          src={`${process.env.REACT_APP_API_URL}/${data?.user.avatar?.url4}`}
-          className=" w-16 h-16 rounded-full"
-        ></img>
+        <img src={Avatar} className=" w-16 h-16 rounded-full"></img>
         <div className=" flex flex-col gap-3 mt-2">
           <p className=" text-2xl font-bold">
             {data.user.firstName ? (
@@ -39,10 +39,7 @@ export default function Comment({ data }) {
       {data?.reply && (
         <div className=" border border-solid w-[95%] border-gray-300 flex flex-col rounded-md p-6 mr-auto mt-5">
           <div className=" flex gap-2">
-            <img
-              src={`${process.env.REACT_APP_API_URL}/${data?.user.avatar?.url4}`}
-              className=" w-16 h-2160 rounded-full"
-            ></img>
+            <img src={Avatar} className=" w-16 h-16 rounded-full"></img>
             <div className=" flex flex-col gap-3 mt-2">
               <p className=" text-2xl font-bold">
                 {data.reply.user.firstName ? (

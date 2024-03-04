@@ -15,6 +15,8 @@ import ReportComments from "./ReportComments";
 import MessageToCitizen from "../submission/MessageToCitizen";
 import CategoryForm2 from "./CategoryForm2";
 import Notes from "./Notes";
+import Satisfaction from "../submission/Satisfaction";
+import Objection from "../submission/Objection";
 
 const modal = document && document.getElementById("modal-root");
 
@@ -64,7 +66,9 @@ const ReportDialog = ({
   console.log(role);
   const userRoles = getUserRoles();
   const isExecutive = hasRole(userRoles, ["Executive"]);
-  
+  const isInspector = hasRole(userRoles, ["Inspector"]);
+  const checkRoles = userRoles.includes("Operator");
+
   return (
     <>
       {loading && <Loader absolute={true} />}
@@ -119,10 +123,19 @@ const ReportDialog = ({
                 clickable={false}
               />
             </article>
-
+            {checkRoles && (
+              <article label="خشنودی‌سنجی" id="satisfaction">
+                <Satisfaction data={data} />
+              </article>
+            )}
             {!readOnly && isExecutive && (
               <article label="پاسخ به شهروند" id="messageToCitizen">
                 <MessageToCitizen data={data} />
+              </article>
+            )}
+            {readOnly && isInspector && (
+              <article label="انتقال به بازرسی" id="messageToCitizen">
+                <Objection onNext={onNext} data={data} />
               </article>
             )}
             {!readOnly && (

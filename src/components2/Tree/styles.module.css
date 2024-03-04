@@ -76,7 +76,7 @@
 }
 
 .addIcon {
-  background-color: var(--lightGreen);
+  background-color: var(--primary);
   color: var(--white);
   width: 20px;
   height: 20px;

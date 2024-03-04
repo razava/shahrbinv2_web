@@ -1147,7 +1147,7 @@ ul {
   background: white;
   max-width: 500px;
   width: 100%;
-  direction: rtl;
+  direction: ltr;
   text-align: right;
   padding: 20px;
 }
@@ -1179,9 +1179,9 @@ ul {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
-.react-toggle--checked .react-toggle-track{
+.react-toggle--checked .react-toggle-track {
   background-color: var(--primary) !important;
 }
-.react-toggle-track{
+.react-toggle-track {
   background-color: gray !important;
 }

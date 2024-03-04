@@ -29,9 +29,7 @@ const NewReportsTable = ({ roleId = null, onRefer = (f) => f }) => {
   const isConfirm = hasRole(["Operator"], userRoles) && roleId == "NEW";
   const isEditable = hasRole(["Operator"], userRoles) && roleId !== "NEW";
   const fromRoleId = useRef(roleId);
-  console.log(isEditable);
-  console.log(roleId);
-  console.log(!roleId);
+
   // store
   const [store, dispatch] = useContext(AppStore);
 
@@ -233,11 +231,10 @@ const NewReportsTable = ({ roleId = null, onRefer = (f) => f }) => {
     getTasks(fromRoleId.current);
   };
 
-  console.log(confirmDialog);
   // eefects
 
   useSignalR(onNewReport);
-
+  
   return (
     <>
       {!isConfirm && (

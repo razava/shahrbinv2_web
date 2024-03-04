@@ -64,6 +64,7 @@ const AddCategoryDialog = ({
     description: "",
     objectionAllowed: "",
     form: "",
+    defaultPriority: "",
   });
   const [processes, setProcesses] = useState([]);
   const [parents, setParents] = useState([]);
@@ -151,7 +152,8 @@ const AddCategoryDialog = ({
       duration: data.duration / 24,
       description: data.description,
       objectionAllowed: data.objectionAllowed ? 1 : 0,
-      formId: data.form ? data.form : "",
+      formId: data.form ? data.form.id : "",
+      defaultPriority: data.defaultPriority,
     });
   };
 
@@ -199,9 +201,11 @@ const AddCategoryDialog = ({
     });
     return categoryTitle;
   };
+  console.log(values.form);
   const createCategory = () => {
     const payload = {
       ...values,
+      defaultPriority: Number(values.defaultPriority),
       responseDuration: values.responseDuration * 24,
       duration: values.duration * 24,
       objectionAllowed: Number(values.objectionAllowed) === 1 ? true : false,
@@ -237,6 +241,9 @@ const AddCategoryDialog = ({
       : [];
 
   console.log(values);
+  useEffect(() => {
+    console.log(values);
+  }, [values]);
   return (
     <>
       <>
@@ -380,6 +387,23 @@ const AddCategoryDialog = ({
               name="description"
               handleChange={handleChange}
               required={false}
+            />
+          </div>
+          <div className={"w100 mxa frc row"}>
+            <SelectBox
+              staticData
+              options={[
+                { id: 0, title: "کم" },
+                { id: 1, title: "عادی" },
+                { id: 2, title: "زیاد" },
+                { id: 3, title: "فوری" },
+              ]}
+              name="defaultPriority"
+              value={values.defaultPriority}
+              handleChange={handleChange}
+              handle={["title"]}
+              label="اولویت"
+              wrapperClassName="col-md-6 col-sm-12 col-12"
             />
           </div>
         </form>

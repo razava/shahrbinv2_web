@@ -32,21 +32,21 @@ const Reports = ({ match }) => {
   console.log(store);
   const [data, setData] = useState([]);
   let categoryTitle;
-  const findCategory = (row) => {
-    const category = store.initials.categories.categories.map((item) => {
-      if (item.id == row.categoryId) {
-        categoryTitle = item.title;
-        return item;
-      } else {
-        const a = item.categories.map((itm) => {
-          if (itm.id == row.categoryId) {
-            categoryTitle = itm.title;
-          }
-        });
-      }
-    });
-    return categoryTitle;
-  };
+  // const findCategory = (row) => {
+  //   const category = store.initials.categories.categories.map((item) => {
+  //     if (item.id == row.categoryId) {
+  //       categoryTitle = item.title;
+  //       return item;
+  //     } else {
+  //       const a = item.categories.map((itm) => {
+  //         if (itm.id == row.categoryId) {
+  //           categoryTitle = itm.title;
+  //         }
+  //       });
+  //     }
+  //   });
+  //   return categoryTitle;
+  // };
 
   // main states
   const [page, setPage] = useState(1);
@@ -100,16 +100,23 @@ const Reports = ({ match }) => {
     );
   };
 
-  reportColumn[1] = {
-    name: "زیر‌گروه موضوعی",
-    grow: 2,
-    cell: (row) => <span>{doesExist(findCategory(row))}</span>,
-  };
+  // reportColumn[1] = {
+  //   name: "زیر‌گروه موضوعی",
+  //   grow: 2,
+  //   cell: (row) => <span>{doesExist(findCategory(row))}</span>,
+  // };
 
   const openDialog = (row) => {
     modalRoot.classList.add("active");
     setDialog(true);
     setDialogData(row);
+  };
+
+  const closeDialog = () => {
+    console.log("shet");
+    setDialog(false);
+    modalRoot.classList.remove("active");
+    // setConfirmDialog(false);
   };
 
   const openEditDialog = (row) => {
@@ -179,6 +186,8 @@ const Reports = ({ match }) => {
     //   hide: !isOperator,
     // },
   ];
+
+  console.log("rep");
   return (
     <>
       <TableHeader renderHeader={renderTableHeader} />
@@ -225,6 +234,7 @@ const Reports = ({ match }) => {
           setDialog: setDialog,
           refresh: refresh,
           caller: InfoAPI.getReportById,
+          onNext: closeDialog,
         }}
         list={data}
       />

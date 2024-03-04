@@ -111,3 +111,24 @@ export async function deleteReportNote(noteId) {
   );
   return data.data;
 }
+
+export async function getSatisfaction(reportId) {
+  const data = await axios.get(
+    `/api/${instanceId}/StaffReport/Satisfaction/${reportId}`,
+    {
+      headers: { Authorization: `Bearer ${Token}` },
+    }
+  );
+  return data.data;
+}
+
+export async function postObjection({ ReportId, payload }) {
+  const data = await axios.post(
+    `/api/${instanceId}/StaffReport/Objection/${ReportId}`,
+    payload,
+    {
+      headers: { Authorization: `Bearer ${Token}` },
+    }
+  );
+  return data.data;
+}

@@ -35,7 +35,14 @@ export const roles = {
   FAQ: ["Admin"],
   news: ["Admin"],
   forms: ["Admin"],
-  notes: ["Operator"],
+  notes: [
+    "Operator",
+    "Executive",
+    "Contractor",
+    "Inspector",
+    "Manager",
+    "Mayor",
+  ],
 };
 
 export const links = [

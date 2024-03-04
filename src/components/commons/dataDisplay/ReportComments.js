@@ -12,6 +12,9 @@ export default function ReportComments({ data }) {
   return (
     <div className=" p-10">
       <div className=" flex flex-col  gap-5">
+        {ReportComments?.length == 0 && (
+          <p className=" text-xl ">هیچ نظری ثبت نشده است.</p>
+        )}
         {ReportComments?.map((item) => {
           return <Comment key={item.id} data={item} />;
         })}

@@ -27,6 +27,28 @@ export class ReportsAPI {
       .catch((err) => err.response);
   }
 
+  static sendSatisfaction(token, payload, source, instance, reportId) {
+    return axios
+      .post(
+        `${prefix}/api/${instance?.id}/StaffReport/Satisfaction/${reportId}`,
+        payload,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((res) => res)
+      .catch((err) => {
+        if (axios.isCancel(err)) {
+          console.log("Request canceled", err.message);
+        } else {
+          return err.response;
+        }
+      });
+  }
+
   static getReportHistory(token, payload, source, instance, queries) {
     const initialUrl = `${prefix}/api/${instance?.id}/StaffReport/ReportHistory/${payload}`;
     const wholeUrl = createQueryParams(initialUrl, queries);
@@ -934,7 +956,7 @@ export class InfoAPI {
 
   static getListCharts(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/StaffInfo/ListCharthh`, {
+      .get(`${prefix}/api/${instance?.id}/StaffInfo/ListChart`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -952,7 +974,7 @@ export class InfoAPI {
   }
 
   static getChart(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/Info/Chart/${payload}`;
+    const initialUrl = `${prefix}/api/${instance?.id}/StaffInfo/Charts/${payload.code}?parameter=${payload.parameter}`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {

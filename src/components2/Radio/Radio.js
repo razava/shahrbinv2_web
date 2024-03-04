@@ -7,10 +7,10 @@ const Radio = ({
   option = {},
   nameKey = "",
 }) => {
-  const radioClassName = [
-    styles.radio,
-    checked ? styles.checked : "",
-  ].join(" ");
+  const radioClassName = [styles.radio, checked ? styles.checked : ""].join(
+    " "
+  );
+  console.log(option);
   return (
     <>
       <div className={styles.radioWrapper} onClick={() => onRadioClick(option)}>

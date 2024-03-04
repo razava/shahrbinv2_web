@@ -186,6 +186,30 @@ export const tableDarkTheme = () =>
 
 export const reportColumn = [
   {
+    name: "",
+    cell: (row) => (
+      <span className=" ">
+        {row?.priority && !isTimePassed(row.responseDeadline) ? (
+          <i
+            className="fad fa-fire-alt mr-2 text-red-600"
+            style={{ fontSize: "17px" }}
+          ></i>
+        ) : (
+          ""
+        )}
+        {isTimePassed(row.responseDeadline) && row?.priority ? (
+          <i
+            className="fad fa-fire-alt text-red-600"
+            style={{ fontSize: "17px" }}
+          ></i>
+        ) : (
+          ""
+        )}
+      </span>
+    ),
+    grow: 0,
+  },
+  {
     name: "شماره رهگیری",
     cell: (row) => <span>{doesExist(row.trackingNumber)}</span>,
   },
@@ -230,6 +254,7 @@ export const ideaColumn = [
   {
     name: "شماره ایده",
     cell: (row) => <span>{fixDigit(row.ideaId)}</span>,
+    grow: 0,
   },
   {
     name: "شهروند",
@@ -331,7 +356,6 @@ export const signUserIn = (res, history) => {
   const milliseconds = seconds * 1000; // Convert seconds to milliseconds
   const date = new Date(milliseconds); // Create a date object from the milliseconds
   const formattedDate = date.toISOString(); // Format the date object to ISO string
-  console.log(formattedDate);
   saveToLocalStorage(
     constants.SHAHRBIN_MANAGEMENT_INSTANCE_ID,
     decoded["instance_id"]
@@ -358,7 +382,6 @@ export const signUserIn = (res, history) => {
   saveToLocalStorage(constants.SHAHRBIN_MANAGEMENT_LOGIN_TIME, currentTime);
   const roles =
     decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-  console.log(roles);
   // const to = isManager(res.data.roles) ? appRoutes.infos : appRoutes.newReports;
   const to = hasRole(["Mayor", "Manager", "Admin"], roles)
     ? "/admin/infos"
@@ -367,7 +390,6 @@ export const signUserIn = (res, history) => {
     : hasRole(["ComplaintAdmin"], roles)
     ? "/admin/complaints-categories"
     : "/admin/newReports";
-  console.log(to);
   history.push(to);
 };
 
@@ -378,7 +400,6 @@ export const signUserAfterVerify = (res, history) => {
   const milliseconds = seconds * 1000; // Convert seconds to milliseconds
   const date = new Date(milliseconds); // Create a date object from the milliseconds
   const formattedDate = date.toISOString(); // Format the date object to ISO string
-  console.log(formattedDate);
   saveToLocalStorage(
     constants.SHAHRBIN_MANAGEMENT_INSTANCE_ID,
     decoded["instance_id"]
@@ -624,7 +645,15 @@ export const accessibilityByRoles = (path) => {
   if (path === "/admin/allComplaints") return ["ComplaintInspector"];
   if (path === "/admin/complaints-categories") return ["ComplaintAdmin"];
   if (path === "/admin/complaints-units") return ["ComplaintAdmin"];
-  if (path === "/admin/notes") return ["Operator"];
+  if (path === "/admin/notes")
+    return [
+      "Operator",
+      "Executive",
+      "Contractor",
+      "Inspector",
+      "Manager",
+      "Mayor",
+    ];
   if (String(path).toLowerCase().startsWith("/admin/poll/")) return ["Admin"];
 };
 
@@ -889,6 +918,7 @@ export const callAPI = (
     .then((res) => {
       requestEnded();
       // if server didn't respond
+      console.log(res);
       if (res === undefined) {
         toast("مشکلی در ارسال درخواست به سرور به وجود آمد", { type: "error" });
         return;
@@ -1100,7 +1130,6 @@ export const createQueryParams = (url, queries = {}) => {
       myUrl.searchParams.append("CurrentStates", r.value)
     );
   const updatedUrl = myUrl.toString();
-  console.log(updatedUrl);
   return myUrl;
 };
 
@@ -1196,6 +1225,8 @@ export const checkExtensions = (path) => {
     "xlsx",
     "xls",
     "xlsm",
+    "mp3",
+    "webm",
   ];
 
   const extension = getExtension(path);

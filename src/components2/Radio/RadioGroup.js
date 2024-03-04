@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Radio from "./Radio";
 import styles from "./radio.module.css";
 
@@ -21,7 +21,7 @@ const RadioGroup = ({
   // states
   // ** data
   const [selected, setSelected] = useState(defaultValue);
-  console.log(defaultValue);
+  // console.log(defaultValue);
   // styles
   const rowStyle = getRowStyle(horizontal);
   const wrapperClassName = [
@@ -31,11 +31,17 @@ const RadioGroup = ({
   const containerClassName = [styles.container, rowStyle].join(" ");
   const labelClassName = [styles.label].join(" ");
 
+  useEffect(() => {
+    if (defaultValue != {}) {
+      setSelected(defaultValue);
+    }
+  }, [defaultValue]);
   //   functions
   const onRadioClick = (option) => {
     setSelected(option);
     onChange(option, name);
   };
+  console.log(options);
   return (
     <>
       <section className={wrapperClassName}>

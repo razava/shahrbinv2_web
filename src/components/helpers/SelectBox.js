@@ -40,7 +40,7 @@ const SelectBox = ({
     }
   );
   console.log(value);
-  
+
   // console.log(options[0].id);
   return (
     <>
@@ -64,7 +64,6 @@ const SelectBox = ({
             </label>
           )}
           <select
-  
             value={value?.id ? value.id : value}
             disabled={disabled}
             onChange={handleChange(name)}

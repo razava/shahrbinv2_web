@@ -18,6 +18,10 @@ import DropdownWrapper from "../helpers/DropdownWrapper";
 import DropDownItem from "../helpers/DropDown/DropDownItem";
 import LayoutScrollable from "../helpers/Layout/LayoutScrollable";
 import TableHeaderAction from "../commons/dataDisplay/Table/TableHeaderAction";
+import ChartTypes from "../commons/Charts/ChartTypes";
+import LineChart from "../commons/Charts/LineChart";
+import { cn } from "../../utils/functions";
+import Icon from "../../components2/Icon/Icon";
 
 const filterTypes = { from: true, to: true, category: true, regions: true };
 const filterDefaults = {
@@ -35,12 +39,15 @@ const Infos = ({ match }) => {
   const [selectedChartId, setSlectedChartId] = useState("");
   const [selectedChartTitle, setSelectedChartTitle] = useState("");
   const [pieChartsData, setPieChartsData] = useState([]);
+  const [chartsData, setChartsData] = useState([]);
   const [barChartsData, setBarChartsData] = useState([]);
+  const [chartType, setChartType] = useState("barCharts");
   const [singletons, setSingletons] = useState([]);
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isScatterMap, setIsScatterMap] = useState(false);
   const [filters, setFilters] = useState(filterDefaults);
+  const [stack, setStack] = useState("");
 
   useEffect(() => {
     getChartsList({});
@@ -56,16 +63,16 @@ const Infos = ({ match }) => {
     };
   }, [store.refresh.call]);
 
-  useEffect(() => {
-    if (selectedChartId) {
-      clearData();
-      if (isScatterMap) {
-        getLocations(store.filters);
-      } else {
-        getInfos({ filters: store.filters, chartId: selectedChartId });
-      }
-    }
-  }, [store.filters]);
+  // useEffect(() => {
+  //   if (selectedChartId) {
+  //     clearData();
+  //     if (isScatterMap) {
+  //       getLocations(store.filters);
+  //     } else {
+  //       getInfos({ filters: store.filters, chartId: selectedChartId });
+  //     }
+  //   }
+  // }, [store.filters]);
 
   // functions
   const getChartsList = () => {
@@ -87,8 +94,9 @@ const Infos = ({ match }) => {
         successStatus: 200,
         payload: chartId,
         successCallback: (res) => {
-          setPieChartsData(res.data.pieCharts);
-          setBarChartsData(res.data.barCharts);
+          setChartsData(res.data.charts);
+          setPieChartsData(res.data.charts);
+          setBarChartsData(res.data.charts);
           setSingletons(res.data.singletons);
         },
         requestEnded: () => setLoading(false),
@@ -116,7 +124,35 @@ const Infos = ({ match }) => {
     );
   };
 
+  const onSelectChartType = (chartType) => {
+    // setLoading(true);
+    console.log(chartType);
+    setChartType(chartType.value);
+    // setIsHorizontal(chartType.isHorizontal);
+    setTimeout(() => {
+      setLoading(false);
+    }, 300);
+  };
+
+  const onClickOnElement = (item) => {
+    if (!item.parameters) return;
+    // const params = { ...getParams(), ...item.parameters };
+    // setStack([...stack, { level: stack.length + 1, data: item }]);
+    const chartCode = chartsList.find(
+      (c) => String(c.id) === String(selectedChartId)
+    )?.code;
+    console.log(chartCode);
+    console.log(item);
+    setStack(item.title);
+    getInfos({ chartId: { code: chartCode, parameter: item.parameters } });
+  };
+
   const onChartSelected = (chart) => {
+    // setStack([
+    //   { level: 0, data: { title: "نمودارها" } },
+    //   { level: 1, data: chart },
+    // ]);
+    setStack("");
     const selectedChartId = chart.id;
     const chartCode = chartsList.find(
       (c) => String(c.id) === String(selectedChartId)
@@ -131,21 +167,38 @@ const Infos = ({ match }) => {
       if (isScatterMap) {
         getLocations({});
       } else {
-        getInfos({ chartId: selectedChartId });
+        getInfos({ chartId: { code: chartCode, parameter: 0 } });
       }
     }
   };
 
+  useEffect(() => {
+    if (chartsList.length > 0) {
+      onChartSelected(chartsList[0]);
+    }
+  }, [chartsList]);
   // renders
   const renderInfoHeader = () => {
     return (
       <>
-        <ChartsList
-          charts={chartsList}
-          onSelectChart={onChartSelected}
-          selectedChart={selectedChartTitle}
-        />
-        <Filters filterTypes={filterTypes} filterValues={filters} />
+        <div className=" flex items-center gap-2">
+          <ChartsList
+            charts={chartsList}
+            onSelectChart={onChartSelected}
+            selectedChart={selectedChartTitle}
+          />
+          {stack && <p className=" text-lg text-[var(--primary)]">/ {stack}</p>}
+        </div>
+        <div className=" flex items-center ml-3">
+          {chartsData?.length > 0 && (
+            <ChartTypes
+              selected={chartType}
+              // isHorizontal={isHorizontal}
+              onSelectChartType={onSelectChartType}
+            />
+          )}
+        </div>
+        {/* <Filters filterTypes={filterTypes} filterValues={filters} /> */}
       </>
     );
   };
@@ -153,19 +206,44 @@ const Infos = ({ match }) => {
   const hasNoData =
     !loading &&
     singletons.length === 0 &&
-    pieChartsData.length === 0 &&
+    // pieChartsData.length === 0 &&
     barChartsData.length === 0 &&
     !isScatterMap;
 
   const { windowWidth, windowHeight } = useResize();
+  useEffect(() => {
+    console.log(chartType);
+  }, [chartType]);
+
+  const renderBreadCrumb = () => {
+    return (
+      <div className={layoutStyle.breadCrumb}>
+        <div className={layoutStyle.breadLine}></div>
+        {stack.map((s, i) => (
+          <span
+            className={cn(
+              layoutStyle.crumb,
+              i + 1 === stack.length ? layoutStyle.active : ""
+            )}
+            // onClick={() => goTo(s)}
+            key={`stack-${s.level}`}
+          >
+            <span>{s.data.title}</span>
+            {i + 1 !== stack.length && <Icon name="angle-left" />}
+          </span>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <>
       <section className={layoutStyle.wrapper}>
         <TableHeader renderHeader={renderInfoHeader} />
+        {/* {renderBreadCrumb()} */}
         <LayoutScrollable clipped={(window.innerHeight * 3) / 48 + 10}>
-          <div className="w100 mxa">
-            <section className="w100 mxa mt1 bg-white br1">
+          <div className="w100 mxa flex h-full">
+            <section className="w100 mxa bg-white br1 overflow-auto h-full px-1">
               {loading ? (
                 <section className="relative w100 vh100 fcc">
                   <Loader absolute={true} />
@@ -183,7 +261,7 @@ const Infos = ({ match }) => {
                       ))}
                   </div>
 
-                  {pieChartsData.length > 0 &&
+                  {/* {pieChartsData.length > 0 &&
                     pieChartsData.map((pieChartData, i) => (
                       <PieChart
                         key={`piechart-${i}`}
@@ -193,23 +271,128 @@ const Infos = ({ match }) => {
                         width={"100%"}
                         radius={((windowHeight * 37) / 48 - 120) / 2}
                       />
-                    ))}
-                  {barChartsData.length > 0 &&
-                    barChartsData.map((barChartData, i) => {
-                      const barChartItemHeight =
-                        (barChartData.series.length > 0
-                          ? Object.keys(barChartData.series[0].values).length
-                          : 1) * 30;
+                    ))} */}
+                  {chartsData.length > 0 && chartType == "lineCharts" && (
+                    <>
+                      {chartsData.map((lineChartData, i) => {
+                        return (
+                          <LineChart
+                            key={`piechart-${i}`}
+                            chartData={lineChartData}
+                            chartTitle={lineChartData.chartTitle}
+                            height={(windowHeight * 37) / 48 - 20}
+                            width={"100%"}
+                            radius={((windowHeight * 37) / 48 - 120) / 2}
+                            onClickOnElement={onClickOnElement}
+                          />
+                        );
+                      })}
+                    </>
+                  )}
+                  {chartsData.length > 0 && chartType == "pieCharts" && (
+                    <>
+                      {chartsData.map((pieChartData, i) => {
+                        return (
+                          <PieChart
+                            key={`piechart-${i}`}
+                            chartData={pieChartData}
+                            chartTitle={pieChartData.chartTitle}
+                            height={(windowHeight * 37) / 48 - 20}
+                            width={"100%"}
+                            radius={((windowHeight * 37) / 48 - 120) / 2}
+                            onClickOnElement={onClickOnElement}
+                          />
+                        );
+                      })}
+                    </>
+                  )}
+                  {chartsData.length > 0 &&
+                    chartType == "barCharts" &&
+                    chartsData.map((barChartData, i) => {
+                      const isHorizontal = true;
+                      const barThickness = 5;
+                      const seriesCount = barChartData.series.length;
+                      const barChartItemHeight = seriesCount * barThickness;
+                      const margin = 10;
+                      const groupsCount =
+                        barChartData.series?.[0]?.values?.length || 0;
+                      const bottomSpace = 60;
+                      const topSpace = (seriesCount / 4 + 1) * margin;
+                      const horizontalHeight =
+                        (20 * window.innerHeight) / 24 - 120;
+
+                      const barChartHeight = !isHorizontal
+                        ? horizontalHeight
+                        : groupsCount * barChartItemHeight +
+                          bottomSpace +
+                          topSpace +
+                          margin * groupsCount;
+
+                      const barChartWidth = !isHorizontal
+                        ? groupsCount * barChartItemHeight +
+                          bottomSpace +
+                          topSpace +
+                          margin * groupsCount
+                        : "100%";
+                      console.log(barChartWidth);
+                      console.log(barChartData.series[0].values.length);
+                      const numOfGroups = barChartData.series[0].values.length;
+                      const numOfColumns = barChartData.series.length;
+                      const a = barThickness * numOfGroups * numOfColumns + 50;
                       return (
                         <BarChart
                           key={`barchart-${i}`}
                           chartTitle={barChartData.chartTitle}
                           chartData={barChartData}
-                          height={
-                            barChartData.series.length * barChartItemHeight +
-                            barChartItemHeight * 5
-                          }
-                          width={windowWidth - (store.sidebarIsOpen ? 250 : 70)}
+                          height={a}
+                          width={barChartWidth}
+                          isHorizontal={true}
+                          onClickOnElement={onClickOnElement}
+                        />
+                      );
+                    })}
+                  {chartsData.length > 0 &&
+                    chartType == "barCharts2" &&
+                    chartsData.map((barChartData, i) => {
+                      const isHorizontal = false;
+                      const barThickness = 5;
+                      const seriesCount = barChartData.series.length;
+                      const barChartItemHeight = seriesCount * barThickness;
+                      const margin = 10;
+                      const groupsCount =
+                        barChartData.series?.[0]?.values?.length || 0;
+                      const bottomSpace = 60;
+                      const topSpace = (seriesCount / 4 + 1) * margin;
+                      const horizontalHeight =
+                        (20 * window.innerHeight) / 24 - 120;
+
+                      const barChartHeight = !isHorizontal
+                        ? horizontalHeight
+                        : groupsCount * barChartItemHeight +
+                          bottomSpace +
+                          topSpace +
+                          margin * groupsCount;
+
+                      const barChartWidth = !isHorizontal
+                        ? groupsCount * barChartItemHeight +
+                          bottomSpace +
+                          topSpace +
+                          margin * groupsCount
+                        : "100%";
+                      console.log(barChartWidth);
+                      console.log(barChartData.series[0].values.length);
+                      const numOfGroups = barChartData.series[0].values.length;
+                      const numOfColumns = barChartData.series.length;
+                      const a = barThickness * numOfGroups * numOfColumns + 50;
+                      return (
+                        <BarChart
+                          key={`barchart-${i}`}
+                          chartTitle={barChartData.chartTitle}
+                          chartData={barChartData}
+                          height={(20 * window.innerHeight) / 24 - 120}
+                          width={a}
+                          isHorizontal={false}
+                          onClickOnElement={onClickOnElement}
                         />
                       );
                     })}

@@ -38,6 +38,7 @@ const defaultValues = {
     longitude: null,
   },
   region: "",
+  defaultPriority: "",
 };
 
 const RegisterReport = () => {
@@ -140,8 +141,9 @@ const RegisterReport = () => {
           longitude: values.coordinates.longitude,
           elevation: 0,
         },
-        attachments: attachments.forEach((attachment) => attachment.id),
+        attachments: attachments.map((attachment) => attachment.id),
         visibility: isPublic,
+        defaultPriority: Number(values.defaultPriority),
       });
     } else {
       toast(validation.message, { type: "error" });
@@ -166,10 +168,12 @@ const RegisterReport = () => {
   };
 
   const onCategoriesSelected = (selecteds) => {
+    console.log(selecteds[0]);
     if (selecteds.length > 0) {
       const selected = selecteds[0];
       setCategoryTitle(selected.title);
       setCategoryId(selected.id);
+      setValues({ ...values, defaultPriority: selecteds[0].defaultPriority });
     } else {
       setCategoryTitle("");
       setCategoryId(null);
@@ -214,6 +218,7 @@ const RegisterReport = () => {
     setIsPublic(name === "public" ? 0 : 1);
 
   const onAddAttachment = (attachs) => {
+    console.log(attachs);
     setAttachments(attachs);
   };
 
@@ -231,6 +236,7 @@ const RegisterReport = () => {
       title: "خصوصی",
     },
   ];
+
   return (
     <>
       <LayoutScrollable>
@@ -346,16 +352,33 @@ const RegisterReport = () => {
                 title={"نوع انتشار"}
                 options={visibilityOptions}
                 defaultStyles={true}
-                wrapperClassName="col-md-6 col-sm-12 px1"
+                wrapperClassName="col-md-6 col-sm-12"
                 onChange={onVisibilityChange}
               />
               <IsIdentityVisible
-                wrapperClassName="px1 py05 w100 d-flex fdc al-s ju-c relative col-md-6 col-sm-12"
+                wrapperClassName=" py05 w100 d-flex fdc al-s ju-c relative col-md-6 col-sm-12"
                 value={isIdentityVisible}
                 onChange={setIsIdentityVisible}
               />
             </div>
-          </div>
+            <div className={"w100 mxa row"}>
+              <SelectBox
+                staticData
+                options={[
+                  { id: 0, title: "کم" },
+                  { id: 1, title: "عادی" },
+                  { id: 2, title: "زیاد" },
+                  { id: 3, title: "فوری" },
+                ]}
+                name="defaultPriority"
+                value={values.defaultPriority}
+                handleChange={handleChange}
+                handle={["title"]}
+                label="اولویت"
+                wrapperClassName="col-md-6 col-sm-12 col-12 mx-auto"
+              />
+            </div>
+          </div>{" "}
           <div className="w100 mxa">
             <Textarea
               value={values.comments}
@@ -370,7 +393,6 @@ const RegisterReport = () => {
           <div className="w90 mxa frc mt1 px3">
             <AttachmentToggle onAddAttachment={onAddAttachment} reset={reset} />
           </div>
-
           <div className="w100 mxa fre py1 px2 border-t-light mt1">
             <Button
               title="ثبت درخواست"

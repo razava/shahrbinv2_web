@@ -44,7 +44,7 @@ const AddAttachment = ({
     },
     onError: (err) => {},
   });
-  
+
   // functions
   const openFilePicker = () => {
     fileInputRef.current.click();
@@ -88,6 +88,7 @@ const AddAttachment = ({
     console.log(files);
     setData(files[0]);
     const formData = new FormData();
+    console.log(files[0]);
     formData.append("File", files[0]);
     formData.append("AttachmentType", 1);
     uploadMutation.mutate(formData);

@@ -4,6 +4,8 @@ import {
   clearNull,
   constants,
   getFromLocalStorage,
+  getUserRoles,
+  hasRole,
   mapObjectToFormData,
 } from "../../../helperFuncs";
 import styles from "../../../stylesheets/reportdialog.module.css";
@@ -16,6 +18,10 @@ import Loader from "../../helpers/Loader";
 import MultiSelect from "../../helpers/MultiSelect";
 import { AppStore } from "../../../store/AppContext";
 import AttachmentToggle from "../dataDisplay/Attachment/AttachmentToggle";
+import VideoRecorder from "../dataDisplay/Record/VideoRecorder";
+import Modal from "react-responsive-modal";
+import VoiceRecorder from "../dataDisplay/Record/VoiceRecorder";
+import RadioGroup from "../../../components2/Radio/RadioGroup";
 
 // get logged in user roles
 const roles = getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_USER_ROLES);
@@ -27,7 +33,8 @@ const TransitionForm = ({
   createLoading = false,
 }) => {
   const [store] = useContext(AppStore);
-
+  const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
   // data states
   const [referralData, setRefrerralData] = useState({
     // isPublic: 0,
@@ -36,12 +43,13 @@ const TransitionForm = ({
     messageToCitizen: "",
   }); // data needed for submit
   const [attachments, setAttachments] = useState([]); // user attachments to be send to selected destination
-  const [selectedActors, setSelectedActors] = useState([]); // list of users or roles that current user can send this request to.
+  const [selectedActors, setSelectedActors] = useState(); // list of users or roles that current user can send this request to.
   const [allActors, setAllActors] = useState([]); // list of users or roles that current user can send this request to.
 
   // other states
   const [defaultActors, setDefaultActors] = useState([]); // list of users that should be preselected.
-
+  const userRoles = getUserRoles();
+  const isContractor = hasRole(userRoles, ["Contractor"]);
   // flags
   const [loading, setLoading] = useState(false); // flag used to indicate loader status
 
@@ -54,17 +62,26 @@ const TransitionForm = ({
   }, []);
 
   const handleSelectedActors = () => {
-    setSelectedActors(
-      transition.actors.filter((a) => a.type !== 2).map((a, i) => setActors(a))
-    );
+    console.log(transition.actors);
+    const selectedActor = transition.actors
+      .filter((a) => a.type !== 2)
+      .map((a, i) => setActors(a));
+    console.log(selectedActor[0]);
+    setSelectedActors(selectedActor[0]);
     const actors = transition.actors
       .filter((a) => a.type !== 2)
       .map((a, i) => setActors(a));
-    if (actors.length === 1) setDefaultActors(actors);
+    console.log(actors);
+    if (actors.length === 1) setDefaultActors(actors[0]);
   };
 
   const handleChange = (name) => (e) =>
-    setRefrerralData({ ...referralData, [name]: e.target.value }); // func that keep track of changes in form
+    setRefrerralData({ ...referralData, [name]: e.target.value });
+  // func that keep track of changes in form
+  const handleActors = (name) => (e) => {
+    console.log(e.target.value);
+    setSelectedActors(e.target.value);
+  }; // func that keep track of changes in form
 
   const validations = () => {
     // should not send request if no actor has been selected
@@ -83,10 +100,9 @@ const TransitionForm = ({
 
   const getReportPayload = () => {
     // get actor ids
-    const actors = selectedActors.map((a, i) => {
-      return { id: a.value };
-    });
-    console.log(actors);
+    // const actors = selectedActors.map((a, i) => {
+    //   return { id: a.value };
+    // });
     let payload = new FormData();
     payload = mapObjectToFormData(
       // add form data to payload
@@ -99,19 +115,20 @@ const TransitionForm = ({
       payload
     );
     // add attachments to payload
-    attachments.forEach((attachment) => {
+    attachments.map((attachment) => {
       payload.append("attachments", attachment.file);
     });
     // add visibility to payload
     // payload.append("visibility", isPublic);
     // add actorIds to payload
-    actors.forEach((actor, i) => {
-      payload.append(`actors[${i}].id`, actor.id);
-    });
+    // actors.map((actor, i) => {
+    //   payload.append(`actors[${i}].id`, actor.id);
+    // });
+    console.log(selectedActors);
     return {
       transitionId: transition.transitionId,
       reasonId: reasonId,
-      toActorId: actors[0].id,
+      toActorId: selectedActors?.id ? selectedActors?.id : selectedActors,
       attachments: attachments.map((item) => item.id),
       comment: comment,
       id: data.id,
@@ -148,10 +165,10 @@ const TransitionForm = ({
   const setActors = (a) => {
     return {
       label: selectActorLabel(a),
-      value: a.id,
+      id: a.id,
     };
   };
-  
+
   const sendMessageToCitizen = () => {
     // function to handle message to citizen request
     const payload = { message: messageToCitizen };
@@ -186,15 +203,28 @@ const TransitionForm = ({
   };
 
   const onAddAttachment = (attachs) => {
+    console.log(attachs);
     setAttachments(attachs);
   };
 
+  const onRemoveRecord = (type) => {
+    const newAttachments = attachments.filter((item) => item?.type == "type");
+    setAttachments(newAttachments);
+  };
+
+  const onAddRecords = (record, type) => {
+    setAttachments([...attachments, { id: record.id, type: type }]);
+    if (type == "video") setOpen(false);
+    if (type == "voice") setOpen2(false);
+  };
+  const hasVideo = attachments.find((item) => item?.type == "video");
+  const hasVoice = attachments.find((item) => item?.type == "voice");
   return (
     <>
       <div className={[styles.infoList, "pb5 mb1"].join(" ")}>
         {/* list of available actors */}
         <div className={[`w90 mxa mt1 row`].join(" ")}>
-          <MultiSelect
+          {/* <MultiSelect
             staticData={allActors}
             defaultSelecteds={defaultActors}
             onChange={setSelectedActors}
@@ -205,6 +235,27 @@ const TransitionForm = ({
             strings={{ label: "ارجاع به" }}
             maxHeight={300}
             id="actors-list"
+          /> */}
+          {/* <div className="flex flex-col gap-0 col-md-12 col-sm-12 mb-2">
+            <span>ارجاع به</span>
+            <RadioGroup
+              // label="ارجاع به"
+              valueKey="value"
+              nameKey="label"
+              defaultValue={defaultActors}
+              onChange={(value) => setSelectedActors(value)}
+              options={allActors}
+            />
+          </div> */}
+          <SelectBox
+            label="ارجاع به"
+            staticData={true}
+            name="actorId"
+            handleChange={handleActors}
+            options={allActors}
+            handle={["label"]}
+            value={selectedActors}
+            wrapperClassName="col-md-6 col-sm-12"
           />
           {/* list of reasons */}
           <SelectBox
@@ -249,7 +300,68 @@ const TransitionForm = ({
           </div>
         )} */}
         {/* add and show attachments */}
-        <div className="w90 frc mxa mt1">
+        <Modal
+          open={open}
+          onClose={() => setOpen(false)}
+          center
+          modalId="recorder"
+          styles={{ direction: "ltr" }}
+          //   classNames={styles.customModal}
+        >
+          <VideoRecorder
+            removeRecord={onRemoveRecord}
+            addRecord={onAddRecords}
+          />
+        </Modal>
+        <Modal
+          open={open2}
+          onClose={() => setOpen2(false)}
+          center
+          modalId="recorder"
+          styles={{ direction: "ltr" }}
+          //   classNames={styles.customModal}
+        >
+          <VoiceRecorder
+            removeRecord={onRemoveRecord}
+            addRecord={onAddRecords}
+          />
+        </Modal>
+        <div className="w90 frc mxa mt1 flex items-center gap-5">
+          {isContractor && (
+            <>
+              <Button outline onClick={() => setOpen2(true)}>
+                <div className=" flex gap-2">
+                  <span>میکروفون</span>
+                  <span>
+                    <i class="fas fa-microphone-alt"></i>
+                  </span>
+                </div>
+                {hasVoice && (
+                  <span className=" absolute bg-primary -top-2 -left-2 rounded-full h-6 w-6 text-white grid place-content-center">
+                    1
+                  </span>
+                )}
+              </Button>
+              <Button
+                outline
+                onClick={() => setOpen(true)}
+                className=" flex !items-center gap-2"
+              >
+                <div className=" flex items-center gap-2">
+                  <span>دوربین</span>
+                  <span>
+                    <i class="fas fa-camera-alt"></i>
+                  </span>
+                </div>
+                {hasVideo && (
+                  <span className=" absolute bg-primary -top-2 -left-2 rounded-full h-6 w-6 text-white grid place-content-center">
+                    1
+                  </span>
+                )}
+              </Button>
+            </>
+          )}
+
           <AttachmentToggle onAddAttachment={onAddAttachment} />
         </div>
         {/* submit button */}

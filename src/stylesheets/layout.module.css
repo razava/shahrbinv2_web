@@ -34,3 +34,19 @@
     right: calc((100vw * 10) / 48);
   }
 }
+
+
+.breadCrumb {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  height: 40px;
+}
+
+.breadLine {
+  width: 20px;
+  height: 2px;
+  background-color: var(--gray-scale-2);
+}
