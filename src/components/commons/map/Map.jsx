@@ -16,7 +16,6 @@ import { transform } from "ol/proj"; // Import the transform function from ol/pr
 // import GeoJSON from "ol/format/GeoJSON.js";
 
 import scatter from "../../../assets/Images/scatter.png";
-import Button from "../../helpers/Button";
 
 function ScatterMap({
   width = 400,
@@ -26,33 +25,25 @@ function ScatterMap({
   locations = [],
   className = "",
   mode = "chart",
-  getLocations,
 }) {
   const [map, setMap] = useState();
   const [layer, setLayer] = useState(null);
   const [markers, setMarkers] = useState([]);
-  const [vector, setVector] = useState();
-  const [feature, setFeature] = useState();
   const [drawInteraction, setDrawInteraction] = useState(null);
+
   const mapElement = useRef();
   const locationsRef = useRef();
   mapElement.current = map;
 
   useEffect(() => {
     if (map) {
-      if (mode == "chart") {
-        console.log(112);
+      if (mode != "chart") {
         addMarkerLayer();
       }
       addDrawInteraction();
-      if (localStorage.getItem("MapView") && map) {
-        const v = JSON.parse(localStorage.getItem("MapView"));
-        map.getView().fit(v, map.getSize());
-      }
     }
-  }, [map, locations]);
+  }, [locations, map]);
 
-  useEffect(() => {}, [map]);
   const addMarkerLayer = () => {
     if (layer) map.removeLayer(layer);
 
@@ -116,7 +107,7 @@ function ScatterMap({
       const coordinates = geometry.getCoordinates();
       // console.log(coordinates);
       // console.log(coordinates[0]);
-      const lonLatCoordinates = coordinates[0].reverse().map((coord) => {
+      const lonLatCoordinates = coordinates[0].map((coord) => {
         // transform(coord, "EPSG:3857", "EPSG:4326");
         // console.log(coord);
         // console.log(transform(coord, "EPSG:3857", "EPSG:4326"));
@@ -129,31 +120,20 @@ function ScatterMap({
       //     "EPSG:4326"
       //   )
       // );
-      var extent = feature.getGeometry().getExtent();
-      console.log(extent);
-      map.getView().fit(extent, map.getSize());
-      // map.getView().fit(feature.getGeometry(), map.getSize());
-      const flatCoordinates = lonLatCoordinates.reduce(
-        (acc, subList) => [...acc, ...subList],
-        []
-      );
-      localStorage.setItem("MapView", JSON.stringify(extent));
-      if (mode == "chart") {
-        getLocations(flatCoordinates);
-      }
+      console.log("Latitude and Longitude:", lonLatCoordinates);
       setDrawInteraction(lonLatCoordinates);
     });
 
     // Add snapping and modifying interactions if needed
     // const modify = new Modify({ source: source });
     // const snap = new Snap({ source: source });
-    setVector(vectorLayer);
+
     map.addInteraction(draw);
     map.addLayer(vectorLayer);
     // map.addInteraction(modify);
     // map.addInteraction(snap);
     // map.removeInteraction(draw);
-    // return map.removeLastPoint;
+    return map.removeLastPoint;
   };
 
   useEffect(() => {
@@ -180,7 +160,6 @@ function ScatterMap({
         projection: "EPSG:3857",
         center: fromLonLat(center),
         zoom,
-        // minZoom:10
       }),
       controls: [],
     });
@@ -191,23 +170,12 @@ function ScatterMap({
   }, []);
 
   return (
-    <div>
-      <div
-        ref={mapElement}
-        id="map"
-        className={className}
-        style={{ width, height, cursor: "pointer" }}
-      ></div>
-      <Button
-        title="پاک کردن"
-        className="py1 br05 bg-primary"
-        onClick={() => {
-          map.removeLayer(vector);
-          addDrawInteraction();
-        }}
-        // loading={createLoading}
-      />
-    </div>
+    <div
+      ref={mapElement}
+      id="map"
+      className={className}
+      style={{ width, height, cursor: "pointer" }}
+    ></div>
   );
 }
 

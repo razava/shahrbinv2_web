@@ -89,7 +89,7 @@ const BarChart = ({
       },
     },
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     barPercentage: 0.5,
     scales: {
       x: {
@@ -180,21 +180,25 @@ const BarChart = ({
     }
   };
   console.log(height);
-  const hasW = isHorizontal ? `w-[${width * 20}px]` : "";
+  // const hasW = isHorizontal ? `w-[${width * 20}px]` : "";
   console.log(width);
+  console.log(isHorizontal);
   return (
     <div
       style={{
-        // height: !isHorizontal ? undefined : "",
-        width: isHorizontal ? "100%" : width * 8 + "px",
+        height: isHorizontal ? height + "px" : "100%",
+        width: isHorizontal ? "100%" : width + "px",
+        minHeight: "100%",
+        minWidth: "100%",
       }}
-      className={`${isHorizontal && "h-full"}`}
+      // className=" w-[3000px] h-full"
+      // className={`${isHorizontal && "h-full"}`}
     >
       <Bar
         options={options}
         data={data}
-        // width={width}
-        height={isHorizontal ? height : "70%"}
+        // width={5000}
+        // height={500}
         // style={{ height: "5000px", width: "100%" }}
         // className={` ${isHorizontal ? "w-full" : ""}`}
         // style={{width:"400px"}}

@@ -533,13 +533,17 @@ export class AuthenticateAPI {
   }
   static resetPassword(token, payload, source, instance, id) {
     return axios
-      .put(`${prefix}/api/Authenticate/ChangePassword/${id}`, payload, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        cancelToken: source.token,
-      })
+      .put(
+        `${prefix}/api/${instance?.id}/AdminUserManagement/Password/${id}`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          cancelToken: source.token,
+        }
+      )
       .then((res) => res)
       .catch((err) => {
         if (axios.isCancel(err)) {
@@ -550,10 +554,10 @@ export class AuthenticateAPI {
       });
   }
 
-  static changePassword(token, payload, source, instance) {
+  static changePassword(token, payload, source, instance, id) {
     return axios
       .put(
-        `${prefix}/api/${instance?.id}/Authenticate/ChangePassword`,
+        `${prefix}/api/${instance?.id}/AdminUserManagement/Password/${id}`,
         payload,
         {
           headers: {

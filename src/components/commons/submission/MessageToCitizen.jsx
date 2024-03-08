@@ -7,7 +7,7 @@ import { postMessageToCitizen } from "../../../api/StaffApi";
 import AttachmentToggle from "../dataDisplay/Attachment/AttachmentToggle";
 import { toast } from "react-toastify";
 
-export default function MessageToCitizen({ data }) {
+export default function MessageToCitizen({ data, refresh }) {
   const sendMessageMutation = useMutation({
     mutationKey: ["messageToCitizen"],
     mutationFn: postMessageToCitizen,
@@ -15,6 +15,7 @@ export default function MessageToCitizen({ data }) {
       toast("پیام شما با موفقیت به شهروند ارسال شد.", { type: "success" });
       setRefrerralData({ ...referralData, messageToCitizen: "" });
       setAttachments([]);
+      refresh();
     },
     onError: (err) => {},
   });

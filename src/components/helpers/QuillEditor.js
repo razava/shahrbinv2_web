@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
-function QuillEditor({ setData, data, mode , readOnly = false }) {
+function QuillEditor({ setData, data, mode, readOnly = false }) {
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -45,16 +45,17 @@ function QuillEditor({ setData, data, mode , readOnly = false }) {
     //this.quill.setSelection(cursorPosition + 1);
   };
   console.log(data);
-    // useEffect(() => {
-    //   if (mode == "step") {
-    //     setCode(data);
-    //   }
-    // }, [data]);
+  // useEffect(() => {
+  //   if (mode == "step") {
+  //     setCode(data);
+  //   }
+  // }, [data]);
   console.log(data);
   return (
     <>
       <div>
         <ReactQuill
+          readOnly={readOnly}
           theme="snow"
           modules={modules}
           formats={formats}

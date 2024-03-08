@@ -222,9 +222,9 @@ const Polls = ({ match }) => {
       <DialogToggler
         condition={createPollDialog}
         setCondition={setCreatePollDialog}
-        width={window.innerWidth}
+        width={900}
         // height={800}
-        fixHeight={800}
+        fixHeight={600}
         isUnique={false}
         id="create-poll-dialog"
       >

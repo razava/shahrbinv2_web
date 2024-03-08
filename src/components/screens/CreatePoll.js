@@ -17,6 +17,7 @@ import { Fragment } from "react";
 import { AppStore } from "../../store/AppContext";
 import QuillEditor from "../helpers/QuillEditor";
 import ReactQuill from "react-quill";
+import TextInput from "../helpers/TextInput";
 
 const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
   const [store] = useContext(AppStore);
@@ -27,6 +28,7 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
   const [pollAnswers, setPollAnswers] = useState([]);
   const [pollId, setPollId] = useState(null);
   const [pollType, setPollType] = useState(0);
+  const [isDescriptivePollType, setIsDescriptivePollType] = useState(false);
   const [tempContent, setTempContent] = useState("");
   const [editor, setEditor] = useState(false);
   const [input, setInput] = useState(false);
@@ -157,26 +159,28 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
         shortTitle: choice.shortTitle,
       });
     });
-    steps.push(
-      {
-        id: steps.length + 1,
-        title: "گزینه نظرسنجی را اینجا وارد نمایید.",
-        type: "editor",
-        role: "answer",
-        finished: false,
-        writable: true,
-        shortTitle: "",
-      },
-      {
-        id: steps.length + 2,
-        title: "گزینه نظرسنجی را اینجا وارد نمایید.",
-        type: "editor",
-        role: "answer",
-        finished: false,
-        writable: true,
-        shortTitle: "",
-      }
-    );
+    if (data.pollType !== 2) {
+      steps.push(
+        {
+          id: steps.length + 1,
+          title: "گزینه نظرسنجی را اینجا وارد نمایید.",
+          type: "editor",
+          role: "answer",
+          finished: false,
+          writable: true,
+          shortTitle: "",
+        },
+        {
+          id: steps.length + 2,
+          title: "گزینه نظرسنجی را اینجا وارد نمایید.",
+          type: "editor",
+          role: "answer",
+          finished: false,
+          writable: true,
+          shortTitle: "",
+        }
+      );
+    }
     const answers = data.choices.map((choice) => choice.text);
     setSteps(steps);
     setPollQuestion(data.question);
@@ -189,9 +193,13 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
   };
 
   const handlePollCreation = (step) => {
+    console.log(steps[step].type);
     if (steps[step].type === "editor") setEditor(true);
-    else if (steps[step].type === "input") setInput(true);
-    else if (steps[step].type === "radio") setRadio(true);
+    else if (steps[step].type === "input") {
+      // proceed();
+      setInput(true);
+      // setEditor(true);
+    } else if (steps[step].type === "radio") setRadio(true);
     setButton(true);
   };
 
@@ -203,24 +211,24 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
     setPollTitle(e.target.value);
   };
 
-  const createPoll = (e) => {
-    setLoading(true);
-    setButton(false);
-    const token = getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN);
-    return new Promise((resolve, reject) => {
-      PollAPI.createPoll(token, {
-        title: pollTitle,
-        pollType: parseInt(pollType),
-        pollState: 0,
-      }).then((res) => {
-        setLoading(false);
-        if (res.status === 201) {
-          setPollId(res.data.id);
-          resolve(true);
-        } else resolve(false);
-      });
-    });
-  };
+  // const createPoll = (e) => {
+  //   setLoading(true);
+  //   setButton(false);
+  //   const token = getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN);
+  //   return new Promise((resolve, reject) => {
+  //     PollAPI.createPoll(token, {
+  //       title: pollTitle,
+  //       pollType: parseInt(pollType),
+  //       pollState: 0,
+  //     }).then((res) => {
+  //       setLoading(false);
+  //       if (res.status === 201) {
+  //         setPollId(res.data.id);
+  //         resolve(true);
+  //       } else resolve(false);
+  //     });
+  //   });
+  // };
 
   const stepForward = () => {
     setSteps((prev) =>
@@ -255,11 +263,30 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
     handlePollCreation(currentStep + 1);
   };
 
+  // const goNext = () = > {
+
+  // }
+  useEffect(() => {
+    console.log(currentStep);
+    if (currentStep == 1) {
+      setCurrentStep((prev) => prev + 1);
+      setEditor(false);
+      setRadio(false);
+      setTempContent("");
+      stepForward();
+      // setInput(true);
+    }
+  }, [currentStep]);
+
   const proceed = async (e) => {
+    console.log(currentStep);
+    if (pollType == 2) {
+      setIsDescriptivePollType(true);
+    }
     e.preventDefault();
     e.stopPropagation();
     setCurrentStep((prev) => prev + 1);
-    setInput(false);
+    // setInput(false);
     setEditor(false);
     setRadio(false);
     setTempContent("");
@@ -330,7 +357,7 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
       title: pollTitle,
       pollType: Number(pollType),
       // id: pollId,
-      question: pollQuestion,
+      question: isDescriptivePollType ? tempContent : pollQuestion,
       choices,
       isActive: true,
     };
@@ -357,22 +384,28 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
 
   const [, publishLoading] = useMakeRequest(
     PollAPI.createPoll,
-    204,
+    201,
     publishRequest,
     payload,
     (res) => {
       setPublishRequest(false);
-      if (res.status === 204) {
+      if (res.status === 201) {
         toast("نظرسنجی با موفقیت ایجاد شد.", { type: "success" });
         onPollCreated();
       }
     },
     pollId
   );
+
+  useEffect(() => {
+    addPoll();
+  }, []);
+
+  console.log(pollTitle);
   return (
     <>
       {(loading || publishLoading) && <Loader />}
-      <div
+      {/* <div
         className="w100 mx-a px-4 frc"
         style={{ height: window.innerHeight * 0.2, overflow: "auto" }}
       >
@@ -391,11 +424,34 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
           className="rw2 br2 mx1"
           outline={!store.darkMode}
         />
-      </div>
+      </div> */}
       <div
-        className="w100 mx-a px-4 of-auto-y scrollbar"
+        className="w100 mx-a px-4 of-auto-y scrollbar mt-2"
         style={{ height: window.innerHeight * 0.8 }}
       >
+        {input && (
+          <>
+            {/* <div className={styles.stepTitle}>{steps[currentStep].title}</div>
+            <input
+              type="text"
+              className={styles.input}
+              onChange={handleTitleAdd}
+            /> */}
+            <TextInput
+              value={pollTitle}
+              // readOnly={true}
+              title={"عنوان"}
+              placeholder={steps[1].title}
+              wrapperClassName="!w-full !px-0"
+              inputClassName=" text-right px-1 py-2 text-lg"
+              labelClassName=" text-xl"
+              onChange={(name, onlyDigit) => (e) => {
+                handleTitleAdd(e);
+              }}
+              required={false}
+            />
+          </>
+        )}
         {steps
           .filter((step) => step.finished)
           .map((step, i) => {
@@ -416,7 +472,7 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
                       onEditStep(value, step.role, step.id)
                     }
                   /> */}
-
+                  {/* <QuillEditor /> */}
                   <QuillEditor
                     readOnly={!step.writable}
                     data={
@@ -439,6 +495,19 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
                       placeholder="عنوان کوتاه گزینه"
                     />
                   )}
+                  {/* {step.role === "answer" && (
+                    <TextInput
+                      value={step.shortTitle}
+                      onChange={(e) =>
+                        onEditShortTitle(e.target.value, step.id)
+                      }
+                      readOnly={!step.writable}
+                      title={step.title}
+                      wrapperClassName="w-full"
+                      inputClassName=""
+                      required={false}
+                    />
+                  )} */}
                   <Button className="my-1" onClick={editStep(step.id)}>
                     {isEditing.bool && isEditing.id === step.id
                       ? "تایید"
@@ -449,18 +518,27 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
             } else if (step.type === "input") {
               return (
                 <>
-                  <div className={styles.stepTitle}>{step.title}</div>
-                  <input
+                  {/* <div className={styles.stepTitle}>{step.title}</div> */}
+                  {/* <input
                     type="text"
                     className={styles.input}
                     readOnly={true}
                     value={pollTitle}
-                  />
+                  /> */}
+                  {/* <TextInput
+                    value={pollTitle}
+                    readOnly={true}
+                    title={"عنوان"}
+                    placeholder={step.title}
+                    wrapperClassName="w-full"
+                    inputClassName=" text-right px-1 py-2"
+                    required={false}
+                  /> */}
                 </>
               );
             }
           })}
-        {editor && (
+        {editor && mode != "edit" && (
           <>
             {/* {console.log(tempContent)} */}
             <div className={styles.stepTitle}>{steps[currentStep].title}</div>
@@ -493,16 +571,7 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
             )}
           </>
         )}
-        {input && (
-          <>
-            <div className={styles.stepTitle}>{steps[currentStep].title}</div>
-            <input
-              type="text"
-              className={styles.input}
-              onChange={handleTitleAdd}
-            />
-          </>
-        )}
+
         {radio && (
           <>
             <div className={styles.stepTitle}>{steps[currentStep].title}</div>
@@ -511,7 +580,7 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
                 <input
                   type="radio"
                   name="pollType"
-                  id={pollType.id}
+                  id={pollType.id}ء
                   value={pollType.id}
                   onChange={(e) => setPollType(e.target.value)}
                 />
@@ -522,17 +591,48 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
             ))}
           </>
         )}
-        {button && (
+        {button &&
+          steps.length <= 5 &&
+          !isDescriptivePollType &&
+          mode !== "edit" && (
+            <form onSubmit={proceed}>
+              <Button
+                type="submit"
+                title="تایید"
+                className="my-1"
+                onClick={proceed}
+              />
+            </form>
+          )}
+        {steps.length > 5 && (
           <form onSubmit={proceed}>
             <Button
               type="submit"
-              title="تایید"
-              className="my-1"
+              title="افزودن گزینه جدید"
+              className="my-4 mx-auto"
               onClick={proceed}
             />
           </form>
         )}
       </div>
+
+      {/* <div className=" mxa fre py1 px2 border-t-light mt1 fixed b0 bg-white"> */}
+      <Button
+        disabled={isDescriptivePollType ? false : currentStep <= 3}
+        title="انتشار نظرسنجی"
+        onClick={() => {
+          if (isDescriptivePollType) {
+            setPollQuestion(tempContent);
+          }
+          publishPoll();
+        }}
+        className={` mr-auto ml-10 my-10 ${
+          !isDescriptivePollType && currentStep <= 3 && "hidden"
+        }`}
+        // style={{ display: currentStep <= 3 ? "hidden" : "hidden" }}
+        // outline={!store.darkMode}
+      />
+      {/* </div> */}
     </>
   );
 };

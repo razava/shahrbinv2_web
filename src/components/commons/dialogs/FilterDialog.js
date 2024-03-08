@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { lazy, useContext, useEffect, useState } from "react";
 import {
   ActorsAPI,
   CommonAPI,
@@ -21,6 +21,8 @@ import TextInput from "../../helpers/TextInput";
 import useMakeRequest from "../../hooks/useMakeRequest";
 import DialogButtons from "./DialogButtons";
 import TreeSystem from "./TreeSystem";
+import { Modal } from "react-responsive-modal";
+const ScatterMap = lazy(() => import("../map/ScatterMap"));
 
 const FilterDialog = ({
   filterTypes = [],
@@ -29,6 +31,7 @@ const FilterDialog = ({
   excel = false,
 }) => {
   const [store, dispatch] = useContext(AppStore);
+  const [open, setOpen] = useState(false);
 
   const [allOrgans, setAllOrgans] = useState([]);
   const [filterData, setFilterData] = useState({
@@ -220,7 +223,6 @@ const FilterDialog = ({
                 />
               )}
             </div>
-
             <div className="w100 mx-a relative frc">
               {filterTypes.to && (
                 <DatePickerConatiner
@@ -235,7 +237,6 @@ const FilterDialog = ({
                 />
               )}
             </div>
-
             <div className="w100 mxa row frc">
               {filterTypes.roles && (
                 <MultiSelect
@@ -253,7 +254,6 @@ const FilterDialog = ({
                 />
               )}
             </div>
-
             <div className="w100 mx-a relative frc">
               {filterTypes.category && (
                 <TreeSystem
@@ -288,7 +288,6 @@ const FilterDialog = ({
                 ></TreeSystem>
               )}
             </div>
-
             <div className="w100 mxa row frc">
               {filterTypes.regions && (
                 <MultiSelect
@@ -304,7 +303,6 @@ const FilterDialog = ({
                 />
               )}
             </div>
-
             <div className="w100 mxa row frc">
               {filterTypes.statuses && (
                 <MultiSelect
@@ -321,7 +319,6 @@ const FilterDialog = ({
                 />
               )}
             </div>
-
             <div className="w100 mxa row frc">
               {filterTypes.organs && allOrgans.length > 0 && (
                 <MultiSelect
@@ -340,7 +337,31 @@ const FilterDialog = ({
                 />
               )}
             </div>
-
+            {/* {filterTypes.Map && ( */}
+            {/* <div className="mx-auto">
+              <Button
+                title="نقشه"
+                className="py1 br05 bg-primary"
+                onClick={() => setOpen(true)}
+                // loading={createLoading}
+              />
+            </div> */}
+            <Modal
+              open={open}
+              onClose={() => setOpen(false)}
+              center
+              modalId="filter"
+              styles={{ direction: "rtl" }}
+              //   classNames={styles.customModal}
+            >
+              <h2 className="mt-10 font-bold text-2xl mb-5">پیش نمایش فرم</h2>
+            </Modal>
+            {filterTypes.Map && (
+              <div className=" w-full px-2 py-1">
+                <p className=" text-lg">انتخاب ناحیه</p>
+                <ScatterMap className=" !w-full" mode="filter" locations={[]} />
+              </div>
+            )}
             <div className="w100 mxa row frc">
               {filterTypes.query && (
                 <form className="col-md-12" onSubmit={onQueryRequest}>

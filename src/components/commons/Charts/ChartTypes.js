@@ -4,6 +4,7 @@ import React from "react";
 import styles from "./styles.module.css";
 import Icon from "../../../components2/Icon/Icon";
 import { cn } from "../../../utils/functions";
+import { Tooltip } from "react-tooltip";
 
 const chartTypeOptions = [
   {
@@ -48,19 +49,23 @@ const ChartTypes = ({
     <>
       <div className={styles.chartTypes}>
         {chartTypeOptions.map((option) => (
-          <Icon
-            key={option.id}
-            onClick={() => onSelectChartType(option)}
-            name={option.icon}
-            classNames={{
-              icon: cn(
-                styles.chartType,
-                selectedChartType.id === option.id ? styles.active : "",
-                option.value == "barCharts" && "rotate-90"
-              ),
-            }}
-            size={"50px"}
-          />
+          <>
+            <Icon
+              key={option.id}
+              onClick={() => onSelectChartType(option)}
+              name={option.icon}
+              classNames={{
+                icon: cn(
+                  styles.chartType,
+                  selectedChartType.id === option.id ? styles.active : "",
+                  option.value == "barCharts" && "rotate-90"
+                ),
+              }}
+              size={"50px"}
+              tooltipId={option.id}
+            />
+            <Tooltip style={{fontSize:"10px"}} id={option.id} place="bottom" content={option.title} />
+          </>
         ))}
       </div>
     </>

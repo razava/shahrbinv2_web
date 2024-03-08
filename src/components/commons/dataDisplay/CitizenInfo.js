@@ -8,11 +8,12 @@ import { useQuery } from "@tanstack/react-query";
 import { getCitizenInformation } from "../../../api/commonApi";
 
 const CitizenInfo = ({ data }) => {
+  //queries
   const { data: citizenData, isLoading } = useQuery({
     queryKey: ["citizenData", data.citizenId],
     queryFn: () => getCitizenInformation(data.citizenId),
   });
-  console.log(citizenData);
+  
   return (
     <section className={styles.wrapper}>
       <figure className={styles.avatarContainer}>

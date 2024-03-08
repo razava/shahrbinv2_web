@@ -17,6 +17,7 @@ import CategoryForm2 from "./CategoryForm2";
 import Notes from "./Notes";
 import Satisfaction from "../submission/Satisfaction";
 import Objection from "../submission/Objection";
+import ShareInformation from "./ShareInformation";
 
 const modal = document && document.getElementById("modal-root");
 
@@ -130,7 +131,7 @@ const ReportDialog = ({
             )}
             {!readOnly && isExecutive && (
               <article label="پاسخ به شهروند" id="messageToCitizen">
-                <MessageToCitizen data={data} />
+                <MessageToCitizen refresh={refresh} data={data} />
               </article>
             )}
             {readOnly && isInspector && (
@@ -138,6 +139,9 @@ const ReportDialog = ({
                 <Objection onNext={onNext} data={data} />
               </article>
             )}
+            <article label="اشتراک گذاری" id="Share">
+              <ShareInformation data={data} />
+            </article>
             {!readOnly && (
               <article label="ارجاع" id="finalize">
                 <Referral

@@ -50,7 +50,7 @@ const ReportHistory = ({ data }) => {
     title: (
       <>
         <span>
-          {i + 1} - {d.message}
+          {reportHistory.length - i} - {d.message}
         </span>
         <span className="f1 ts-light">
           {convertserverTimeToDateString(d.dateTime)}

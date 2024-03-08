@@ -12,7 +12,13 @@ import TabLabel from "../helpers/Tabs/TabLabel";
 import Filters from "../helpers/Filters";
 import Search from "../helpers/Search";
 
-const filterTypes = { query: true, from: true, to: true, statuses: true };
+const filterTypes = {
+  query: true,
+  from: true,
+  to: true,
+  statuses: true,
+  Map: true,
+};
 
 const NewReports = ({ match }) => {
   // refs

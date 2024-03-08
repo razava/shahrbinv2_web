@@ -53,3 +53,14 @@ export async function postConnectionId(id) {
   );
   return data.data;
 }
+
+
+export async function getFilters() {
+  const data = await axios.get(
+    `/api/${instanceId}/StaffCommon/Filters`,
+    {
+      headers: { Authorization: `Bearer ${Token}` },
+    }
+  );
+  return data.data;
+}

@@ -95,9 +95,9 @@ export default function Notes({ data }) {
         // style={{ height: "calc(100% - 150px)" }}
         className=" h-2/3 overflow-y-auto"
       >
-        <p className=" text-xl mt-4 font-bold mr-5 mb-5">یادداشت ها</p>
+        <p className=" text-xl mt-4 font-bold mr-14 mb-5">یادداشت ها</p>
         {Notes?.length == 0 && (
-          <p className=" mt-2 mr-5">هیج یادداشتی وجود ندارد</p>
+          <p className=" mt-2 mr-14">هیج یادداشتی وجود ندارد.</p>
         )}
         {}
         {Notes?.map((item, index) => {
@@ -113,16 +113,16 @@ export default function Notes({ data }) {
                 </span>
                 <span class="flex-grow bg-gray-300 !h-2"></span>
               </h3>
-              <div className=" relative flex items-center mx-auto">
+              <div className=" relative flex items-center w-full px-2 justify-between">
                 {/* <p className=" text-2xl self-start mt-3">{index + 1}</p> */}
                 <Textarea
                   value={values && values[index]?.text}
                   title="یادداشت"
-                  wrapperClassName=""
+                  wrapperClassName=" w-full"
                   name={index}
                   resize={false}
                   readOnly={values && values[index]?.readOnly}
-                  inputClassName=" h-fit of-x-hidden text-right px-1 !w-full"
+                  inputClassName=" h-44 of-x-hidden text-right px-1 "
                   handleChange={handelChange}
                 />
                 <div
@@ -130,7 +130,7 @@ export default function Notes({ data }) {
                     values && values[index]?.readOnly == false
                       ? "hidden"
                       : "flex"
-                  } rounded-md flex flex-col justify-center items-center gap-5 ml-20`}
+                  } rounded-md flex flex-col justify-center items-center gap-5 ml-1`}
                 >
                   <div
                     onClick={() =>
@@ -158,7 +158,7 @@ export default function Notes({ data }) {
                 <div
                   className={`${
                     values && values[index]?.readOnly && "hidden"
-                  } rounded-md flex flex-col justify-center items-center gap-5 ml-20`}
+                  } rounded-md flex flex-col justify-center items-center gap-5 ml-1`}
                 >
                   <div
                     onClick={() =>
@@ -207,14 +207,14 @@ export default function Notes({ data }) {
         <Textarea
           value={note}
           title="یادداشت"
-          wrapperClassName="mxa"
+          wrapperClassName="mxa w-full"
           resize={false}
-          inputClassName=" h-44 of-x-hidden px-1"
+          inputClassName=" h-44 of-x-hidden text-right px-1"
           handleChange={(name) => (e) => setNote(e.target.value)}
         />
         <Button
           title="افزودن"
-          className="py1 br05 bg-primary self-end ml-16 mt-2"
+          className="py1 br05 bg-primary self-end ml-5 mt-2"
           onClick={handelPostNote}
           //   loading={createLoading}
         />

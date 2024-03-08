@@ -22,6 +22,9 @@ import ChartTypes from "../commons/Charts/ChartTypes";
 import LineChart from "../commons/Charts/LineChart";
 import { cn } from "../../utils/functions";
 import Icon from "../../components2/Icon/Icon";
+import ExportExcel from "../helpers/Excel/ExcelExport";
+import Button from "../helpers/Button";
+import { Tooltip } from "react-tooltip";
 
 const filterTypes = { from: true, to: true, category: true, regions: true };
 const filterDefaults = {
@@ -95,6 +98,11 @@ const Infos = ({ match }) => {
         payload: chartId,
         successCallback: (res) => {
           setChartsData(res.data.charts);
+          const locs = res.data.locations.map((item) => {
+            delete item.reportId;
+            return item;
+          });
+          setLocations(locs);
           setPieChartsData(res.data.charts);
           setBarChartsData(res.data.charts);
           setSingletons(res.data.singletons);
@@ -189,7 +197,31 @@ const Infos = ({ match }) => {
           />
           {stack && <p className=" text-lg text-[var(--primary)]">/ {stack}</p>}
         </div>
-        <div className=" flex items-center ml-3">
+        <div className=" flex items-center ml-3 divide-y divide-x">
+          {/* {chartsData?.length > 0 && (
+            <>
+              <span data-tooltip-id="filter" className=" cursor-pointer py-1">
+                <i
+                  style={{ fontSize: "15px" }}
+                  className="fas fa-filter text-primary mx-1"
+                  ></i>
+                  </span>
+                  <Tooltip
+                  style={{ fontSize: "10px" }}
+                  id="filter"
+                  place="bottom"
+                  content="فیلتر"
+                  />
+                  </>
+                )} */}
+          <Filters filterTypes={filterTypes} filterValues={filters} />
+          {chartsData?.length > 0 && (
+            <span className=" h-8 w-1 bg-gray-300"></span>
+          )}
+          {chartsData?.length > 0 && <ExportExcel data={chartsData} />}
+          {chartsData?.length > 0 && (
+            <span className=" h-8 w-1 bg-gray-300"></span>
+          )}
           {chartsData?.length > 0 && (
             <ChartTypes
               selected={chartType}
@@ -198,7 +230,6 @@ const Infos = ({ match }) => {
             />
           )}
         </div>
-        {/* <Filters filterTypes={filterTypes} filterValues={filters} /> */}
       </>
     );
   };
@@ -208,7 +239,7 @@ const Infos = ({ match }) => {
     singletons.length === 0 &&
     // pieChartsData.length === 0 &&
     barChartsData.length === 0 &&
-    !isScatterMap;
+    !locations.length === 0;
 
   const { windowWidth, windowHeight } = useResize();
   useEffect(() => {
@@ -310,42 +341,17 @@ const Infos = ({ match }) => {
                     chartType == "barCharts" &&
                     chartsData.map((barChartData, i) => {
                       const isHorizontal = true;
-                      const barThickness = 5;
-                      const seriesCount = barChartData.series.length;
-                      const barChartItemHeight = seriesCount * barThickness;
-                      const margin = 10;
-                      const groupsCount =
-                        barChartData.series?.[0]?.values?.length || 0;
-                      const bottomSpace = 60;
-                      const topSpace = (seriesCount / 4 + 1) * margin;
-                      const horizontalHeight =
-                        (20 * window.innerHeight) / 24 - 120;
-
-                      const barChartHeight = !isHorizontal
-                        ? horizontalHeight
-                        : groupsCount * barChartItemHeight +
-                          bottomSpace +
-                          topSpace +
-                          margin * groupsCount;
-
-                      const barChartWidth = !isHorizontal
-                        ? groupsCount * barChartItemHeight +
-                          bottomSpace +
-                          topSpace +
-                          margin * groupsCount
-                        : "100%";
-                      console.log(barChartWidth);
-                      console.log(barChartData.series[0].values.length);
+                      const barThickness = 24;
                       const numOfGroups = barChartData.series[0].values.length;
                       const numOfColumns = barChartData.series.length;
-                      const a = barThickness * numOfGroups * numOfColumns + 50;
+                      const a = barThickness * numOfGroups * numOfColumns + 60;
                       return (
                         <BarChart
                           key={`barchart-${i}`}
                           chartTitle={barChartData.chartTitle}
                           chartData={barChartData}
                           height={a}
-                          width={barChartWidth}
+                          width={"100%"}
                           isHorizontal={true}
                           onClickOnElement={onClickOnElement}
                         />
@@ -355,35 +361,10 @@ const Infos = ({ match }) => {
                     chartType == "barCharts2" &&
                     chartsData.map((barChartData, i) => {
                       const isHorizontal = false;
-                      const barThickness = 5;
-                      const seriesCount = barChartData.series.length;
-                      const barChartItemHeight = seriesCount * barThickness;
-                      const margin = 10;
-                      const groupsCount =
-                        barChartData.series?.[0]?.values?.length || 0;
-                      const bottomSpace = 60;
-                      const topSpace = (seriesCount / 4 + 1) * margin;
-                      const horizontalHeight =
-                        (20 * window.innerHeight) / 24 - 120;
-
-                      const barChartHeight = !isHorizontal
-                        ? horizontalHeight
-                        : groupsCount * barChartItemHeight +
-                          bottomSpace +
-                          topSpace +
-                          margin * groupsCount;
-
-                      const barChartWidth = !isHorizontal
-                        ? groupsCount * barChartItemHeight +
-                          bottomSpace +
-                          topSpace +
-                          margin * groupsCount
-                        : "100%";
-                      console.log(barChartWidth);
-                      console.log(barChartData.series[0].values.length);
+                      const barThickness = 23;
                       const numOfGroups = barChartData.series[0].values.length;
                       const numOfColumns = barChartData.series.length;
-                      const a = barThickness * numOfGroups * numOfColumns + 50;
+                      const a = barThickness * numOfGroups * numOfColumns + 60;
                       return (
                         <BarChart
                           key={`barchart-${i}`}
@@ -396,13 +377,30 @@ const Infos = ({ match }) => {
                         />
                       );
                     })}
-                  {isScatterMap && !loading && (
-                    <ScatterMap
-                      width="100%"
-                      className="mxa"
-                      height={400}
-                      locations={locations}
-                    />
+                  {locations.length > 0 && !loading && (
+                    <div>
+                      <ScatterMap
+                        width="100%"
+                        className="mxa"
+                        height={400}
+                        locations={locations}
+                        getLocations={(data) =>
+                          getInfos({
+                            filters: { geometry: data },
+                            chartId: {
+                              code: 100141,
+                              parameter: 0,
+                            },
+                          })
+                        }
+                      />
+                      {/* <Button
+                        title="ارجاع درخواست"
+                        className="py1 br05 bg-primary"
+                        onClick={setReportPayload}
+                        loading={createLoading}
+                      /> */}
+                    </div>
                   )}
                   {hasNoData ? (
                     <NoData

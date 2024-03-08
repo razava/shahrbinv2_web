@@ -43,7 +43,7 @@ const Filters = ({
       <div className={[styles.wrapper, wrapperClassName].join(" ")}>
         <div className={["", toggleClassName].join(" ")}>
           <div className={styles.filterToggle} onClick={openFilterDialog}>
-            <span className={styles.filterToggleTitle}>فیلتر</span>
+            {/* <span className={styles.filterToggleTitle}>فیلتر</span> */}
             <span key={"filter-icon"} className={styles.filterToggleIcon}>
               <i className="fas fa-filter"></i>
             </span>

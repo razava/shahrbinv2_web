@@ -187,7 +187,12 @@ const Reports = ({ match }) => {
     // },
   ];
 
-  console.log("rep");
+  const onRowClicked = (row) => {
+    openDialog(row);
+  };
+
+  const tableScrollable = (window.innerHeight * 21) / 24 - 200;
+
   return (
     <>
       <TableHeader renderHeader={renderTableHeader} />
@@ -216,6 +221,9 @@ const Reports = ({ match }) => {
               category: true,
             }}
             totalRows={totalRows}
+            onRowClicked={onRowClicked}
+            fixedHeaders={true}
+            fixedHeaderScrollHeight={tableScrollable + "px"}
           />
         </div>
       </LayoutScrollable>

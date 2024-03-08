@@ -1,10 +1,14 @@
 import React from "react";
 import TableHeaderAction from "../../commons/dataDisplay/Table/TableHeaderAction";
 
-const Excel = () => {
+const Excel = ({ onClick }) => {
   return (
     <>
-      <TableHeaderAction title="خروجی اکسل" icon="fas fa-file-excel" />
+      <TableHeaderAction
+        onClick={onClick}
+        title="خروجی اکسل"
+        icon="far fa-file-excel"
+      />
     </>
   );
 };

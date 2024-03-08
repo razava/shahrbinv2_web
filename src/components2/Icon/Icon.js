@@ -8,6 +8,7 @@ const Icon = ({
   classNames = { icon: "" },
   onClick = (f) => f,
   style = {},
+  tooltipId = "",
 }) => {
   const iconStyle = {
     color,
@@ -25,6 +26,7 @@ const Icon = ({
         style={iconStyle}
         className={classNames.icon}
         onClick={onClick}
+        data-tooltip-id={tooltipId}
       >
         <i className={`fas fa-${name}`}></i>
       </span>

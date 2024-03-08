@@ -1110,6 +1110,7 @@ export const createQueryParams = (url, queries = {}) => {
     page,
     perPage,
     statuses,
+    geometry,
   } = queries;
   console.log(query);
   if (page) myUrl.searchParams.append("PageNumber", page);
@@ -1129,6 +1130,8 @@ export const createQueryParams = (url, queries = {}) => {
     statuses.forEach((r) =>
       myUrl.searchParams.append("CurrentStates", r.value)
     );
+  if (geometry && geometry.length > 0)
+    geometry.map((g) => myUrl.searchParams.append("geometry", g));
   const updatedUrl = myUrl.toString();
   return myUrl;
 };
