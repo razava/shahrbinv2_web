@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import TextInput from "../../helpers/TextInput";
 import MultiSelect from "../../helpers/MultiSelect";
 import { OrganizationalUnitAPI, ProcessesAPI } from "../../../apiCalls";
@@ -7,6 +7,7 @@ import Button from "../../helpers/Button";
 import useMakeRequest from "../../hooks/useMakeRequest";
 import { callAPI, serverError, unKnownError } from "../../../helperFuncs";
 import { set } from "nprogress";
+import { AppStore } from "../../../store/AppContext";
 
 const AddOrganizationalUnit = ({
   setLoading = (f) => f,
@@ -29,6 +30,9 @@ const AddOrganizationalUnit = ({
 
   // other states
   const [payload, setPayload] = useState(null);
+  // store
+  const [store = {}] = useContext(AppStore);
+  const { initials: { instance = {} } = {} } = store;
 
   // flags
   const [createRequest, setCreateRequest] = useState(false);
@@ -71,7 +75,7 @@ const AddOrganizationalUnit = ({
     if (isEditMode) {
       getData();
     } else {
-      setValues((prev) => ({ ...prev, userName: '', password: '' }));
+      setValues((prev) => ({ ...prev, userName: "", password: "" }));
     }
   }, []);
 
@@ -116,6 +120,7 @@ const AddOrganizationalUnit = ({
     },
     organizationId
   );
+  console.log(instance.abbreviation);
   return (
     <>
       <form autoComplete="off" className="w90 mx-a relative fcc">
@@ -127,7 +132,6 @@ const AddOrganizationalUnit = ({
             value={values.title}
             name="title"
             onChange={handleChange}
-            wrapperClassName="w100 mxa"
           />
         </div>
         <div className="w100 mxa row">
@@ -162,14 +166,21 @@ const AddOrganizationalUnit = ({
         </div>
         {!isEditMode && (
           <>
-            <div className="w100 mxa row">
+            <div className="w-[98%] mxa row !mr-0">
               <TextInput
-                title="نام کاربری"
-                required={false}
                 value={values.userName}
-                name="userName"
                 onChange={handleChange}
+                name="userName"
+                title={"نام کاربری"}
+                required={false}
                 wrapperClassName="col-md-12"
+                renderInfo={
+                  instance.abbreviation == ""
+                    ? null
+                    : () => {
+                        return " - " + instance.abbreviation;
+                      }
+                }
                 id="userNameForOrg"
               />
             </div>

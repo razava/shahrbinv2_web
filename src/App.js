@@ -16,6 +16,7 @@ import NewForm from "./components/screens/NewForm";
 import Notes from "./components/screens/Notes";
 import Verify from "./components/screens/Verify";
 import ChangePhoneNumber from "./components/screens/Login/ChangePhoneNumber";
+const ForgotPassword = lazy(() => import("./components/screens/Login/ForgotPassword"));
 const NewReports = lazy(() => import("./components/screens/NewReports"));
 const RegisterReport = lazy(() =>
   import("./components/screens/RegisterReport")
@@ -148,6 +149,10 @@ const App = () => {
               <Route
                 path={appRoutes.changePhoneNumber}
                 component={ChangePhoneNumber}
+              />
+              <Route
+                path={appRoutes.forgotPassword}
+                component={ForgotPassword}
               />
               <Route path={appRoutes.login} component={Login} />
               <Route component={NotFound} />

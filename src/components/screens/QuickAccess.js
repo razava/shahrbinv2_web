@@ -73,7 +73,6 @@ const QuickAccess = ({ match }) => {
   };
 
   const onAccessCreated = () => {
-    toast("دسترسی جدید با موفقیت اضافه شد.", { type: "success" });
     setAddAccessDialog(false);
     modalRoot.classList.remove("active");
     getPolls();
@@ -81,11 +80,13 @@ const QuickAccess = ({ match }) => {
 
   const deleteAccess = (accessId, isDeleted) => {
     setLoading(true);
+    const formData = new FormData();
+    formData.append("isDeleted", !isDeleted);
     callAPI(
       {
         caller: QuickAccessAPI.editAccess,
         successStatus: 204,
-        payload: { isDeleted: !isDeleted },
+        payload: formData,
         successCallback: () => {
           toast("عملیات با موفقیت انجام شد.", { type: "success" });
           getPolls();
@@ -120,7 +121,7 @@ const QuickAccess = ({ match }) => {
     {
       id: `quickaccess-2`,
       title: (row) => (row.isDeleted ? "بازیابی" : "حذف"),
-      icon: (row) => (row.isDeleted ? "fas fa-times" : "fas fa-recycle"),
+      icon: (row) => (row.isDeleted ? "fas fa-recycle" : "fas fa-times"),
       onClick: (row) => deleteAccess(row.id, row.isDeleted),
     },
   ];

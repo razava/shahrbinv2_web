@@ -23,6 +23,23 @@ import LayoutScrollable from "../helpers/Layout/LayoutScrollable";
 import TableHeader from "../commons/dataDisplay/Table/TableHeader";
 import Filters from "../helpers/Filters";
 import Excel from "../helpers/Excel/Excel";
+import { useQuery } from "@tanstack/react-query";
+import { getFilters } from "../../api/commonApi";
+import { Tooltip } from "react-tooltip";
+import SearchInput from "../helpers/SearchInput";
+
+const filterTypes = {
+  // query: true,
+  from: true,
+  to: true,
+  statuses: true,
+  geometry: true,
+  category: true,
+  reportsToInclude: true,
+  satisfactionValues: true,
+  priorities: true,
+  executives: true,
+};
 
 const modalRoot = document && document.getElementById("modal-root");
 
@@ -31,28 +48,14 @@ const Reports = ({ match }) => {
   // data states
   console.log(store);
   const [data, setData] = useState([]);
-  let categoryTitle;
-  // const findCategory = (row) => {
-  //   const category = store.initials.categories.categories.map((item) => {
-  //     if (item.id == row.categoryId) {
-  //       categoryTitle = item.title;
-  //       return item;
-  //     } else {
-  //       const a = item.categories.map((itm) => {
-  //         if (itm.id == row.categoryId) {
-  //           categoryTitle = itm.title;
-  //         }
-  //       });
-  //     }
-  //   });
-  //   return categoryTitle;
-  // };
 
   // main states
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [totalRows, setTotalRows] = useState(0);
   const [dialogData, setDialogData] = useState(null);
+  const [query, setQuery] = useState("");
+  const [isQuery, setIsQuery] = useState(true);
 
   // flags
   const [dialog, setDialog] = useState(false);
@@ -65,6 +68,12 @@ const Reports = ({ match }) => {
     perPage: limit,
     ...store.filters,
   };
+
+  //getFilters
+  const { data: filtersData, isLoading } = useQuery({
+    queryKey: ["filters"],
+    queryFn: () => getFilters(),
+  });
 
   useEffect(() => {
     getReports();
@@ -156,11 +165,58 @@ const Reports = ({ match }) => {
     refresh();
   };
 
+  const exportToExcel = () => {
+    const instanceId = getFromLocalStorage(
+      constants.SHAHRBIN_MANAGEMENT_INSTANCE_ID
+    );
+    ReportsAPI.getExcel(queries, instanceId).then((res) => {
+      // setExcelLoading(false);
+      if (res.status === 200) {
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        const filename = new Date().getTime() + ".xlsx";
+        link.setAttribute("download", filename);
+        link.setAttribute("target", "_blank");
+        document.body.appendChild(link);
+        link.click();
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (store.filters.query == "") {
+      setQuery("");
+    }
+  }, [store.filters]);
+
   // renders
   const renderTableHeader = () => {
     return (
-      <div className="w100 fre">
-        <Filters excel />
+      <div className="w100 fre flex items-center gap-2">
+        <SearchInput
+          isQuery={isQuery}
+          setIsQuery={setIsQuery}
+          filters={store.filters}
+          setQuery={setQuery}
+          query={query}
+        />
+        <span
+          data-tooltip-id="excel"
+          className=" cursor-pointer"
+          onClick={exportToExcel}
+        >
+          <span>
+            <i className="far fa-file-excel text-4xl text-primary"></i>
+          </span>
+        </span>
+        <Tooltip
+          style={{ fontSize: "10px", zIndex: 100 }}
+          id="excel"
+          place="bottom"
+          content="خروجی excel"
+        />
+        <Filters filterTypes={filterTypes} filtersData={filtersData} />
       </div>
     );
   };
@@ -197,36 +253,38 @@ const Reports = ({ match }) => {
     <>
       <TableHeader renderHeader={renderTableHeader} />
 
-      <LayoutScrollable clipped={(window.innerHeight * 3) / 48 + 10}>
-        <div className={layoutStyle.wrapper}>
-          <MyDataTable
-            data={data}
-            columns={[...reportColumn, moreButton]}
-            theme={{ initializer: tableLightTheme, name: "light" }}
-            onPageChange={onPageChange}
-            onRowsPageChange={onRowsPageChange}
-            setLoading={setLoading}
-            loading={loading}
-            filters={true}
-            filterTypes={{
-              from: true,
-              to: true,
-              query: true,
-              chooseSubject: true,
-              stages: false,
-              priorities: false,
-              regions: true,
-              organs: true,
-              scatterMap: true,
-              category: true,
-            }}
-            totalRows={totalRows}
-            onRowClicked={onRowClicked}
-            fixedHeaders={true}
-            fixedHeaderScrollHeight={tableScrollable + "px"}
-          />
-        </div>
-      </LayoutScrollable>
+      {/* <LayoutScrollable clipped={(window.innerHeight * 3) / 48 + 10}> */}
+      <div className={layoutStyle.wrapper}>
+        <MyDataTable
+          data={data}
+          columns={[...reportColumn, moreButton]}
+          theme={{ initializer: tableLightTheme, name: "light" }}
+          onPageChange={onPageChange}
+          onRowsPageChange={onRowsPageChange}
+          setLoading={setLoading}
+          loading={loading}
+          filters={true}
+          filterTypes={{
+            from: true,
+            to: true,
+            query: true,
+            chooseSubject: true,
+            stages: false,
+            priorities: true,
+            regions: true,
+            organs: true,
+            scatterMap: true,
+            category: true,
+            reportsToInclude: true,
+            satisfactionValues: true,
+          }}
+          totalRows={totalRows}
+          onRowClicked={onRowClicked}
+          fixedHeaders={true}
+          fixedHeaderScrollHeight={tableScrollable + "px"}
+        />
+      </div>
+      {/* </LayoutScrollable> */}
 
       <NavigatableDialog
         condition={dialog}

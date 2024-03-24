@@ -17,6 +17,7 @@ import styles from "../../../stylesheets/reportdialog.module.css";
 import Button from "../../helpers/Button";
 import { useMutation } from "@tanstack/react-query";
 import { postFiles } from "../../../api/commonApi";
+import { toast } from "react-toastify";
 
 const AddQuickAccessDialog = ({
   setLoading = (f) => f,
@@ -136,6 +137,8 @@ const AddQuickAccessDialog = ({
       setCreateRequest(false);
       const status = isEditMode ? 204 : 201;
       if (res && res.status === status) {
+        toast("دسترسی سریع جدید با موفقیت اضافه شد.", { type: "success" });
+        console.log(res);
         onSuccess();
       } else if (serverError(res)) return;
       else if (unKnownError(res)) return;

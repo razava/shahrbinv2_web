@@ -46,10 +46,13 @@ const AddCategoryDialog = ({
     queryKey: ["categoryData", categoryId],
     queryFn: () => getCategoryById(categoryId),
     enabled: isEditMode,
-    onSuccess: (res) => {
-      setCategoryId2(res.parentId);
-      if (res.parentId != 1) {
-        setParent([{ id: res.parentId, title: findParenTitle(res.parentId) }]);
+    onSuccess: (data) => {
+      console.log(data);
+      setCategoryId2(data.parentId);
+      if (data.parentId != 1) {
+        setParent([
+          { id: data.parentId, title: findParenTitle(data.parentId) },
+        ]);
       }
     },
   });
@@ -57,12 +60,13 @@ const AddCategoryDialog = ({
   const [values, setValues] = useState({
     title: "",
     processId: "",
-    order: "",
+    order: 0,
     code: "",
     responseDuration: "",
     duration: "",
     description: "",
     objectionAllowed: "",
+    editingAllowed: "",
     form: "",
     defaultPriority: "",
   });
@@ -71,7 +75,6 @@ const AddCategoryDialog = ({
   const parentId = useRef(null);
   const [store] = useContext(AppStore);
   // const rootId = store.categories
-  console.log(store.initials.categories.id);
   const [categoryDialog, setCategoryDialog] = useState(false);
   const [categoryTitle2, setCategoryTitle2] = useState([]);
   const [parent, setParent] = useState([]);
@@ -91,7 +94,6 @@ const AddCategoryDialog = ({
     }
   });
   const [payload, setPayload] = useState(null);
-  console.log(categoryId2);
   // flags
   const [createRequest, setCreateRequest] = useState(false);
 
@@ -109,7 +111,6 @@ const AddCategoryDialog = ({
     //   setCategoryId2(null);
     // }
   };
-  console.log(categoryId2);
   const getData = () => {
     const token = getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN);
 
@@ -130,19 +131,18 @@ const AddCategoryDialog = ({
   // console.log(defaltValues);
   const fillInputs = () => {
     parentId.current = data.parentId;
-    console.log(data.form, "ab");
     const ab = {
       title: data.title,
       processId: data.processId,
       order: data.order,
-      code: data.code,
+      code: data.code ? data.code : "",
       responseDuration: data.responseDuration / 24,
       duration: data.duration / 24,
       description: data.description,
       objectionAllowed: data.objectionAllowed ? 1 : 0,
-      formId: data.formId ? data.formId : "",
+      formId: data.formId ? data.formId : null,
     };
-    console.log(ab);
+    console.log(data.editingAllowed , "ed");
     setValues({
       title: data.title,
       processId: data.processId,
@@ -152,6 +152,7 @@ const AddCategoryDialog = ({
       duration: data.duration / 24,
       description: data.description,
       objectionAllowed: data.objectionAllowed ? 1 : 0,
+      editingAllowed: data.editingAllowed ? 1 : 0,
       formId: data.form ? data.form.id : "",
       defaultPriority: data.defaultPriority,
     });
@@ -159,7 +160,6 @@ const AddCategoryDialog = ({
 
   useEffect(() => {
     if (isEditMode && data) {
-      console.log("9999999999999999999999999999999");
       fillInputs();
     }
 
@@ -176,11 +176,11 @@ const AddCategoryDialog = ({
   const handleChange =
     (name, options = {}) =>
     (e) => {
+      
       let value = e?.target ? e.target.value : e;
       if (options?.onlyDigits) {
         value = String(value).replace(/\D/g, "");
       }
-      console.log("zzz");
       setValues({ ...values, [name]: value });
     };
   const findParenTitle = (parentId) => {
@@ -201,7 +201,6 @@ const AddCategoryDialog = ({
     });
     return categoryTitle;
   };
-  console.log(values.form);
   const createCategory = () => {
     const payload = {
       ...values,
@@ -209,13 +208,13 @@ const AddCategoryDialog = ({
       responseDuration: values.responseDuration * 24,
       duration: values.duration * 24,
       objectionAllowed: Number(values.objectionAllowed) === 1 ? true : false,
+      editingAllowed: Number(values.objectionAllowed) === 1 ? true : false,
       parentId: categoryId2,
       processId: values.processId ? Number(values.processId) : null,
     };
     setPayload(payload);
     setCreateRequest(true);
   };
-  console.log(values);
   const [, loading] = useMakeRequest(
     isEditMode
       ? ConfigurationsAPI.updateCategory
@@ -226,7 +225,6 @@ const AddCategoryDialog = ({
     (res) => {
       setCreateRequest(false);
       const status = isEditMode ? 204 : 201;
-      console.log(res);
       if (res && res.status === status) {
         onSuccess();
       } else if (serverError(res)) return;
@@ -240,7 +238,6 @@ const AddCategoryDialog = ({
       ? [{ id: data?.parentId, title: findParenTitle(data?.parentId) }]
       : [];
 
-  console.log(values);
   useEffect(() => {
     console.log(values);
   }, [values]);
@@ -404,6 +401,17 @@ const AddCategoryDialog = ({
               handle={["title"]}
               label="اولویت"
               wrapperClassName="col-md-6 col-sm-12 col-12"
+            />
+            <SelectBox
+              value={values.editingAllowed}
+              label="نیاز به تایید و ویرایش"
+              staticData={true}
+              options={objectionValues.map((v) => ({ ...v, id: v.value }))}
+              wrapperClassName="col-md-6 col-sm-12"
+              inputClassName=""
+              name="editingAllowed"
+              handleChange={handleChange}
+              required={false}
             />
           </div>
         </form>

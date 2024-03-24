@@ -7,6 +7,7 @@ import {
   callAPI,
   appRoutes,
   defaultFilters,
+  mapPollTypes,
 } from "../../helperFuncs";
 import MyDataTable from "../helpers/MyDataTable";
 import { toast } from "react-toastify";
@@ -22,6 +23,8 @@ import Filters from "../helpers/Filters";
 import TableHeader from "../commons/dataDisplay/Table/TableHeader";
 import LayoutScrollable from "../helpers/Layout/LayoutScrollable";
 import ConfirmDialog from "../commons/dialogs/ConfirmDialog";
+import { useMutation } from "@tanstack/react-query";
+import { putPolls } from "../../api/AdminApi";
 
 const modalRoot = document && document.getElementById("modal-root");
 
@@ -35,7 +38,17 @@ const Polls = ({ match }) => {
   const [createPollDialog, setCreatePollDialog] = useState(false);
   const [loading, setLoading] = useState(true);
   const [statusLoading, setStatusLoading] = useState(false);
-
+  //Queries
+  const putPollsMutation = useMutation({
+    mutationKey: ["putPolls"],
+    mutationFn: putPolls,
+    onSuccess: (res) => {
+      toast("عملیات با موفقیت انجام شد.", { type: "success" });
+      getPolls();
+    },
+    onError: (err) => {},
+  });
+  //
   const queries = {
     ...store.filters,
   };
@@ -120,9 +133,13 @@ const Polls = ({ match }) => {
     },
     {
       id: `poll-4`,
-      title: "حذف",
-      icon: "far fa-trash-alt",
-      onClick: (row) => handleDialog("open", row),
+      title: (row) => (row.isDeleted ? "بازیابی" : "حذف"),
+      icon: (row) => (row.isDeleted ? "fas fa-recycle" : "fas fa-times"),
+      onClick: (row) =>
+        putPollsMutation.mutate({
+          id: row.id,
+          payload: { isDeleted: !row.isDeleted },
+        }),
     },
   ];
 
@@ -133,11 +150,15 @@ const Polls = ({ match }) => {
     },
     {
       name: "تاریخ ایجاد",
-      cell: (row) => <span>{convertserverTimeToDateString(row.created)}</span>,
+      cell: (row) => <span>{convertserverTimeToDateString(row.creatted)}</span>,
     },
     {
       name: "وضعیت",
-      cell: (row) => <span>{mapPollStatus(row.status)}</span>,
+      cell: (row) => <span>{mapPollStatus(row.pollState)}</span>,
+    },
+    {
+      name: "نوع نظرسنجی",
+      cell: (row) => <span>{mapPollTypes(row.pollType)}</span>,
     },
     {
       name: "اقدامات",
@@ -202,6 +223,16 @@ const Polls = ({ match }) => {
     );
   };
 
+  const condStyle = [
+    {
+      when: (row) => row?.isDeleted,
+      style: {
+        backgroundColor: "#ddd",
+        color: "#333",
+      },
+    },
+  ];
+
   return (
     <>
       {statusLoading && <Loader />}
@@ -216,6 +247,7 @@ const Polls = ({ match }) => {
           setLoading={setLoading}
           theme={{ initializer: tableLightTheme, name: "light" }}
           pagination={false}
+          conditionalRowStyles={condStyle}
         />
       </LayoutScrollable>
 

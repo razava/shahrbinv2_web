@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import TableHeaderAction from "../commons/dataDisplay/Table/TableHeaderAction";
 import TableHeader from "../commons/dataDisplay/Table/TableHeader";
 import { useHistory } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getForms } from "../../api/AdminApi";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { deleteForm, getForms } from "../../api/AdminApi";
 import MyDataTable from "../helpers/MyDataTable";
 import LayoutScrollable from "../helpers/Layout/LayoutScrollable";
 import { fixDigit, tableLightTheme } from "../../helperFuncs";
@@ -12,6 +12,7 @@ import { AppStore } from "../../formStore/store";
 import { appActions } from "../../utils/constants";
 import DialogToggler from "../helpers/DialogToggler";
 import AddFormDialog from "../commons/dialogs/AddFormsDialog";
+import { toast } from "react-toastify";
 
 const customStyles = {
   content: {
@@ -31,9 +32,19 @@ function Forms() {
   const [store, dispatch] = useContext(AppStore);
   const [addFormDialog, setAddFormDialog] = useState(false);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["getForms"],
     queryFn: getForms,
+  });
+
+  const deleteFormMutation = useMutation({
+    mutationKey: ["deleteForm"],
+    mutationFn: deleteForm,
+    onSuccess: (res) => {
+      refetch();
+      toast("فرم با موفقیت حذف شد.", { type: "success" });
+    },
+    onError: (err) => {},
   });
 
   //   let subtitle;
@@ -87,7 +98,9 @@ function Forms() {
       id: `forms-2`,
       title: "حذف",
       icon: "fas fa-ban",
-      onClick: (row) => {},
+      onClick: (row) => {
+        deleteFormMutation.mutate(row.id);
+      },
     },
   ];
 
@@ -121,7 +134,6 @@ function Forms() {
       />
     );
   };
-
 
   return (
     <>

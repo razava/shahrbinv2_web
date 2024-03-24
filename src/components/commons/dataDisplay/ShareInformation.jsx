@@ -45,9 +45,7 @@ export default function ShareInformation({ data }) {
       <div style={{ display: "none" }}>
         <div className=" w-screen h-screen p-10 border" ref={componentRef}>
           <div className="  w-full h-full rounded-xl p-5">
-            <p className=" text-center w-full font-bold text-xl mb-6">
-              شهربین جامع
-            </p>
+            <p className=" text-center w-full font-bold text-xl mb-6">شهربین</p>
             {/* <p className=" text-lg bg-gray-200 rounded-md p-2 my-1">
                 اطلاعات درخواست
               </p> */}

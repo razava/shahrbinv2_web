@@ -53,6 +53,7 @@ const TreeSystem = ({
     if (res.status === 200) {
       setData(res.data);
       setAllData(res.data);
+      console.log(res);
       setDisplayedData(res.data[treeKey]);
       const flatData = getFlatData(res.data);
       setFlatData(flatData);
@@ -66,9 +67,9 @@ const TreeSystem = ({
   // }, [condition]);
   useEffect(() => {
     if (defaultSelecteds.length > 0) {
-      setSelecteds(defaultSelecteds)
+      setSelecteds(defaultSelecteds);
     }
-  },[defaultSelecteds])
+  }, [defaultSelecteds]);
   console.log(selecteds);
   console.log(defaultSelecteds);
   useEffect(() => {

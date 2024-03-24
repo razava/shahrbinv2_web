@@ -3,26 +3,45 @@ import styles from "../../../stylesheets/login.module.css";
 import image from "../../../assets/Images/login-img.png";
 import OTPInput from "react-otp-input";
 import Button from "../../helpers/Button";
-import { verifyStaff } from "../../../api/AuthenticateApi";
+import { resendOtp, verifyStaff } from "../../../api/AuthenticateApi";
 import { useMutation } from "@tanstack/react-query";
 import { useHistory } from "react-router-dom";
 import { signUserAfterVerify, signUserIn } from "../../../helperFuncs";
+import CountdownTimer from "./CountDown";
+import { toast } from "react-toastify";
 
 export default function VerifyForm() {
   const [otp, setOtp] = useState("");
   const space = "\xa0";
   const history = useHistory();
+  const [isShow, setIsShow] = useState(true);
 
   const verifyMutation = useMutation({
     mutationKey: ["postNote"],
     mutationFn: verifyStaff,
     onSuccess: (res) => {
       signUserAfterVerify(res, history);
-      //   queryClient.invalidateQueries({ queryKey: ["getReportNotes"] });
-      //   toast("یادداشت با موفقیت ثبت شد.", { type: "success" });
-      //   setNote("");
+      localStorage.removeItem("verificationToken");
+      localStorage.removeItem("CountDownCompleted");
     },
     onError: (err) => {},
+  });
+
+  const resendOtpMutation = useMutation({
+    mutationKey: ["resendOtp"],
+    mutationFn: resendOtp,
+    onSuccess: (res) => {},
+    onError: (err) => {
+      if (err.response.status === 428) {
+        localStorage.setItem("verificationToken", err.response.data);
+        toast("کد تایید مجدد ارسال شد.", { type: "info" });
+        localStorage.removeItem("countdownTime");
+        localStorage.removeItem("CountDownCompleted");
+        setIsShow(true);
+      } else {
+        toast("مشکلی در ارسال درخواست به وجود آمد.", { type: "error" });
+      }
+    },
   });
 
   useEffect(() => {
@@ -34,6 +53,12 @@ export default function VerifyForm() {
       verifyMutation.mutate(payload);
     }
   }, [otp]);
+
+  const handelResendOtp = () => {
+    resendOtpMutation.mutate({
+      otpToken: localStorage.getItem("verificationToken"),
+    });
+  };
 
   return (
     <section className={styles.loginFormWrapper}>
@@ -58,6 +83,20 @@ export default function VerifyForm() {
             <p className=" text-center mt-8 text-lg">
               کد دریافت شده توسط پیامک را وارد نمایید.
             </p>
+            <div className=" mx-auto w-full text-center mt-2">
+              <CountdownTimer
+                setIsShow={(state) => setIsShow(state)}
+                isShow={isShow}
+              />
+              {!isShow && (
+                <p
+                  onClick={handelResendOtp}
+                  className=" text-primary text-lg cursor-pointer"
+                >
+                  ارسال مجدد کد تایید
+                </p>
+              )}
+            </div>
             {/* <Button
             className={styles.loginBtn}
             loading={verifyMutation.isLoading}

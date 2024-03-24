@@ -5,6 +5,7 @@ import Loader from "../../helpers/Loader";
 import TextInput from "../../helpers/TextInput";
 import OlMapContainer from "../map/OlMapContainer";
 import DialogButtons from "./DialogButtons";
+import { callAPI } from "../../../helperFuncs";
 
 const modalRoot = document && document.getElementById("modal-root");
 
@@ -62,13 +63,25 @@ const SelectOnMapDialog = ({
 
   const fetchAddress = (coordinates) => {
     setLoading(true);
-    ParsiMap.reverse(coordinates).then((res) => {
-      setLoading(false);
-      if (res.status === 200) {
+    callAPI({
+      caller: ParsiMap.reverse,
+      payload: coordinates,
+      successCallback: (res) => {
+        setLoading(false);
+        console.log(res);
         setSearchAddress(res.data.address);
-        setGeoFences(res.data.geofences);
-      }
+        // setGeoFences(res.data.geofences);
+      },
+      errorCallback: () => {},
+      requestEnded: () => {},
     });
+    // ParsiMap.reverse(coordinates).then((res) => {
+    //   setLoading(false);
+    //   if (res.status === 200) {
+    //     setSearchAddress(res.data.address);
+    //     setGeoFences(res.data.geofences);
+    //   }
+    // });
   };
 
   const getAddress = (value) => (e) => {

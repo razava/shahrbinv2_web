@@ -135,7 +135,7 @@ const ReportDialog = ({
               </article>
             )}
             {readOnly && isInspector && (
-              <article label="انتقال به بازرسی" id="messageToCitizen">
+              <article label="انتقال به بازرسی" id="moveToObjection">
                 <Objection onNext={onNext} data={data} />
               </article>
             )}

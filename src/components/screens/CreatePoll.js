@@ -72,9 +72,10 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
     "size",
     "font",
   ];
-
+  console.log(pollAnswers);
   const [code, setCode] = useState("hellllo");
   const handleProcedureContentChange = (content, delta, source, editor) => {
+    console.log(content);
     setTempContent(content);
   };
   useEffect(() => {
@@ -229,6 +230,9 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
   //     });
   //   });
   // };
+  useEffect(() => {
+    console.log(pollAnswers);
+  }, [pollAnswers]);
 
   const stepForward = () => {
     setSteps((prev) =>
@@ -319,17 +323,15 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
   };
 
   const onEditStep = (value, role, id) => {
-    console.log(
-      "🚀 ~ file: CreatePoll.js:258 ~ onEditStep ~ value, role, id:",
-      value,
-      role,
-      id
-    );
+    console.log(value, role, id);
     if (role === "question") {
+      console.log(value);
       setPollQuestion(value);
     } else if (role === "answer") {
-      const newPollAnswers = pollAnswers;
+      const newPollAnswers = [...pollAnswers];
+      console.log(newPollAnswers);
       newPollAnswers[id - 4] = value;
+      console.log(newPollAnswers);
       setPollAnswers(newPollAnswers);
     }
   };
@@ -346,7 +348,7 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
   };
 
   const publishPoll = (e) => {
-    const choices = pollAnswers.map((pollAnswer, i) => {
+    const choices = [...pollAnswers, tempContent].map((pollAnswer, i) => {
       return {
         text: pollAnswer,
         shortTitle: steps[i + 3].shortTitle,
@@ -362,6 +364,7 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
       isActive: true,
     };
     setPayload(payload);
+    console.log(payload);
     setPublishRequest(true);
   };
 
@@ -474,7 +477,7 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
                   /> */}
                   {/* <QuillEditor /> */}
                   <QuillEditor
-                    readOnly={!step.writable}
+                    // readOnly={!step.writable}
                     data={
                       step.role === "question"
                         ? pollQuestion
@@ -490,7 +493,7 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
                       onChange={(e) =>
                         onEditShortTitle(e.target.value, step.id)
                       }
-                      readOnly={!step.writable}
+                      // readOnly={!step.writable}
                       className={[styles.input, "my-2"].join(" ")}
                       placeholder="عنوان کوتاه گزینه"
                     />
@@ -508,11 +511,11 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
                       required={false}
                     />
                   )} */}
-                  <Button className="my-1" onClick={editStep(step.id)}>
+                  {/* <Button className="my-1" onClick={editStep(step.id)}>
                     {isEditing.bool && isEditing.id === step.id
                       ? "تایید"
                       : "ویرایش"}
-                  </Button>
+                  </Button> */}
                 </div>
               );
             } else if (step.type === "input") {
@@ -572,7 +575,7 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
           </>
         )}
 
-        {radio && (
+        {radio && mode != "edit" && (
           <>
             <div className={styles.stepTitle}>{steps[currentStep].title}</div>
             {pollTypes.map((pollType, i) => (
@@ -580,7 +583,7 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
                 <input
                   type="radio"
                   name="pollType"
-                  id={pollType.id}ء
+                  id={pollType.id}
                   value={pollType.id}
                   onChange={(e) => setPollType(e.target.value)}
                 />

@@ -23,6 +23,10 @@ import TableHeader from "../commons/dataDisplay/Table/TableHeader";
 import Filters from "../helpers/Filters";
 import LayoutScrollable from "../helpers/Layout/LayoutScrollable";
 import TableHeaderAction from "../commons/dataDisplay/Table/TableHeaderAction";
+import { getUserFilters } from "../../api/commonApi";
+import { useQuery } from "@tanstack/react-query";
+import SearchInput from "../helpers/SearchInput";
+import UsersDialog from "../commons/dialogs/UsersDialog";
 
 const modalRoot = document && document.getElementById("modal-root");
 
@@ -32,16 +36,18 @@ const ManageUsers = ({ match }) => {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
-  const [query, setQuery] = useState("");
   const [roles, setRoles] = useState([]);
   const [totalRows, setTotalRows] = useState(0);
   const [rolesDialog, setRolesDialog] = useState(false);
   const [passwordDialog, setPasswordDialog] = useState(false);
   const [regionsDialog, setRegionsDialog] = useState(null);
+  const [usersDialog, setUsersDialog] = useState(null);
   const [userDialog, setUserDialog] = useState(false);
   const [editDialog, setEditDialog] = useState(false);
   const [dialogData, setDialogData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState("");
+  const [isQuery, setIsQuery] = useState(true);
 
   const queries = {
     page: currentPage,
@@ -49,30 +55,41 @@ const ManageUsers = ({ match }) => {
     ...store.filters,
   };
 
+  const { data: filtersData, isLoading } = useQuery({
+    queryKey: ["getUserFilters"],
+    queryFn: () => getUserFilters(),
+  });
+
   const tableActions = [
+    // {
+    //   id: `manageUser-${1}`,
+    //   title: "ویرایش",
+    //   icon: "far fa-edit",
+    //   onClick: (row) => handlePortalClick("edit", row),
+    // },
+    // {
+    //   id: `manageUser-${2}`,
+    //   title: "نقش‌ها",
+    //   icon: "far fa-user",
+    //   onClick: (row) => handlePortalClick("roles", row),
+    // },
+    // {
+    //   id: `manageUser-${3}`,
+    //   title: "مناطق",
+    //   icon: "far fa-map",
+    //   onClick: (row) => handlePortalClick("regions", row),
+    // },
+    // {
+    //   id: `manageUser-${4}`,
+    //   title: "تغییر رمز عبور",
+    //   icon: "fas fa-key",
+    //   onClick: (row) => handlePortalClick("password", row),
+    // },
     {
-      id: `manageUser-${1}`,
-      title: "ویرایش",
-      icon: "far fa-edit",
-      onClick: (row) => handlePortalClick("edit", row),
-    },
-    {
-      id: `manageUser-${2}`,
-      title: "نقش‌ها",
-      icon: "far fa-user",
-      onClick: (row) => handlePortalClick("roles", row),
-    },
-    {
-      id: `manageUser-${3}`,
-      title: "مناطق",
-      icon: "far fa-map",
-      onClick: (row) => handlePortalClick("regions", row),
-    },
-    {
-      id: `manageUser-${4}`,
-      title: "تغییر رمز عبور",
-      icon: "fas fa-key",
-      onClick: (row) => handlePortalClick("password", row),
+      id: `manageUser-${5}`,
+      icon: "fas fa-eye",
+      title: "بررسی",
+      onClick: (row) => handlePortalClick("info", row),
     },
   ];
 
@@ -137,6 +154,9 @@ const ManageUsers = ({ match }) => {
       setEditDialog(true);
       setUserDialog(true);
     }
+    if (dialog === "info") {
+      setUsersDialog(true);
+    }
   };
 
   const makeQueryRequset = (payload) => {
@@ -163,6 +183,12 @@ const ManageUsers = ({ match }) => {
   useEffect(() => {
     getAllUsers();
   }, [store.filters, currentPage, perPage]);
+
+  useEffect(() => {
+    if (store.filters.query == "") {
+      setQuery("");
+    }
+  }, [store.filters]);
 
   const getAllUsers = () => {
     setLoading(true);
@@ -191,15 +217,23 @@ const ManageUsers = ({ match }) => {
           icon="fas fa-user-plus"
           onClick={() => handlePortalClick("create")}
         />
-        <Filters
-          filterTypes={{
-            from: true,
-            to: true,
-            query: true,
-            regions: true,
-            roles: true,
-          }}
-        />
+        <div className=" flex items-center">
+          <SearchInput
+            isQuery={isQuery}
+            setIsQuery={setIsQuery}
+            filters={store.filters}
+            setQuery={setQuery}
+            query={query}
+          />
+          <Filters
+            filtersData={filtersData}
+            filterTypes={{
+              // query: true,
+              regions: true,
+              roles: true,
+            }}
+          />
+        </div>
       </>
     );
   };
@@ -279,6 +313,19 @@ const ManageUsers = ({ match }) => {
           userId={dialogData?.id}
           setCondition={setRegionsDialog}
         />
+      </DialogToggler>
+
+      <DialogToggler
+        condition={usersDialog}
+        data={dialogData}
+        setCondition={setUsersDialog}
+        dialogId={dialogData?.id}
+        width={700}
+        height={500}
+        // fixedDimension={false}
+        id="Users-dialog"
+      >
+        <UsersDialog dialogData={dialogData} getAllUsers={getAllUsers} />
       </DialogToggler>
       <DialogToggler
         condition={userDialog}

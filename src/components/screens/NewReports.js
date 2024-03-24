@@ -11,13 +11,24 @@ import Tabs from "../helpers/Tabs";
 import TabLabel from "../helpers/Tabs/TabLabel";
 import Filters from "../helpers/Filters";
 import Search from "../helpers/Search";
+import { useQuery } from "@tanstack/react-query";
+import { getFilters } from "../../api/commonApi";
+import { Tooltip } from "react-tooltip";
+import { getExcel } from "../../api/StaffApi";
+import TextInput from "../helpers/TextInput";
+import SearchInput from "../helpers/SearchInput";
 
 const filterTypes = {
-  query: true,
+  // query: true,
   from: true,
   to: true,
-  statuses: true,
-  Map: true,
+  statuses: false,
+  geometry: false,
+  category: true,
+  reportsToInclude: false,
+  satisfactionValues: true,
+  priorities: true,
+  executives: true,
 };
 
 const NewReports = ({ match }) => {
@@ -25,7 +36,7 @@ const NewReports = ({ match }) => {
   let sources = useRef([]);
 
   // store
-  const [store] = useContext(AppStore);
+  const [store, dispatch] = useContext(AppStore);
 
   // data states
   const [possibleSources, setPossibleSources] = useState([]);
@@ -33,6 +44,8 @@ const NewReports = ({ match }) => {
 
   // other states
   const [activeTab, setActiveTab] = useState("");
+  const [query, setQuery] = useState("");
+  const [isQuery, setIsQuery] = useState(true);
 
   // flags
   const [loading, setLoading] = useState(false);
@@ -46,6 +59,23 @@ const NewReports = ({ match }) => {
     constants.SHAHRBIN_MANAGEMENT_INSTANCE_ID
   );
 
+  // Queries
+  const { data: filtersData, isLoading } = useQuery({
+    queryKey: ["filters"],
+    queryFn: () => getFilters(),
+  });
+
+  const {
+    data: excelData,
+    isLoading: isLoading2,
+    refetch,
+  } = useQuery({
+    queryKey: ["excel"],
+    queryFn: () => getExcel(),
+    enabled: false,
+  });
+
+  console.log(filtersData);
   // get sources
   useEffect(() => {
     getSources();
@@ -123,10 +153,44 @@ const NewReports = ({ match }) => {
     setActiveTab(tab);
   };
 
+  const exportToExcel = () => {
+    const instanceId = getFromLocalStorage(
+      constants.SHAHRBIN_MANAGEMENT_INSTANCE_ID
+    );
+    ReportsAPI.getExcel(queries, instanceId).then((res) => {
+      // setExcelLoading(false);
+      if (res.status === 200) {
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        const filename = new Date().getTime() + ".xlsx";
+        link.setAttribute("download", filename);
+        link.setAttribute("target", "_blank");
+        document.body.appendChild(link);
+        link.click();
+      }
+    });
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      dispatch({
+        type: "setFilters",
+        payload: { ...store.filters, query: query },
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (store.filters.query == "") {
+      setQuery("");
+    }
+  }, [store.filters]);
+
   // renders
   const renderTableHeader = () => {
     return (
-      <>
+      <div className=" flex items-center w-full">
         {tabs.length > 0 ? (
           <Tabs
             mainClass="report-tab"
@@ -145,12 +209,73 @@ const NewReports = ({ match }) => {
         ) : (
           <div className="report-tabs"></div>
         )}
+        <div className=" flex items-center gap-2">
+          <SearchInput
+            isQuery={isQuery}
+            setIsQuery={setIsQuery}
+            filters={store.filters}
+            setQuery={setQuery}
+            query={query}
+          />
+          {/* <div
+            className=" flex items-center !border border-solid border-gray-300 rounded-lg px-1 h-16 w-80 gap-1 p-2 ml-5"
+          >
+            {isQuery && (
+              <span
+                onClick={() => {
+                  setIsQuery(false);
+                  dispatch({
+                    type: "setFilters",
+                    payload: { ...store.filters, query: query },
+                  });
+                }}
+                className="w-8 cursor-pointer"
+              >
+                <i className="far fa-search text-primary !text-[16px]"></i>
+              </span>
+            )}
+            {!isQuery && (
+              <span
+                onClick={() => {
+                  setIsQuery(true);
+                  dispatch({
+                    type: "setFilters",
+                    payload: { ...store.filters, query: "" },
+                  });
+                }}
+                className="w-8 cursor-pointer"
+              >
+                <i className="fas fa-times text-primary !text-[16px]"></i>
+              </span>
+            )}
+            <input
+              value={query}
+              className=" h-full rounded-lg border-none flex-1 bg text-xl focus:outline-none ring-offset-white  bg--200 "
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder={"جستجو..."}
+            ></input>
+          </div> */}
+          <span
+            data-tooltip-id="excel"
+            className=" cursor-pointer"
+            onClick={exportToExcel}
+          >
+            <span>
+              <i className="far fa-file-excel text-4xl text-primary"></i>
+            </span>
+          </span>
+          <Tooltip
+            style={{ fontSize: "10px", zIndex: 100 }}
+            id="excel"
+            place="bottom"
+            content="خروجی excel"
+          />
 
-        {/* <div className={"frc"}> */}
-        {/* <Search /> */}
-        <Filters filterTypes={filterTypes} />
+          <Filters filterTypes={filterTypes} filtersData={filtersData} />
+        </div>
         {/* </div> */}
-      </>
+      </div>
     );
   };
 

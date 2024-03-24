@@ -15,6 +15,7 @@ const Textarea = ({
   defaultStyles = true,
   required = false,
   resize = true,
+  ref = null,
 }) => {
   return (
     <div
@@ -47,6 +48,7 @@ const Textarea = ({
         onChange={handleChange(name)}
         placeholder={placeholder}
         readOnly={readOnly}
+        ref={ref}
       />
     </div>
   );

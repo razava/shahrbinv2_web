@@ -6,7 +6,11 @@ import styles from "./style.module.css";
 
 const modalRoot = document && document.getElementById("modal-root");
 
-const AttachmentToggle = ({ onAddAttachment = (f) => f, reset = false }) => {
+const AttachmentToggle = ({
+  onAddAttachment = (f) => f,
+  reset = false,
+  clearAttachments,
+}) => {
   const [store] = useContext(AppStore);
 
   const [dialog, setDialog] = useState(false);
@@ -53,6 +57,7 @@ const AttachmentToggle = ({ onAddAttachment = (f) => f, reset = false }) => {
         reset={reset}
         setOpen={setDialog}
         onAdd={onAdd}
+        clearAttachments={clearAttachments}
       />
     </>
   );

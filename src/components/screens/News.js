@@ -19,13 +19,13 @@ export default function News() {
   const [addNewsDialog, setAddNewsDialog] = useState(false);
   const [mode, setMode] = useState("create");
   const queryClient = useQueryClient();
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["News"],
     queryFn: getNews,
   });
 
   const NewsMutation = useMutation({
-    mutationKey: ["FAQ"],
+    mutationKey: ["News"],
     mutationFn: editNews,
     onSuccess: (res) => {
       toast("وضعیت خبر با موفقیت بروزرسانی شد.", { type: "success" });
@@ -41,7 +41,10 @@ export default function News() {
   };
 
   const changeDeleteMode = (isDeleted, id) => {
-    NewsMutation.mutate({ Data: { isDeleted: !isDeleted }, id: id });
+    const formData = new FormData();
+    formData.append("isDeleted", !isDeleted);
+    NewsMutation.mutate({ Data: formData, id: id });
+    refetch();
   };
   const openDialog = (access, mode = "create") => {
     console.log(access);
@@ -81,7 +84,10 @@ export default function News() {
     {
       name: "تصویر",
       cell: (row) => (
-        <Avatar url={row?.media?.url3} placeholder={!row?.media?.url3} />
+        <Avatar
+          url={row?.imageFile?.url3}
+          placeholder={!row?.imageFile?.url3}
+        />
       ),
     },
     {

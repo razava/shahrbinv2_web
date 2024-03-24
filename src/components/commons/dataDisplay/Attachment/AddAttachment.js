@@ -18,6 +18,7 @@ const AddAttachment = ({
   onAdd = (f) => f,
   reset = false,
   id = "add-attachment",
+  clearAttachments,
 }) => {
   // refrences
   const fileInputRef = useRef(null);

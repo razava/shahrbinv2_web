@@ -86,8 +86,8 @@ const RolesDialog = ({ userId, setCondition }) => {
     { roles: roles },
     (res) => {
       setMakeRequest(false);
-      setCondition(false);
-      modalRoot.classList.remove("active");
+      // setCondition(false);
+      // modalRoot.classList.remove("active");
       if (res.status === 204) {
         toast("تغییرات با موفقیت ذخیره شد.", { type: "success" });
       } else if (serverError(res)) return;
@@ -116,32 +116,6 @@ const RolesDialog = ({ userId, setCondition }) => {
   console.log(categoryId2);
   return (
     <>
-      {isOperator?.isIn && (
-        <TreeSystem
-          isStatic
-          staticData={store.initials.categories}
-          condition={categoryDialog}
-          setCondition={setCategoryDialog}
-          onChange={onCategoriesSelected}
-          defaultSelecteds={all}
-          singleSelect={false}
-          onClose={() => setCategoryDialog(false)}
-          mode="Add"
-          renderToggler={(selected) => (
-            <TextInput
-              placeholder=" مشاهده دسته بندی ها"
-              title="‌دسته بندی‌ها"
-              readOnly={true}
-              onClick={() => setCategoryDialog(true)}
-              wrapperClassName="!w-[95%] mb-6"
-              inputClassName="pointer"
-              required={false}
-              value={selected.length > 0 ? selected[0].title : "" ? "" : ""}
-            />
-          )}
-        ></TreeSystem>
-      )}
-
       <CheckBoxGroup
         items={roles.map((role) => ({
           id: role.roleName,
@@ -154,7 +128,7 @@ const RolesDialog = ({ userId, setCondition }) => {
         wrapperClassName="px1 !mb-36"
         title="نقش‌ها"
       />
-      <div className="w100 mxa fre py1 px2 border-t-light mt2 absolute b0">
+      <div className="w80 mxa fre py1 px2 border-t-light mt1 fixed b0 bg-white">
         <Button
           title="ذخیره تغییرات"
           className="py1 br05 bg-primary"

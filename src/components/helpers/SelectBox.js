@@ -34,12 +34,13 @@ const SelectBox = ({
     !staticData,
     null,
     (res) => {
+      console.log(res);
       if (res.status === 200 && res.data.length === 1) {
-        // handleChange(name)(res.data[0]?.id);
+        console.log(res.data[0]?.id);
+        handleChange(name)(res.data[0]?.id);
       }
     }
   );
-  console.log(value);
 
   // console.log(options[0].id);
   return (

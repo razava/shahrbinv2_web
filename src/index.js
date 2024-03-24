@@ -13,7 +13,7 @@ import AppContext from "./store/AppContext";
 import AppContext2 from "./formStore/store";
 import { createRoot } from "react-dom/client";
 
-const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
+// const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
 
 mapboxgl.setRTLTextPlugin(
   "https://cdn.parsimap.ir/third-party/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js",
@@ -23,7 +23,7 @@ mapboxgl.setRTLTextPlugin(
 const root = createRoot(document.getElementById("root"));
 
 root.render(
-  <BrowserRouter basename={baseUrl}>
+  <BrowserRouter>
     <AppContext2>
       <AppContext>
         <App />

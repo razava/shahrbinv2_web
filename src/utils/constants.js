@@ -155,7 +155,6 @@ export const defaultProps = {
   },
 };
 
-
 export const backgroundColor = [
   "rgba(255, 99, 132, 0.2)",
   "rgba(54, 162, 235, 0.2)",
@@ -220,4 +219,11 @@ export const borderColor = [
   "rgba(192, 192, 192, 1)",
   "rgba(128, 128, 128, 1)",
   "rgba(0, 0, 0, 1)",
+];
+
+export const priorities = [
+  { id: 0, title: "کم" },
+  { id: 1, title: "عادی" },
+  { id: 2, title: "زیاد" },
+  { id: 3, title: "فوری" },
 ];

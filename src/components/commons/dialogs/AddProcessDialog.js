@@ -92,6 +92,7 @@ const AddProcessDialog = ({
     payload,
     (res) => {
       setCreateRequest(false);
+      console.log(res);
       const status = isEditMode ? 204 : 201;
       if (res && res.status === status) {
         onSuccess();

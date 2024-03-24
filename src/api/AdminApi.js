@@ -66,7 +66,14 @@ export async function getNews() {
   const data = await axios.get(`/api/${instanceId()}/AdminNews`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
-  return data.data;
+  return data.data.data;
+}
+
+export async function getNewsById(id) {
+  const data = await axios.get(`/api/${instanceId()}/AdminNews/${id}`, {
+    headers: { Authorization: `Bearer ${Token}` },
+  });
+  return data.data.data;
 }
 
 export async function createNews(Data) {
@@ -84,24 +91,24 @@ export async function editNews({ Data, id }) {
 }
 
 export async function getCategoryById(id) {
-  const data = await axios.get(`/api/${instanceId()}/AdminCategory/${id}`, {
+  const response = await axios.get(`/api/${instanceId()}/AdminCategory/${id}`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
-  return data.data;
+  return response.data.data;
 }
 
 export async function getForms() {
   const data = await axios.get(`/api/${instanceId()}/AdminForms`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
-  return data.data;
+  return data.data.data;
 }
 
 export async function getFormById(id) {
   const data = await axios.get(`/api/${instanceId()}/AdminForms/${id}`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
-  return data.data;
+  return data.data.data;
 }
 
 export async function postForm(payload) {
@@ -136,7 +143,7 @@ export async function getOperatorCategories(id) {
       headers: { Authorization: `Bearer ${Token}` },
     }
   );
-  return data.data;
+  return data.data.data;
 }
 
 export async function putOperatorCategories({ id, payload }) {
@@ -166,4 +173,35 @@ export async function deleteProcess(id) {
   });
   console.log(data);
   return data;
+}
+
+export async function getUserRolesByAdmin(id) {
+  const data = await axios.get(
+    `/api/${instanceId()}/AdminUserManagement/Roles/${id}`,
+    {
+      headers: { Authorization: `Bearer ${Token}` },
+    }
+  );
+  return data.data.data;
+}
+
+export async function getUserReports(id) {
+  const data = await axios.get(
+    `/api/${instanceId()}/AdminUserManagement/UserReports/${id}`,
+    {
+      headers: { Authorization: `Bearer ${Token}` },
+    }
+  );
+  return data.data.data;
+}
+
+export async function putPolls({ id, payload }) {
+  const data = await axios.put(
+    `/api/${instanceId()}/AdminPolls/Edit/${id}`,
+    payload,
+    {
+      headers: { Authorization: `Bearer ${Token}` },
+    }
+  );
+  return data.data;
 }

@@ -25,12 +25,12 @@ const Tabs = ({
   useEffect(() => {
     setActiveTab(defaultActiveId ? defaultActiveId : children[0].props.id);
   }, [children.length, defaultActiveId]);
-  
+  console.log(children);
   return (
     <>
       <div className={`${mainClass}s ${wrapperClassName}`}>
         {children
-          .filter((c) => c.props)
+          .filter((c) => c?.props)
           .map((child, i) => {
             const { label, id } = child.props;
             return (
@@ -49,7 +49,7 @@ const Tabs = ({
       </div>
       <div className={`${mainClass}s-content ${contentClassName}`}>
         {children
-          .filter((c) => c.props)
+          .filter((c) => c?.props)
           .map((child, i) => {
             if (child.props.id !== activeTab) return undefined;
             return child.props.children;

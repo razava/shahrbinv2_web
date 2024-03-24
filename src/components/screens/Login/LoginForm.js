@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "../../../stylesheets/login.module.css";
 import image from "../../../assets/Images/login-img.png";
 import shahrbinTitle from "../../../assets/Images/shahrbin_title.png";
-import { callAPI, signUserIn } from "../../../helperFuncs";
+import { appRoutes, callAPI, signUserIn } from "../../../helperFuncs";
 import { AuthenticateAPI } from "../../../apiCalls";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -28,8 +28,6 @@ const LoginForm = () => {
     queryKey: ["Captcha"],
     queryFn: getCaptcha,
   });
-
-  console.log(data);
 
   //   functions
   const handleChange = (name) => (e) => {
@@ -70,6 +68,9 @@ const LoginForm = () => {
 
   //   effects
   useEffect(() => {
+    localStorage.removeItem("CountDownCompleted");
+    localStorage.removeItem("verificationToken");
+    localStorage.removeItem("countdownTime");
     return () => {
       _isMounted.current = false;
     };
@@ -136,6 +137,12 @@ const LoginForm = () => {
                 <i className="fas fa-arrow-left"></i>
               </span>
             </Button>
+            <p
+              onClick={() => history.push(appRoutes.forgotPassword)}
+              className=" !self-start text-xl text-primary cursor-pointer hover:underline"
+            >
+              فراموشی رمز عبور
+            </p>
           </form>
         </div>
       </section>

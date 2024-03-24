@@ -189,7 +189,7 @@ export const reportColumn = [
     name: "",
     cell: (row) => (
       <span className=" ">
-        {row?.priority && !isTimePassed(row.responseDeadline) ? (
+        {row?.priority == 3 && !isTimePassed(row.responseDeadline) ? (
           <i
             className="fad fa-fire-alt mr-2 text-red-600"
             style={{ fontSize: "17px" }}
@@ -197,7 +197,7 @@ export const reportColumn = [
         ) : (
           ""
         )}
-        {isTimePassed(row.responseDeadline) && row?.priority ? (
+        {isTimePassed(row.responseDeadline) && row?.priority == 4 ? (
           <i
             className="fad fa-fire-alt text-red-600"
             style={{ fontSize: "17px" }}
@@ -423,7 +423,6 @@ export const signUserAfterVerify = (res, history) => {
   saveToLocalStorage(constants.SHAHRBIN_MANAGEMENT_LOGIN_TIME, currentTime);
   const roles =
     decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-  console.log(roles);
   // const to = isManager(res.data.roles) ? appRoutes.infos : appRoutes.newReports;
   const to = hasRole(["Mayor", "Manager", "Admin"], roles)
     ? "/admin/infos"
@@ -432,14 +431,12 @@ export const signUserAfterVerify = (res, history) => {
     : hasRole(["ComplaintAdmin"], roles)
     ? "/admin/complaints-categories"
     : "/admin/newReports";
-  console.log(to);
   history.push(to);
 };
 export const isManager = (userRoles) =>
   hasRole(["Mayor", "Manager", "Admin"], userRoles);
 
 export const getLoginDestination = (roles) => {
-  console.log(roles);
   const to = hasRole(["Mayor", "Manager", "Admin"], roles)
     ? "/admin/infos"
     : hasRole(["ComplaintInspector"], roles)
@@ -838,6 +835,18 @@ export const mapPollStatus = (status) => {
       return "";
   }
 };
+export const mapPollTypes = (status) => {
+  switch (status) {
+    case 0:
+      return "تک انتخابی";
+    case 1:
+      return "چند انتخابی";
+    case 2:
+      return "توضیحی";
+    default:
+      return "";
+  }
+};
 
 export const mapPriorities = (priority) => {
   switch (priority) {
@@ -867,6 +876,29 @@ export const fixURL = (path, isAPIAddress = true) => {
 };
 
 export const showErrorMessage = (res) => {
+  if (res.data.detail) {
+    toast(`${res.data.detail}`, {
+      type: "error",
+    });
+    return;
+  }
+  if (res.data.detail == "" && res.data.status == 500) {
+    toast("خطایی رخ داد. لطفا از اتصال اینترنت خود اطمینان حاصل نمایید.", {
+      type: "error",
+    });
+    return;
+  }
+  if (res.status == 401) {
+    // Bad Requests
+    toast(
+      res && res.data && res.data.message
+        ? res.data.message
+        : "مشکلی در ارسال درخواست به وجود آمد.",
+      { type: "error" }
+    );
+    return;
+  }
+
   // Error 500
   if (!res || String(res.status).startsWith("5")) {
     toast("خطایی رخ داد. لطفا از اتصال اینترنت خود اطمینان حاصل نمایید.", {
@@ -884,15 +916,6 @@ export const showErrorMessage = (res) => {
     toast(res && res.data && res.data.message, { type: "success" });
     return;
   }
-
-  // Bad Requests
-  toast(
-    res && res.data && res.data.message
-      ? res.data.message
-      : "مشکلی در ارسال درخواست به وجود آمد.",
-    { type: "error" }
-  );
-  return;
 };
 
 export const getAuthToken = () =>
@@ -918,15 +941,13 @@ export const callAPI = (
     .then((res) => {
       requestEnded();
       // if server didn't respond
-      console.log(res);
       if (res === undefined) {
         toast("مشکلی در ارسال درخواست به سرور به وجود آمد", { type: "error" });
         return;
       }
-
       // if request succeeded
       if (res.status === successStatus) {
-        successCallback(res);
+        successCallback(res.data);
         return;
       } else if (res.status === 401) {
         showErrorMessage(res);
@@ -942,7 +963,6 @@ export const callAPI = (
       }
     })
     .catch((err) => {
-      console.log(err);
       requestEnded();
     });
 };
@@ -993,6 +1013,7 @@ export const appRoutes = {
   login: "/",
   verify: "/verify",
   changePhoneNumber: "/changePhoneNumber",
+  forgotPassword: "/forgotPassword",
   notes: "/admin/notes",
 };
 
@@ -1111,27 +1132,37 @@ export const createQueryParams = (url, queries = {}) => {
     perPage,
     statuses,
     geometry,
+    satisfactionValues,
+    priorities,
+    reportsToInclude,
   } = queries;
-  console.log(query);
   if (page) myUrl.searchParams.append("PageNumber", page);
   if (perPage) myUrl.searchParams.append("PageSize", perPage);
-  if (fromDate) myUrl.searchParams.append("SentFromDate", fromDate);
-  if (toDate) myUrl.searchParams.append("SentToDate", toDate);
+  if (fromDate) myUrl.searchParams.append("FromDate", fromDate);
+  if (toDate) myUrl.searchParams.append("ToDate", toDate);
   if (query) myUrl.searchParams.set("Query", query);
   if (categoryIds && categoryIds.length > 0)
-    categoryIds.forEach((c) => myUrl.searchParams.append("CategoryIds", c));
+    categoryIds.forEach((c) => myUrl.searchParams.append("Categories", c));
   if (organs && organs.length > 0)
-    organs.forEach((o) => myUrl.searchParams.append("ExecutiveIds", o.id));
+    organs.forEach((o) => myUrl.searchParams.append("Execitives", o.id));
   if (regions && regions.length > 0)
-    regions.forEach((r) => myUrl.searchParams.append("RegionIds", r.id));
+    regions.forEach((r) => myUrl.searchParams.append("Regions", r.value));
   if (roles && roles.length > 0)
-    roles.forEach((r) => myUrl.searchParams.append("RoleNames", r.roleName));
+    roles.forEach((r) => myUrl.searchParams.append("Roles", r.roleName));
   if (statuses && statuses.length > 0)
-    statuses.forEach((r) =>
-      myUrl.searchParams.append("CurrentStates", r.value)
-    );
+    statuses.forEach((s) => myUrl.searchParams.append("States", s.value));
   if (geometry && geometry.length > 0)
     geometry.map((g) => myUrl.searchParams.append("geometry", g));
+  if (satisfactionValues && satisfactionValues.length > 0)
+    satisfactionValues.map((s) =>
+      myUrl.searchParams.append("SatisfactionValues", s.value)
+    );
+  if (priorities && priorities.length > 0)
+    priorities.map((p) => myUrl.searchParams.append("Priorities", p.value));
+  if (reportsToInclude && reportsToInclude.length > 0)
+    reportsToInclude.map((r) =>
+      myUrl.searchParams.append("reportsToInclude", r.value)
+    );
   const updatedUrl = myUrl.toString();
   return myUrl;
 };
@@ -1145,6 +1176,10 @@ export const defaultFilters = {
   organs: [],
   roles: [],
   statuses: [],
+  satisfactionValues: [],
+  priorities: [],
+  reportsToInclude: [],
+  geometry: [],
 };
 
 export const lastStatuses = [

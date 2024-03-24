@@ -21,6 +21,7 @@ const AddAttachments = ({
         onChange={handleChange}
         style={{ display: "none" }}
         id="fileAttachment"
+        accept="image/*"
         ref={fileInputRef}
       />
       {toggle ? (

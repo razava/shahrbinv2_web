@@ -81,12 +81,15 @@ const RegisterForm = ({
         ...formData,
         roles: selectedRoles,
         regionIds: selectedRegions,
-        userName: instance.abbreviation + "-" + formData.userName,
+        userName:
+          instance.abbreviation == ""
+            ? formData.userName
+            : instance.abbreviation + "-" + formData.userName,
       };
     }
     return payload;
   };
-
+  console.log(formData);
   // prepare and send request
   const registerUser = (e) => {
     const payload = getPayload();
@@ -94,7 +97,7 @@ const RegisterForm = ({
     callAPI(
       {
         caller,
-        successStatus: edit ? 204 : 200,
+        successStatus: edit ? 204 : 201,
         payload,
         successCallback: (res) => {
           successCallback(res);
@@ -108,8 +111,8 @@ const RegisterForm = ({
           );
         },
         requestEnded: () => {
-          modalRoot.classList.remove("active");
-          setCondition(false);
+          // modalRoot.classList.remove("active");
+          // setCondition(false);
           setLoading(false);
         },
       },
@@ -120,120 +123,260 @@ const RegisterForm = ({
   const shouldBeVisible = (name) => fields.indexOf(name) !== -1;
   return (
     <>
-      <form className="w100 frc row relative py2 px2">
-        {shouldBeVisible("firstName") && (
-          <TextInput
-            value={formData.firstName}
-            onChange={hanldeChange}
-            name="firstName"
-            title={"نام"}
-            required={false}
-            wrapperClassName="rw3"
+      {!edit && (
+        <form
+          autoComplete="chrome-off"
+          className="w100 frc row relative py2 px2"
+        >
+          {shouldBeVisible("firstName") && (
+            <TextInput
+              value={formData.firstName}
+              onChange={hanldeChange}
+              name="firstName"
+              title={"نام"}
+              required={false}
+              wrapperClassName="rw3"
+            />
+          )}
+          {shouldBeVisible("lastName") && (
+            <TextInput
+              value={formData.lastName}
+              onChange={hanldeChange}
+              name="lastName"
+              title={"نام خانوادگی"}
+              required={false}
+              wrapperClassName="rw3 of-hidden"
+            />
+          )}
+          {shouldBeVisible("userName") && (
+            <TextInput
+              value={formData.userName}
+              onChange={hanldeChange}
+              name="userName"
+              title={"نام کاربری"}
+              required={false}
+              wrapperClassName="rw3"
+              renderInfo={
+                instance.abbreviation == ""
+                  ? null
+                  : () => {
+                      return " - " + instance.abbreviation;
+                    }
+              }
+            />
+          )}
+          {shouldBeVisible("password") && (
+            <TextInput
+              value={formData.password}
+              onChange={hanldeChange}
+              name="password"
+              title={"رمز عبور"}
+              required={false}
+              wrapperClassName="rw3"
+              type="password"
+            />
+          )}
+          {shouldBeVisible("title") && (
+            <TextInput
+              value={formData.title}
+              onChange={hanldeChange}
+              name="title"
+              title={"عنوان"}
+              required={false}
+              wrapperClassName="rw3"
+            />
+          )}
+          {shouldBeVisible("roles") && (
+            <MultiSelect
+              wrapperClassName="rw3"
+              strings={{ label: "نقش ها" }}
+              caller={UserInfoAPI.getRolesForCreate}
+              defaultSelecteds={[]}
+              onChange={setRoles}
+              isStatic={false}
+              maxHeight={300}
+              nameKey="roleTitle"
+              valueKey="roleName"
+              isInDialog={true}
+              id="roles-list"
+            />
+          )}
+          {shouldBeVisible("regions") && (
+            <MultiSelect
+              wrapperClassName="rw3"
+              strings={{ label: "مناطق" }}
+              caller={CommonAPI.getYazdRegions}
+              defaultSelecteds={[]}
+              onChange={setRegions}
+              isStatic={false}
+              maxHeight={300}
+              nameKey="name"
+              valueKey="id"
+              isInDialog={true}
+              id="regions-list"
+            />
+          )}
+          {shouldBeVisible("organization") && (
+            <TextInput
+              value={formData.organization}
+              onChange={hanldeChange}
+              name="organization"
+              title={"سازمان"}
+              required={false}
+              wrapperClassName="rw3 of-hidden"
+            />
+          )}
+          {shouldBeVisible("phoneNumber") && (
+            <TextInput
+              value={formData.phoneNumber}
+              onChange={hanldeChange}
+              name="phoneNumber"
+              title={"تلفن همراه"}
+              required={false}
+              wrapperClassName="rw3"
+              onlyDigit={true}
+              maxLength="11"
+            />
+          )}
+        </form>
+      )}
+      {edit && (
+        <form
+          autoComplete="chrome-off"
+          className="w-full  relative px-8"
+        >
+          {shouldBeVisible("firstName") && (
+            <TextInput
+              value={formData.firstName}
+              onChange={hanldeChange}
+              name="firstName"
+              title={"نام"}
+              required={false}
+              wrapperClassName="w-full"
+            />
+          )}
+          {shouldBeVisible("lastName") && (
+            <TextInput
+              value={formData.lastName}
+              onChange={hanldeChange}
+              name="lastName"
+              title={"نام خانوادگی"}
+              required={false}
+              wrapperClassName="w-full"
+            />
+          )}
+          {shouldBeVisible("userName") && (
+            <TextInput
+              value={formData.userName}
+              onChange={hanldeChange}
+              name="userName"
+              title={"نام کاربری"}
+              required={false}
+              wrapperClassName="w-full"
+              renderInfo={
+                instance.abbreviation == ""
+                  ? null
+                  : () => {
+                      return " - " + instance.abbreviation;
+                    }
+              }
+            />
+          )}
+          {shouldBeVisible("password") && (
+            <TextInput
+              value={formData.password}
+              onChange={hanldeChange}
+              name="password"
+              title={"رمز عبور"}
+              required={false}
+              wrapperClassName="w-full"
+              type="password"
+            />
+          )}
+          {shouldBeVisible("title") && (
+            <TextInput
+              value={formData.title}
+              onChange={hanldeChange}
+              name="title"
+              title={"عنوان"}
+              required={false}
+              wrapperClassName="w-full"
+            />
+          )}
+          {shouldBeVisible("roles") && (
+            <MultiSelect
+              wrapperClassName="rw3"
+              strings={{ label: "نقش ها" }}
+              caller={UserInfoAPI.getRolesForCreate}
+              defaultSelecteds={[]}
+              onChange={setRoles}
+              isStatic={false}
+              maxHeight={300}
+              nameKey="roleTitle"
+              valueKey="roleName"
+              isInDialog={true}
+              id="roles-list"
+            />
+          )}
+          {shouldBeVisible("regions") && (
+            <MultiSelect
+              wrapperClassName="rw3"
+              strings={{ label: "مناطق" }}
+              caller={CommonAPI.getYazdRegions}
+              defaultSelecteds={[]}
+              onChange={setRegions}
+              isStatic={false}
+              maxHeight={300}
+              nameKey="name"
+              valueKey="id"
+              isInDialog={true}
+              id="regions-list"
+            />
+          )}
+          {shouldBeVisible("organization") && (
+            <TextInput
+              value={formData.organization}
+              onChange={hanldeChange}
+              name="organization"
+              title={"سازمان"}
+              required={false}
+              wrapperClassName="rw3 of-hidden"
+            />
+          )}
+          {shouldBeVisible("phoneNumber") && (
+            <TextInput
+              value={formData.phoneNumber}
+              onChange={hanldeChange}
+              name="phoneNumber"
+              title={"تلفن همراه"}
+              required={false}
+              wrapperClassName="rw3"
+              onlyDigit={true}
+              maxLength="11"
+            />
+          )}
+        </form>
+      )}
+      {edit && (
+        <div className="w80 mxa fre py1 px2 border-t-light mt1 fixed b0 bg-white">
+          <Button
+            title={edit ? "ویرایش کاربر" : "ایجاد کاربر"}
+            className="py1 br05 bg-primary"
+            onClick={registerUser}
+            loading={loading}
           />
-        )}
-        {shouldBeVisible("lastName") && (
-          <TextInput
-            value={formData.lastName}
-            onChange={hanldeChange}
-            name="lastName"
-            title={"نام خانوادگی"}
-            required={false}
-            wrapperClassName="rw3 of-hidden"
+        </div>
+      )}
+      {!edit && (
+        <div className="w100 mxa fre py1 px2 border-t-light mt1">
+          <Button
+            title={edit ? "ویرایش کاربر" : "ایجاد کاربر"}
+            className="py1 br05 bg-primary"
+            onClick={registerUser}
+            loading={loading}
           />
-        )}
-        {shouldBeVisible("userName") && (
-          <TextInput
-            value={formData.userName}
-            onChange={hanldeChange}
-            name="userName"
-            title={"نام کاربری"}
-            required={false}
-            wrapperClassName="rw3"
-            renderInfo={() => " - " + instance.abbreviation}
-          />
-        )}
-        {shouldBeVisible("password") && (
-          <TextInput
-            value={formData.password}
-            onChange={hanldeChange}
-            name="password"
-            title={"رمز عبور"}
-            required={false}
-            wrapperClassName="rw3"
-            type="password"
-          />
-        )}
-        {shouldBeVisible("title") && (
-          <TextInput
-            value={formData.title}
-            onChange={hanldeChange}
-            name="title"
-            title={"عنوان"}
-            required={false}
-            wrapperClassName="rw3"
-          />
-        )}
-        {shouldBeVisible("roles") && (
-          <MultiSelect
-            wrapperClassName="rw3"
-            strings={{ label: "نقش ها" }}
-            caller={UserInfoAPI.getRolesForCreate}
-            defaultSelecteds={[]}
-            onChange={setRoles}
-            isStatic={false}
-            maxHeight={300}
-            nameKey="displayName"
-            valueKey="roleName"
-            isInDialog={true}
-            id="roles-list"
-          />
-        )}
-        {shouldBeVisible("regions") && (
-          <MultiSelect
-            wrapperClassName="rw3"
-            strings={{ label: "مناطق" }}
-            caller={CommonAPI.getYazdRegions}
-            defaultSelecteds={[]}
-            onChange={setRegions}
-            isStatic={false}
-            maxHeight={300}
-            nameKey="name"
-            valueKey="id"
-            isInDialog={true}
-            id="regions-list"
-          />
-        )}
-        {shouldBeVisible("organization") && (
-          <TextInput
-            value={formData.organization}
-            onChange={hanldeChange}
-            name="organization"
-            title={"سازمان"}
-            required={false}
-            wrapperClassName="rw3 of-hidden"
-          />
-        )}
-        {shouldBeVisible("phoneNumber") && (
-          <TextInput
-            value={formData.phoneNumber}
-            onChange={hanldeChange}
-            name="phoneNumber"
-            title={"تلفن همراه"}
-            required={false}
-            wrapperClassName="rw3"
-            onlyDigit={true}
-            maxLength="11"
-          />
-        )}
-      </form>
-      <div className="w100 mxa fre py1 px2 border-t-light mt1">
-        <Button
-          title={edit ? "ویرایش کاربر" : "ایجاد کاربر"}
-          className="py1 br05 bg-primary"
-          onClick={registerUser}
-          loading={loading}
-        />
-      </div>
+        </div>
+      )}
     </>
   );
 };

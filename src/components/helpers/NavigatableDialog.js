@@ -177,8 +177,8 @@ const NavigatableDialog = ({
     condition: condition,
     callback: (ref, event) => {
       if (event.type === "keydown" && event.keyCode === 27) onEscape();
-      if (event.type === "keydown" && event.keyCode === 39) onRightKey(event);
-      if (event.type === "keydown" && event.keyCode === 37) onLeftKey(event);
+      // if (event.type === "keydown" && event.keyCode === 39) onRightKey(event);
+      // if (event.type === "keydown" && event.keyCode === 37) onLeftKey(event);
     },
   });
 

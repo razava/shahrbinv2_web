@@ -14,7 +14,7 @@ import { click } from "ol/events/condition";
 // import { Modify, Snap } from "ol/interaction";
 import { transform } from "ol/proj"; // Import the transform function from ol/proj
 // import GeoJSON from "ol/format/GeoJSON.js";
-
+import { Polygon } from 'ol/geom'; // Import Polygon geometry from OpenLayers 
 import scatter from "../../../assets/Images/scatter.png";
 import Button from "../../helpers/Button";
 
@@ -27,6 +27,7 @@ function ScatterMap({
   className = "",
   mode = "chart",
   getLocations,
+  handelDrawInteraction,
 }) {
   const [map, setMap] = useState();
   const [layer, setLayer] = useState(null);
@@ -38,6 +39,7 @@ function ScatterMap({
   const locationsRef = useRef();
   mapElement.current = map;
 
+  console.log(locations);
   useEffect(() => {
     if (map) {
       if (mode == "chart") {
@@ -107,6 +109,7 @@ function ScatterMap({
     });
 
     draw.on("drawend", (event) => {
+      event.stopPropagation();
       // Here you can handle the drawn feature, e.g., add it to state, etc.
       const feature = event.feature;
       // Do something with the drawn feature
@@ -141,7 +144,8 @@ function ScatterMap({
       if (mode == "chart") {
         getLocations(flatCoordinates);
       }
-      setDrawInteraction(lonLatCoordinates);
+      // handelDrawInteraction(flatCoordinates);
+      setDrawInteraction(flatCoordinates);
     });
 
     // Add snapping and modifying interactions if needed
@@ -194,19 +198,34 @@ function ScatterMap({
     <div>
       <div
         ref={mapElement}
+        onClick={(e) => e.stopPropagation()}
         id="map"
         className={className}
         style={{ width, height, cursor: "pointer" }}
       ></div>
-      <Button
-        title="پاک کردن"
-        className="py1 br05 bg-primary"
-        onClick={() => {
-          map.removeLayer(vector);
-          addDrawInteraction();
-        }}
-        // loading={createLoading}
-      />
+      <div className=" flex gap-2">
+        <Button
+          title="پاک کردن"
+          className="py1 br05 bg-primary text-white mx-auto my-2"
+          onClick={() => {
+            map.removeLayer(vector);
+            addDrawInteraction();
+          }}
+          // loading={createLoading}
+        />
+        {mode == "filter" && (
+          <Button
+            title="تایید"
+            className="py1 br05 bg-primary text-white mx-auto my-2"
+            onClick={() => {
+              map.removeLayer(vector);
+              addDrawInteraction();
+              handelDrawInteraction(drawInteraction);
+            }}
+            // loading={createLoading}
+          />
+        )}
+      </div>
     </div>
   );
 }

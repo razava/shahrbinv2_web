@@ -3,6 +3,7 @@ import styles from "../../stylesheets/filters.module.css";
 import DialogToggler from "./DialogToggler";
 import FilterDialog from "../commons/dialogs/FilterDialog";
 import { AppStore } from "../../store/AppContext";
+import { Tooltip } from "react-tooltip";
 
 const modalRoot = document && document.getElementById("modal-root");
 
@@ -17,6 +18,7 @@ const Filters = ({
     roles: true,
     statuses: true,
   },
+  filtersData = {},
   wrapperClassName = "",
   toggleClassName = "",
   open = false,
@@ -41,7 +43,10 @@ const Filters = ({
   return (
     <>
       <div className={[styles.wrapper, wrapperClassName].join(" ")}>
-        <div className={["", toggleClassName].join(" ")}>
+        <div
+          data-tooltip-id="filter"
+          className={["", toggleClassName].join(" ")}
+        >
           <div className={styles.filterToggle} onClick={openFilterDialog}>
             {/* <span className={styles.filterToggleTitle}>فیلتر</span> */}
             <span key={"filter-icon"} className={styles.filterToggleIcon}>
@@ -50,7 +55,12 @@ const Filters = ({
           </div>
         </div>
       </div>
-
+      <Tooltip
+        style={{ fontSize: "10px",zIndex:100 }}
+        id="filter"
+        place="bottom"
+        content={"فیلتر"}
+      />
       <DialogToggler
         condition={dialog}
         setCondition={setDialog}
@@ -61,6 +71,7 @@ const Filters = ({
       >
         <FilterDialog
           filterTypes={filterTypes}
+          filtersData={filtersData}
           onFilter={onFilter}
           dialog={dialog}
           excel={excel}

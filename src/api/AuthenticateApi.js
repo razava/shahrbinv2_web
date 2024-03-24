@@ -12,6 +12,8 @@ const instanceId = getFromLocalStorage(
   constants.SHAHRBIN_MANAGEMENT_INSTANCE_ID
 );
 
+
+
 axios.interceptors.request.use(function (config) {
   const token = getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN);
   config.headers.Authorization = token ? `Bearer ${token}` : "";
@@ -52,6 +54,34 @@ export async function postNewPhoneNumber(payload) {
 
 export async function putNewPhoneNumber(payload) {
   const data = await axios.put(`/api/1/Authenticate/PhoneNumber`, payload, {
+    headers: { Authorization: `Bearer ${Token}` },
+  });
+  return data.data;
+}
+
+export async function forgotPassword(payload) {
+  const data = await axios.post(`/api/1/Authenticate/ForgotPassword`, payload, {
+    headers: { Authorization: `Bearer ${Token}` },
+  });
+  return data.data;
+}
+
+export async function resetPassword(payload) {
+  const data = await axios.post(`/api/1/Authenticate/ResetPassword`, payload, {
+    headers: { Authorization: `Bearer ${Token}` },
+  });
+  return data.data;
+}
+
+export async function resendOtp(payload) {
+  const data = await axios.post(`/api/1/Authenticate/ResendOtp`, payload, {
+    headers: { Authorization: `Bearer ${Token}` },
+  });
+  return data.data;
+}
+
+export async function refreshToken(payload) {
+  const data = await axios.post(`/api/1/Authenticate/Refresh`, payload, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data;

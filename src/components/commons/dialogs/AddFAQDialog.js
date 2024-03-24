@@ -95,12 +95,9 @@ export default function AddFAQDialog({ mode, onSuccess, defaltValues }) {
           required={true}
         />
       </div> */}
-      <div style={{ textAlign: "right" }} className="w100">
+      <div style={{ textAlign: "right" }} className="w100 px-7 mb-5">
         <p style={{ marginRight: "15px" }}> جواب</p>
-        <QuillEditor
-          data={defaltValues?.answer}
-          setData={(data) => setAnswer(data)}
-        />
+        <QuillEditor data={values.answer} setData={(data) => setAnswer(data)} />
       </div>
       {/* <div className="w100 mxa row">
         <TextInput

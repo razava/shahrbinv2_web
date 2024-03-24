@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "proxy": "https://api.shahrbin.parsicgroup.ir",
-  "homepage": "https://admin.parsicgroup.ir/",
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^3.0.2",
     "@ckeditor/ckeditor5-upload": "^40.2.0",
@@ -31,6 +30,7 @@
     "rc-tree-select": "^2.9.4",
     "react": "^18.2.0",
     "react-chartjs-2": "^4.0.0",
+    "react-countdown": "^2.3.5",
     "react-data-table-component": "^7.0.0-alpha-5",
     "react-data-table-component-extensions": "^1.5.2",
     "react-datepicker2": "^3.3.13",
@@ -49,6 +49,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^5.0.1",
     "react-select": "^5.8.0",
+    "react-timer-hook": "^3.0.7",
     "react-to-print": "^2.14.15",
     "react-toastify": "^7.0.2",
     "react-toggle": "^4.1.3",

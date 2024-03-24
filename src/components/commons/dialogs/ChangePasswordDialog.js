@@ -61,8 +61,8 @@ const ChangePasswordDialog = ({ id, setCondition, type = 1 }) => {
     payload,
     (res) => {
       setMakeRequest(false);
-      setCondition(false);
-      modalRoot.classList.remove("active");
+      // setCondition(false);
+      // modalRoot.classList.remove("active");
       if (res.status === 204) {
         toast("رمز عبور با موفقیت تنظیم شد.", { type: "success" });
       } else if (serverError(res)) return;
@@ -72,14 +72,14 @@ const ChangePasswordDialog = ({ id, setCondition, type = 1 }) => {
   );
   return (
     <>
-      <div style={{ width: 350 }} className="fcc py2">
+      <div className=" py2 w-full px-2">
         {type === 2 && (
           <TextInput
             name="oldPassword"
             value={oldPassword}
             onChange={handleChange}
             title="رمز عبور سابق"
-            wrapperClassName="rw3"
+            wrapperClassName="w-full"
             type="password"
           />
         )}
@@ -88,7 +88,7 @@ const ChangePasswordDialog = ({ id, setCondition, type = 1 }) => {
           value={password}
           onChange={handleChange}
           title="رمز عبور جدید"
-          wrapperClassName="rw3"
+          wrapperClassName="w-full"
           type="password"
           isValid={!errors.password}
           errorMessage={errorMessage}
@@ -98,11 +98,11 @@ const ChangePasswordDialog = ({ id, setCondition, type = 1 }) => {
           value={confirmPassword}
           onChange={handleChange}
           title=" تکرار رمز عبور جدید"
-          wrapperClassName="rw3"
+          wrapperClassName="w-full"
           type="password"
         />
       </div>
-      <div className="w100 mxa fre py1 px2 border-t-light mt1">
+      <div className="w80 mxa fre py1 px2 border-t-light mt1 fixed b0 bg-white">
         <Button
           title="ذخیره"
           className="py1 br05 bg-primary"

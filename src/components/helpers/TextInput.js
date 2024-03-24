@@ -84,6 +84,7 @@ const TextInput = ({
         </label>
       ) : null}
       <input
+        autocomplete="chrome-off"
         autoFocus={autoFocus}
         type={type}
         ref={forwardInputRef ? forwardInputRef : inputRef}

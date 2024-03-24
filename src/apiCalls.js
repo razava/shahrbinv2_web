@@ -10,6 +10,23 @@ const prefix = process.env.REACT_APP_API_URL;
 // "https://192.168.1.130:3749"
 // https://shahrbin.ashkezar.ir:8181
 // const prefix = process.env.REACT_APP_API_URL;
+axios.interceptors.response.use(
+  function (response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    console.log(response);
+    console.log(response.data?.data);
+    // if (response.data?.data) {
+    //   return response.data.data;
+    // }
+    return response;
+  },
+  function (error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    return Promise.reject(error);
+  }
+);
 
 export class ReportsAPI {
   static getTasks(token, payload, source, instance, queries) {
@@ -75,7 +92,7 @@ export class ReportsAPI {
   }
 
   static getReports(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/StaffReport/AllReports`;
+    const initialUrl = `${prefix}/api/${instance?.id}/StaffInfo/Reports`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -145,7 +162,7 @@ export class ReportsAPI {
 
   static getExcel(queries, instance) {
     const token = getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN);
-    const initialUrl = `${prefix}/api/${instance?.id}/Info/Excel`;
+    const initialUrl = `${prefix}/api/${instance?.id}/StaffInfo/Excel`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -752,7 +769,7 @@ export class UserInfoAPI {
 
   static getRolesForCreate(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Authenticate/RolesForCreate`, {
+      .get(`${prefix}/api/${instance?.id}/AdminUserManagement/Roles`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -978,7 +995,7 @@ export class InfoAPI {
   }
 
   static getChart(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/StaffInfo/Charts/${payload.code}?parameter=${payload.parameter}`;
+    const initialUrl = `${prefix}/api/${instance?.id}/StaffInfo/Charts/${payload?.code}?parameter=${payload?.parameter}`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -1135,10 +1152,10 @@ export class PollAPI {
 }
 
 export class ParsiMap {
-  static reverse(coordinates) {
+  static reverse(token, payload, source, instance) {
     return axios
       .get(
-        `${prefix}/api/Map/Backward/${coordinates.longitude}/${coordinates.latitude}`
+        `${prefix}/api/Map/Backward/${instance?.id}/${payload.longitude}/${payload.latitude}`
       )
       .then((res) => res)
       .catch((err) => err.response);

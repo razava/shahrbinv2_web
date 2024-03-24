@@ -9,6 +9,7 @@ import { AppStore } from "../../../store/AppContext";
 import { getCitizenInformation } from "../../../api/commonApi";
 import { getReportHistory } from "../../../api/StaffApi";
 import Button from "../../helpers/Button";
+import { priorities } from "../../../utils/constants";
 
 moment.loadPersian({ usePersianDigits: true });
 const ReportDetails = ({ data }) => {
@@ -60,6 +61,24 @@ const ReportDetails = ({ data }) => {
             value={doesExist(regionName)}
             readOnly={true}
             title="منطقه"
+            wrapperClassName="mxa flex-1"
+            inputClassName=""
+            required={false}
+          />
+        </div>
+        <div className="w90 mxa frc wrap">
+          <TextInput
+            value={convertserverTimeToDateString(data?.sent)}
+            readOnly={true}
+            title="تاریخ ایجاد"
+            wrapperClassName="mxa flex-1"
+            inputClassName=""
+            required={false}
+          />
+          <TextInput
+            value={doesExist(priorities[data?.priority]?.title)}
+            readOnly={true}
+            title="اولویت"
             wrapperClassName="mxa flex-1"
             inputClassName=""
             required={false}

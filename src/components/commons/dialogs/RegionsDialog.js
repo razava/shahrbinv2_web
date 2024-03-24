@@ -81,8 +81,8 @@ const RolesDialog = ({ userId, setCondition }) => {
       setLoading(false);
     } catch (err) {
       setLoading(false);
-      setCondition(false);
-      modalRoot.classList.remove("active");
+      // setCondition(false);
+      // modalRoot.classList.remove("active");
     }
   };
 
@@ -97,7 +97,7 @@ const RolesDialog = ({ userId, setCondition }) => {
     payload,
     (res) => {
       setMakeRequest(false);
-      setCondition(false);
+      // setCondition(false);
       modalRoot.classList.remove("active");
       if (res.status === 204) {
         toast("تغییرات با موفقیت ذخیره شد.", { type: "success" });
@@ -131,7 +131,7 @@ const RolesDialog = ({ userId, setCondition }) => {
             wrapperClassName="px1 mh100"
             title="مناطق"
           />
-          <div className="w100 mxa fre py1 px2 border-t-light mt1">
+          <div className="w80 mxa fre py1 px2 border-t-light mt1 fixed b0 bg-white">
             <Button
               title="ذخیره تغییرات"
               className="py1 br05 bg-primary"

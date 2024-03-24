@@ -14,7 +14,7 @@ const MultiSelectBox = ({
   label = "",
   caller = (f) => f,
   className = "input",
-  selecteds = [],
+  selecteds = [], 
   setSelected,
   isStatic = false,
   data = [],

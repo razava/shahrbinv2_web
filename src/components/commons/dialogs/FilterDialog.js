@@ -22,6 +22,7 @@ import useMakeRequest from "../../hooks/useMakeRequest";
 import DialogButtons from "./DialogButtons";
 import TreeSystem from "./TreeSystem";
 import { Modal } from "react-responsive-modal";
+import DialogToggler from "../../helpers/DialogToggler";
 const ScatterMap = lazy(() => import("../map/ScatterMap"));
 
 const FilterDialog = ({
@@ -29,9 +30,11 @@ const FilterDialog = ({
   onFilter = (f) => f,
   dialog,
   excel = false,
+  filtersData = {},
 }) => {
   const [store, dispatch] = useContext(AppStore);
   const [open, setOpen] = useState(false);
+  const [mapDialog, setMapDialog] = useState(false);
 
   const [allOrgans, setAllOrgans] = useState([]);
   const [filterData, setFilterData] = useState({
@@ -43,7 +46,14 @@ const FilterDialog = ({
   const [regions, setRegions] = useState(store.filters.regions);
   const [statuses, setStatuses] = useState(store.filters.statuses);
   const [organs, setOrgans] = useState(store.filters.organs);
-  const [priorities, setPriorities] = useState([]);
+  const [geometry, setGeometry] = useState(store.filters.geometry);
+  const [reportsToInclude, setReportsToInclude] = useState(
+    store.filters.reportsToInclude
+  );
+  const [satisfactionValues, setSatisfactionValues] = useState(
+    store.filters.satisfactionValues
+  );
+  const [priorities, setPriorities] = useState(store.filters.priorities);
   const [categoryIds, setCategoryIds] = useState(
     store.filters.categoryIds || []
   );
@@ -81,7 +91,7 @@ const FilterDialog = ({
   const clearFilters = () => {
     onFilter(defaultFilters);
   };
-
+  console.log(store.filters);
   const handleChange = (name) => (e) => {
     setFilterData({ ...filterData, [name]: e.target.value });
   };
@@ -122,21 +132,25 @@ const FilterDialog = ({
       : "";
     const toDate = filterData.toDate ? getDateFormat(GregorianTo, "to") : "";
     const newStages = stages.map((s) => s.value);
-    const newPriorities = priorities.map((s) => s.value);
+    const newPriorities = priorities?.map((s) => s.value);
     setStages(stages);
     setPriorities(priorities);
+    console.log(reportsToInclude);
     onFilter({
       fromDate,
       toDate,
       query,
       categoryIds,
       stages: newStages,
-      priorities: newPriorities,
+      priorities: priorities,
       regions,
       organs,
       roles,
       groupCategories,
       statuses,
+      satisfactionValues,
+      reportsToInclude,
+      geometry,
     });
   };
 
@@ -217,13 +231,11 @@ const FilterDialog = ({
                   name="fromDate"
                   title="از تاریخ"
                   wrapperClassName="w100 px0"
-                  containerClassName="col-md-12"
+                  containerClassName="col-sm-12 col-md-6"
                   isInDialog={true}
                   id="fromDate"
                 />
-              )}
-            </div>
-            <div className="w100 mx-a relative frc">
+              )}{" "}
               {filterTypes.to && (
                 <DatePickerConatiner
                   date={toDate}
@@ -231,12 +243,13 @@ const FilterDialog = ({
                   name="toDate"
                   title="تا تاریخ"
                   wrapperClassName="w100 px0"
-                  containerClassName="col-md-12"
+                  containerClassName="ccol-sm-12 col-md-6"
                   isInDialog={true}
                   id="toDate"
                 />
               )}
             </div>
+            <div className="w100 mx-a relative frc"></div>
             <div className="w100 mxa row frc">
               {filterTypes.roles && (
                 <MultiSelect
@@ -255,7 +268,7 @@ const FilterDialog = ({
               )}
             </div>
             <div className="w100 mx-a relative frc">
-              {filterTypes.category && (
+              {filterTypes?.category && (
                 <TreeSystem
                   caller={CommonAPI.getSubjectGroups}
                   condition={categoryDialog}
@@ -289,27 +302,29 @@ const FilterDialog = ({
               )}
             </div>
             <div className="w100 mxa row frc">
-              {filterTypes.regions && (
+              {filterTypes?.regions && (
                 <MultiSelect
                   strings={{ label: "مناطق" }}
-                  caller={ActorsAPI.getActorRegions}
+                  // caller={ActorsAPI.getActorRegions}
                   onChange={setRegions}
-                  isStatic={false}
-                  wrapperClassName="col-md-12"
                   defaultSelecteds={regions}
+                  isStatic={true}
+                  staticData={filtersData.regions}
+                  wrapperClassName="col-md-12"
                   isInDialog={true}
-                  nameKey="regionName"
+                  nameKey="title"
+                  valueKey="value"
                   id="regions-list"
                 />
               )}
             </div>
             <div className="w100 mxa row frc">
-              {filterTypes.statuses && (
+              {filterTypes?.statuses && (
                 <MultiSelect
                   strings={{ label: "وضعیت" }}
                   onChange={setStatuses}
                   isStatic={true}
-                  staticData={lastStatuses}
+                  staticData={filtersData?.states}
                   wrapperClassName="col-md-12"
                   defaultSelecteds={statuses}
                   isInDialog={true}
@@ -320,16 +335,72 @@ const FilterDialog = ({
               )}
             </div>
             <div className="w100 mxa row frc">
-              {filterTypes.organs && allOrgans.length > 0 && (
+              {filterTypes?.reportsToInclude && (
+                <MultiSelect
+                  strings={{ label: "شامل درخواست های" }}
+                  onChange={setReportsToInclude}
+                  isStatic={true}
+                  staticData={filtersData?.reportsToInclude}
+                  wrapperClassName="col-md-12"
+                  defaultSelecteds={reportsToInclude}
+                  isInDialog={true}
+                  id="reportsToInclude-list"
+                  nameKey="title"
+                  valueKey="value"
+                  maxHeight={300}
+                />
+              )}
+            </div>
+            <div className="w100 mxa row frc">
+              {filterTypes?.satisfactionValues && (
+                <MultiSelect
+                  strings={{ label: "میزان رضایت" }}
+                  // selecteds={minSatisfaction}
+                  onChange={setSatisfactionValues}
+                  isStatic={true}
+                  // caller={InfoAPI.getExecutives}
+                  wrapperClassName="col-md-12"
+                  nameKey="title"
+                  valueKey="value"
+                  staticData={filtersData?.satisfactionValues}
+                  defaultSelecteds={satisfactionValues}
+                  maxHeight={300}
+                  id="minSatisfaction-list"
+                  isInDialog
+                />
+              )}
+            </div>
+            <div className="w100 mxa row frc">
+              {filterTypes?.priorities && (
+                <MultiSelect
+                  strings={{ label: "اولویت" }}
+                  // selecteds={minSatisfaction}
+                  onChange={setPriorities}
+                  isStatic={true}
+                  // caller={InfoAPI.getExecutives}
+                  wrapperClassName="col-md-12"
+                  nameKey="title"
+                  valueKey="value"
+                  staticData={filtersData?.priorities}
+                  defaultSelecteds={priorities}
+                  maxHeight={300}
+                  id="minSatisfaction-list"
+                  isInDialog
+                />
+              )}
+            </div>
+            <div className="w100 mxa row frc">
+              {filterTypes.executives && (
                 <MultiSelect
                   strings={{ label: "واحد های اجرایی" }}
                   selecteds={organs}
                   onChange={setOrgans}
-                  isStatic={false}
-                  caller={InfoAPI.getExecutives}
+                  isStatic={true}
+                  staticData={filtersData.executives}
+                  // caller={InfoAPI.getExecutives}
                   wrapperClassName="col-md-12"
                   nameKey="title"
-                  valueKey="id"
+                  valueKey="value"
                   defaultSelecteds={organs}
                   maxHeight={300}
                   id="organs-list"
@@ -338,10 +409,10 @@ const FilterDialog = ({
               )}
             </div>
             {/* {filterTypes.Map && ( */}
-            {/* <div className="mx-auto">
+            {/* <div className="mx-[15px] my-1">
               <Button
                 title="نقشه"
-                className="py1 br05 bg-primary"
+                className="py1 br05 bg-primary w-full"
                 onClick={() => setOpen(true)}
                 // loading={createLoading}
               />
@@ -354,14 +425,61 @@ const FilterDialog = ({
               styles={{ direction: "rtl" }}
               //   classNames={styles.customModal}
             >
-              <h2 className="mt-10 font-bold text-2xl mb-5">پیش نمایش فرم</h2>
+              <h2 className="mt-10 font-bold text-2xl mb-5">انتخاب ناحیه</h2>
+              {/* <ScatterMap
+                className=" !w-full"
+                height={300}
+                mode="filter"
+                locations={[]}
+              /> */}
             </Modal>
-            {filterTypes.Map && (
+            {/* {filterTypes.geometry && (
               <div className=" w-full px-2 py-1">
                 <p className=" text-lg">انتخاب ناحیه</p>
-                <ScatterMap className=" !w-full" mode="filter" locations={[]} />
+                <ScatterMap className=" !w-full" height={300} mode="filter" locations={[]} />
+              </div>
+            )} */}
+            {filterTypes?.geometry && (
+              <div className="w100 mxa row frc">
+                <TextInput
+                  value={geometry}
+                  name="address"
+                  // onChange={handleChange}
+                  required={false}
+                  title="آدرس"
+                  wrapperClassName="col-md-12"
+                  inputClassName="pointer bg-white"
+                  icon="fas fa-map-marker-alt"
+                  iconClassName="f15 text-color"
+                  onIconClick={() => setMapDialog(true)}
+                  onClick={() => setMapDialog(true)}
+                  readOnly={true}
+                >
+                  <DialogToggler
+                    condition={mapDialog}
+                    setCondition={setMapDialog}
+                    // loading={mapLoading}
+                    width={700}
+                    isUnique={false}
+                    outSideClickEvent={"mousedown"}
+                    id="select-on-map-dialog"
+                  >
+                    <ScatterMap
+                      // className=" !w-full"
+                      width={650}
+                      height={400}
+                      mode="filter"
+                      locations={[]}
+                      handelDrawInteraction={(coordinates) => {
+                        setGeometry(coordinates);
+                        setMapDialog(false);
+                      }}
+                    />
+                  </DialogToggler>
+                </TextInput>
               </div>
             )}
+
             <div className="w100 mxa row frc">
               {filterTypes.query && (
                 <form className="col-md-12" onSubmit={onQueryRequest}>

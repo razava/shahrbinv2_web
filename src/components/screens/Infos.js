@@ -25,8 +25,16 @@ import Icon from "../../components2/Icon/Icon";
 import ExportExcel from "../helpers/Excel/ExcelExport";
 import Button from "../helpers/Button";
 import { Tooltip } from "react-tooltip";
+import { useQuery } from "@tanstack/react-query";
+import { getFilters } from "../../api/commonApi";
 
-const filterTypes = { from: true, to: true, category: true, regions: true };
+const filterTypes = {
+  from: true,
+  to: true,
+  category: true,
+  regions: true,
+  reportsToInclude: true,
+};
 const filterDefaults = {
   fromDate: "",
   toDate: "",
@@ -45,8 +53,10 @@ const Infos = ({ match }) => {
   const [chartsData, setChartsData] = useState([]);
   const [barChartsData, setBarChartsData] = useState([]);
   const [chartType, setChartType] = useState("barCharts");
+  const [chartCode, setChartCode] = useState();
+  const [chartParameter, setChartParameter] = useState();
   const [singletons, setSingletons] = useState([]);
-  const [locations, setLocations] = useState([]);
+  const [locations, setLocations] = useState();
   const [loading, setLoading] = useState(false);
   const [isScatterMap, setIsScatterMap] = useState(false);
   const [filters, setFilters] = useState(filterDefaults);
@@ -66,17 +76,24 @@ const Infos = ({ match }) => {
     };
   }, [store.refresh.call]);
 
-  // useEffect(() => {
-  //   if (selectedChartId) {
-  //     clearData();
-  //     if (isScatterMap) {
-  //       getLocations(store.filters);
-  //     } else {
-  //       getInfos({ filters: store.filters, chartId: selectedChartId });
-  //     }
-  //   }
-  // }, [store.filters]);
-
+  useEffect(() => {
+    if (selectedChartId) {
+      clearData();
+      if (isScatterMap) {
+        getLocations(store.filters);
+      } else {
+        getInfos({
+          filters: store.filters,
+          chartId: { code: chartCode, parameter: chartParameter },
+        });
+      }
+    }
+  }, [store.filters]);
+  // Queries
+  const { data: filtersData, isLoading } = useQuery({
+    queryKey: ["filters"],
+    queryFn: () => getFilters(),
+  });
   // functions
   const getChartsList = () => {
     callAPI({
@@ -98,7 +115,7 @@ const Infos = ({ match }) => {
         payload: chartId,
         successCallback: (res) => {
           setChartsData(res.data.charts);
-          const locs = res.data.locations.map((item) => {
+          const locs = res.data.locations?.map((item) => {
             delete item.reportId;
             return item;
           });
@@ -152,6 +169,7 @@ const Infos = ({ match }) => {
     console.log(chartCode);
     console.log(item);
     setStack(item.title);
+    setChartParameter(item.parameters);
     getInfos({ chartId: { code: chartCode, parameter: item.parameters } });
   };
 
@@ -168,6 +186,7 @@ const Infos = ({ match }) => {
     const isScatterMap = chartCode === 141;
     setSelectedChartTitle(chart.title);
     setSlectedChartId(selectedChartId);
+    setChartCode(chartCode);
     setIsScatterMap(isScatterMap);
     clearData();
     dispatch({ type: "setFilters", payload: defaultFilters });
@@ -175,6 +194,7 @@ const Infos = ({ match }) => {
       if (isScatterMap) {
         getLocations({});
       } else {
+        setChartParameter(0);
         getInfos({ chartId: { code: chartCode, parameter: 0 } });
       }
     }
@@ -198,23 +218,14 @@ const Infos = ({ match }) => {
           {stack && <p className=" text-lg text-[var(--primary)]">/ {stack}</p>}
         </div>
         <div className=" flex items-center ml-3 divide-y divide-x">
-          {/* {chartsData?.length > 0 && (
-            <>
-              <span data-tooltip-id="filter" className=" cursor-pointer py-1">
-                <i
-                  style={{ fontSize: "15px" }}
-                  className="fas fa-filter text-primary mx-1"
-                  ></i>
-                  </span>
-                  <Tooltip
-                  style={{ fontSize: "10px" }}
-                  id="filter"
-                  place="bottom"
-                  content="فیلتر"
-                  />
-                  </>
-                )} */}
-          <Filters filterTypes={filterTypes} filterValues={filters} />
+          {locations?.length == 0 ||
+            (locations == null && (
+              <Filters
+                filtersData={filtersData}
+                filterTypes={filterTypes}
+                filterValues={filters}
+              />
+            ))}
           {chartsData?.length > 0 && (
             <span className=" h-8 w-1 bg-gray-300"></span>
           )}
@@ -236,15 +247,15 @@ const Infos = ({ match }) => {
 
   const hasNoData =
     !loading &&
-    singletons.length === 0 &&
+    singletons == null &&
     // pieChartsData.length === 0 &&
-    barChartsData.length === 0 &&
-    !locations.length === 0;
+    barChartsData == null &&
+    !locations == null;
 
   const { windowWidth, windowHeight } = useResize();
   useEffect(() => {
-    console.log(chartType);
-  }, [chartType]);
+    console.log(locations);
+  }, [locations]);
 
   const renderBreadCrumb = () => {
     return (
@@ -282,7 +293,7 @@ const Infos = ({ match }) => {
               ) : (
                 <>
                   <div className={widgetStyle.infowidgets}>
-                    {singletons.length > 0 &&
+                    {singletons &&
                       singletons.map((s, i) => (
                         <ReportCard
                           key={`reportcard-${i}`}
@@ -303,7 +314,7 @@ const Infos = ({ match }) => {
                         radius={((windowHeight * 37) / 48 - 120) / 2}
                       />
                     ))} */}
-                  {chartsData.length > 0 && chartType == "lineCharts" && (
+                  {chartsData && chartType == "lineCharts" && (
                     <>
                       {chartsData.map((lineChartData, i) => {
                         return (
@@ -320,7 +331,7 @@ const Infos = ({ match }) => {
                       })}
                     </>
                   )}
-                  {chartsData.length > 0 && chartType == "pieCharts" && (
+                  {chartsData && chartType == "pieCharts" && (
                     <>
                       {chartsData.map((pieChartData, i) => {
                         return (
@@ -337,7 +348,7 @@ const Infos = ({ match }) => {
                       })}
                     </>
                   )}
-                  {chartsData.length > 0 &&
+                  {chartsData &&
                     chartType == "barCharts" &&
                     chartsData.map((barChartData, i) => {
                       const isHorizontal = true;
@@ -357,7 +368,7 @@ const Infos = ({ match }) => {
                         />
                       );
                     })}
-                  {chartsData.length > 0 &&
+                  {chartsData &&
                     chartType == "barCharts2" &&
                     chartsData.map((barChartData, i) => {
                       const isHorizontal = false;
@@ -377,13 +388,14 @@ const Infos = ({ match }) => {
                         />
                       );
                     })}
-                  {locations.length > 0 && !loading && (
+                  {locations && !loading && (
                     <div>
                       <ScatterMap
                         width="100%"
+                        mode="chart"
                         className="mxa"
                         height={400}
-                        locations={locations}
+                        locations={locations[0].locations}
                         getLocations={(data) =>
                           getInfos({
                             filters: { geometry: data },

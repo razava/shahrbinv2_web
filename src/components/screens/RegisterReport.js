@@ -131,7 +131,7 @@ const RegisterReport = () => {
         lastName: values.lastName,
         isIdentityVisible: isIdentityVisible,
         address: {
-          regionId: regionId,
+          regionId: values.region && values.region,
           street: "",
           valley: "",
           detail: values.address,
@@ -236,7 +236,9 @@ const RegisterReport = () => {
       title: "خصوصی",
     },
   ];
-
+  useEffect(() => {
+    console.log(values.region);
+  }, [values.region]);
   return (
     <>
       <LayoutScrollable>

@@ -15,12 +15,14 @@ export default function MessageToCitizen({ data, refresh }) {
       toast("پیام شما با موفقیت به شهروند ارسال شد.", { type: "success" });
       setRefrerralData({ ...referralData, messageToCitizen: "" });
       setAttachments([]);
+      setClearAttachments(true);
       refresh();
     },
     onError: (err) => {},
   });
 
   const [attachments, setAttachments] = useState([]); //
+  const [clearAttachments, setClearAttachments] = useState(false); //
   const [referralData, setRefrerralData] = useState({
     comment: "",
     // reasonId: transition.reasonList[0].id,
@@ -57,7 +59,10 @@ export default function MessageToCitizen({ data, refresh }) {
           inputClassName="mh100"
         />
         <div className="w90 frc mxa mt1">
-          <AttachmentToggle onAddAttachment={onAddAttachment} />
+          <AttachmentToggle
+            reset={clearAttachments}
+            onAddAttachment={onAddAttachment}
+          />
         </div>
       </div>
       <div className="w80 mxa fre py1 px2 border-t-light mt1 fixed b0 bg-white">

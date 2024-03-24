@@ -15,7 +15,7 @@ export async function getFAQ() {
   const data = await axios.get(`/api/${instanceId}/StaffFaq`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
-  return data.data;
+  return data.data.data;
 }
 
 export async function makeFAQ(Data) {
@@ -39,7 +39,7 @@ export async function getReportHistory(id) {
       headers: { Authorization: `Bearer ${Token}` },
     }
   );
-  return data.data;
+  return data.data.data;
 }
 
 export async function getReportComments(ReportId) {
@@ -49,7 +49,7 @@ export async function getReportComments(ReportId) {
       headers: { Authorization: `Bearer ${Token}` },
     }
   );
-  return data.data;
+  return data.data.data;
 }
 
 export async function postMessageToCitizen({ id, payload }) {
@@ -60,14 +60,14 @@ export async function postMessageToCitizen({ id, payload }) {
       headers: { Authorization: `Bearer ${Token}` },
     }
   );
-  return data.data;
+  return data.data.data;
 }
 
 export async function getAllNotes() {
   const data = await axios.get(`/api/${instanceId}/StaffReport/Notes`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
-  return data.data;
+  return data.data.data;
 }
 
 export async function getReportNotes(reportId) {
@@ -77,12 +77,12 @@ export async function getReportNotes(reportId) {
       headers: { Authorization: `Bearer ${Token}` },
     }
   );
-  return data.data;
+  return data.data.data;
 }
 
 export async function postReportNote({ ReportId, payload }) {
   const data = await axios.post(
-    `/api/${instanceId}/StaffReport/Notes/${ReportId}`,
+    `/api/${instanceId ? instanceId : 1}/StaffReport/Notes/${ReportId}`,
     payload,
     {
       headers: { Authorization: `Bearer ${Token}` },
@@ -119,7 +119,7 @@ export async function getSatisfaction(reportId) {
       headers: { Authorization: `Bearer ${Token}` },
     }
   );
-  return data.data;
+  return data.data.data;
 }
 
 export async function postObjection({ ReportId, payload }) {
@@ -131,4 +131,11 @@ export async function postObjection({ ReportId, payload }) {
     }
   );
   return data.data;
+}
+
+export async function getExcel(payload) {
+  const data = await axios.get(`/api/${instanceId}/StaffInfo/Excel`, {
+    headers: { Authorization: `Bearer ${Token}` },
+  });
+  return data.data.data;
 }

@@ -1,14 +1,35 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import TextInput from "../../helpers/TextInput";
 import Button from "../../helpers/Button";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createNews, editNews } from "../../../api/AdminApi";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createNews, editNews, getNewsById } from "../../../api/AdminApi";
 import { toast } from "react-toastify";
 import { postFiles } from "../../../api/commonApi";
+import { fixURL } from "../../../helperFuncs";
 
 export default function AddNewsDialog({ mode, onSuccess, defaltValues }) {
   const isEditMode = mode === "edit";
 
+  const { data, isLoading, isSuccess } = useQuery({
+    queryKey: ["News", defaltValues?.id],
+    queryFn: () => getNewsById(defaltValues?.id),
+    enabled: isEditMode,
+  });
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log(data);
+      setValues({
+        title: data?.title,
+        description: data?.description,
+        url: data?.url,
+        image: data?.imageFile.url3,
+      });
+       previewRef.current.src = fixURL(data?.imageFile?.url3, false);
+       setPreview(true);
+       setImage(data?.imageFile?.url3);
+    }
+  }, [data]);
   const queryClient = useQueryClient();
   const [values, setValues] = useState({
     title: "",

@@ -72,6 +72,7 @@ const MultiSelect = ({
         caller: caller,
         requestEnded: () => setLoading(false),
         successCallback: (res) => {
+          console.log(res);
           if (id == "categories") {
             const flatData = getFlatData(res.data);
             console.log(flatData);
@@ -85,11 +86,12 @@ const MultiSelect = ({
       ...requestArgs
     );
   };
-  console.log(data);
+
   const formatData = (data, shouldUpdate = true) => {
     const options = data.map((d, i) => {
       return { ...d, selected: false };
     });
+    console.log(options, "ff");
     setOptions(options);
     if (shouldUpdate) {
       handleDefaultSelecteds(defaultSelecteds, options);
@@ -99,7 +101,10 @@ const MultiSelect = ({
 
   useEffect(() => {
     if (isStatic) {
-      setData(staticData);
+      setTimeout(() => {
+        setData(staticData);
+      }, 500);
+      // formatData(staticData);
     }
   }, [staticData]);
 
@@ -110,7 +115,10 @@ const MultiSelect = ({
   }, []);
 
   useEffect(() => {
-    formatData(data);
+    if (staticData.length > 0) {
+      console.log(data);
+      // formatData(data);
+    }
   }, [data]);
 
   const onClick = (e) => {
@@ -204,7 +212,18 @@ const MultiSelect = ({
   }, [defaultSelecteds]);
 
   const inputStrings = { ...defaultStrings, ...strings };
+  console.log(data);
+  useEffect(() => {
+    if (!isStatic) {
+      formatData(data);
+    }
+  }, [data]);
 
+  useEffect(() => {
+    if (isStatic && staticData) {
+      formatData(staticData);
+    }
+  }, [staticData]);
   return (
     <>
       <TextInput
@@ -243,6 +262,7 @@ const MultiSelect = ({
             overflow: "auto",
           }}
         >
+          {/* {options.length > 0 && ( */}
           <SelectList
             options={options}
             onChange={handleChange}
@@ -258,6 +278,7 @@ const MultiSelect = ({
             maxHeight={maxHeight}
             id={id}
           />
+          {/* )} */}
         </ul>
       </TextInput>
     </>

@@ -49,10 +49,11 @@ const useMakeRequest = (
           callback(res);
         }
         if (res.status === statusCode) {
-          setData(res.data);
+          console.log(res);
+          setData(res.data.data);
           setError(true);
           setSuccess(true);
-          callback(res);
+          callback({ ...res, data: res.data.data });
         }
         if (res.status === 401) {
           setError(true);

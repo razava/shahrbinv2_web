@@ -19,6 +19,9 @@ const initialState = {
     organs: [],
     roles: [],
     statuses: [],
+    satisfactionValues: [],
+    priorities: [],
+    reportsToInclude: [],
   },
   modals: [],
   initials: {
