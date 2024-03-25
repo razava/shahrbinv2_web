@@ -946,8 +946,10 @@ export const callAPI = (
         return;
       }
       // if request succeeded
+      console.log(res);
       if (res.status === successStatus) {
-        successCallback(res.data);
+        console.log(res.headers);
+        successCallback({ ...res.data, headers: res.headers });
         return;
       } else if (res.status === 401) {
         showErrorMessage(res);

@@ -6,6 +6,7 @@ import {
   tableLightTheme,
   callAPI,
   defaultFilters,
+  reportColumn,
 } from "../../helperFuncs";
 import ViolationDialog from "../commons/dialogs/ViolationDialog";
 import Button from "../helpers/Button";
@@ -34,6 +35,8 @@ const Violations = ({ match }) => {
   const [loading, setLoading] = useState(true);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("violation-tab-1");
+  const [totalRows, setTotalRows] = useState(0);
+  const tableScrollable = (window.innerHeight * 21) / 24 - 200;
 
   const queries = {
     page,
@@ -61,10 +64,15 @@ const Violations = ({ match }) => {
       {
         caller: ViolationAPI.getViolations,
         successCallback: (res) => {
+          console.log(res);
           const reportViolations = res.data.filter((v) => v.reportId);
           const commentViolations = res.data.filter((v) => v.commentId);
-          setReportViolations(reportViolations);
+          setReportViolations(res.data);
           setCommentViolations(commentViolations);
+          const pagination = res.headers["x-pagination"];
+          const totalRows = JSON.parse(pagination)?.TotalCount;
+          console.log(totalRows);
+          setTotalRows(totalRows);
         },
         requestEnded: () => setLoading(false),
       },
@@ -118,6 +126,10 @@ const Violations = ({ match }) => {
     setPerPage(newPerPage);
   };
 
+  const refresh = () => {
+    getViolations();
+  };
+
   const renderViolationsHeader = () => {
     return (
       <>
@@ -158,14 +170,14 @@ const Violations = ({ match }) => {
   ];
 
   const tableData = activeTab ? tabs.find((t) => t.id === activeTab)?.data : [];
-
+  console.log(tableData);
   const actions = [
-    {
-      id: "violations-1",
-      icon: "fas fa-search",
-      title: "بررسی",
-      onClick: (row) => openDialog(row),
-    },
+    // {
+    //   id: "violations-1",
+    //   icon: "fas fa-search",
+    //   title: "بررسی",
+    //   onClick: (row) => openDialog(row),
+    // },
     {
       id: "violations-2",
       icon: "fas fa-eye",
@@ -217,13 +229,14 @@ const Violations = ({ match }) => {
 
         <MyDataTable
           data={tableData}
-          columns={[...columns, moreButton]}
+          columns={[...reportColumn, moreButton]}
           theme={{ initializer: tableLightTheme, name: "light" }}
           loading={loading}
-          pagination={false}
-          totalRows={tableData.length}
+          totalRows={totalRows}
           onRowsPageChange={onRowsPageChange}
           onPageChange={onPageChange}
+          fixedHeaders={true}
+          fixedHeaderScrollHeight={tableScrollable + "px"}
         />
 
         <DialogToggler
@@ -239,8 +252,10 @@ const Violations = ({ match }) => {
             setDialog={setReportDialog}
             readOnly={true}
             caller={InfoAPI.getReportById}
-            childData={{ id: dialogData?.reportId }}
+            childData={{ id: dialogData?.id, data: tableData }}
             onNext={closeDialog}
+            refresh={refresh}
+            defTab={"ReportViolations"}
           />
         </DialogToggler>
       </>

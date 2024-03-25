@@ -18,6 +18,8 @@ import Notes from "./Notes";
 import Satisfaction from "../submission/Satisfaction";
 import Objection from "../submission/Objection";
 import ShareInformation from "./ShareInformation";
+import ReportActions from "../submission/ReportActions";
+import ReportViolations from "../submission/ReportViolations";
 
 const modal = document && document.getElementById("modal-root");
 
@@ -28,6 +30,7 @@ const ReportDialog = ({
   caller = (f) => f,
   childData,
   onNext = (f) => f,
+  defTab = "reportDetails",
 }) => {
   // data states
   const [data, setData] = useState({});
@@ -41,7 +44,7 @@ const ReportDialog = ({
   useEffect(() => {
     if (childData) {
       getData();
-      setDefaultTab("reportDetails");
+      setDefaultTab(defTab);
     }
   }, [childData]);
 
@@ -69,7 +72,7 @@ const ReportDialog = ({
   const isExecutive = hasRole(userRoles, ["Executive"]);
   const isInspector = hasRole(userRoles, ["Inspector"]);
   const checkRoles = userRoles.includes("Operator");
-
+  console.log(defTab == "ReportViolations");
   return (
     <>
       {loading && <Loader absolute={true} />}
@@ -142,6 +145,16 @@ const ReportDialog = ({
             <article label="اشتراک گذاری" id="Share">
               <ShareInformation data={data} />
             </article>
+            {defTab == "ReportViolations" && (
+              <article label="گزارش های تخلف" id="ReportViolations">
+                <ReportViolations data={data} />
+              </article>
+            )}
+            {defTab == "ReportViolations" && (
+              <article label="عملیات" id="actions">
+                <ReportActions data={data} onNext={onNext} refresh={refresh} />
+              </article>
+            )}
             {!readOnly && (
               <article label="ارجاع" id="finalize">
                 <Referral

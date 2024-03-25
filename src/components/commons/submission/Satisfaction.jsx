@@ -79,12 +79,17 @@ const Satisfaction = ({ data }) => {
                 setValues({ ...values, comments: e.target.value })}
               value={values.comments}
             />
-            <Button className="w90 mxa mt3" onClick={submit} loading={loading}>
-              ثبت
-            </Button>
           </>
         )}
       </section>
+      <div className="w80 mxa fre py1 px2 border-t-light mt1 fixed b0 bg-white">
+        <Button
+          title="ثبت"
+          className="py1 br05 bg-primary"
+          onClick={submit}
+          loading={loading}
+        />
+      </div>
     </>
   );
 };

@@ -139,3 +139,13 @@ export async function getExcel(payload) {
   });
   return data.data.data;
 }
+
+export async function getViolationsOfReport(id) {
+  const data = await axios.get(
+    `/api/${instanceId}/StaffReport/ReportViolations/${id}`,
+    {
+      headers: { Authorization: `Bearer ${Token}` },
+    }
+  );
+  return data.data.data;
+}

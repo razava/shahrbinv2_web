@@ -234,7 +234,7 @@ const NewReportsTable = ({ roleId = null, onRefer = (f) => f }) => {
   // eefects
 
   useSignalR(onNewReport);
-  
+
   return (
     <>
       {!isConfirm && (

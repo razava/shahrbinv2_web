@@ -1429,7 +1429,7 @@ export class ConfigurationsAPI {
 
 export class ViolationAPI {
   static getViolations(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/StaffReport/Violations`;
+    const initialUrl = `${prefix}/api/${instance?.id}/StaffReport/ReportViolations`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -1444,7 +1444,7 @@ export class ViolationAPI {
 
   static handleViolation(token, payload, source, instance, id) {
     return axios
-      .put(`${prefix}/api/${instance?.id}/Violation/${id}`, payload, {
+      .put(`${prefix}/api/${instance?.id}/StaffReport/ReportViolations/${id}`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
