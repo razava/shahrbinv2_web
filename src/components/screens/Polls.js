@@ -150,15 +150,17 @@ const Polls = ({ match }) => {
     },
     {
       name: "تاریخ ایجاد",
-      cell: (row) => <span>{convertserverTimeToDateString(row.creatted)}</span>,
+      cell: (row) => (
+        <span>{convertserverTimeToDateString(row?.creatted)}</span>
+      ),
     },
     {
       name: "وضعیت",
-      cell: (row) => <span>{mapPollStatus(row.pollState)}</span>,
+      cell: (row) => <span>{mapPollStatus(row?.pollState)}</span>,
     },
     {
       name: "نوع نظرسنجی",
-      cell: (row) => <span>{mapPollTypes(row.pollType)}</span>,
+      cell: (row) => <span>{mapPollTypes(row?.pollType)}</span>,
     },
     {
       name: "اقدامات",
@@ -240,15 +242,15 @@ const Polls = ({ match }) => {
       <TableHeader renderHeader={renderTableHeader} />
 
       <LayoutScrollable clipped={(window.innerHeight * 3) / 48 + 10}>
-        {/* <MyDataTable
+        <MyDataTable
           columns={columns}
           data={data}
-          loading={loading}
+          loading={loading && !data}
           setLoading={setLoading}
           theme={{ initializer: tableLightTheme, name: "light" }}
           pagination={false}
           conditionalRowStyles={condStyle}
-        /> */}
+        />
       </LayoutScrollable>
 
       <DialogToggler
