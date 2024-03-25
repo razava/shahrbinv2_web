@@ -1,6 +1,6 @@
 {
   "name": "shahrbin-admin",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "private": true,
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^3.0.2",

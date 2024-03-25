@@ -146,7 +146,7 @@ const Polls = ({ match }) => {
   const columns = [
     {
       name: "عنوان",
-      selector: "title",
+      cell: (row) => <span>{row?.title}</span>,
     },
     {
       name: "تاریخ ایجاد",
@@ -234,7 +234,7 @@ const Polls = ({ match }) => {
       },
     },
   ];
-
+  console.log(data);
   return (
     <>
       {statusLoading && <Loader />}
@@ -242,15 +242,17 @@ const Polls = ({ match }) => {
       <TableHeader renderHeader={renderTableHeader} />
 
       <LayoutScrollable clipped={(window.innerHeight * 3) / 48 + 10}>
-        <MyDataTable
-          columns={columns}
-          data={data}
-          loading={loading && !data}
-          setLoading={setLoading}
-          theme={{ initializer: tableLightTheme, name: "light" }}
-          pagination={false}
-          conditionalRowStyles={condStyle}
-        />
+        {data && (
+          <MyDataTable
+            columns={columns}
+            data={data}
+            loading={loading}
+            setLoading={setLoading}
+            theme={{ initializer: tableLightTheme, name: "light" }}
+            pagination={false}
+            conditionalRowStyles={condStyle}
+          />
+        )}
       </LayoutScrollable>
 
       <DialogToggler
