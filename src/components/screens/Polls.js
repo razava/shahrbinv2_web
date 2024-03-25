@@ -240,7 +240,7 @@ const Polls = ({ match }) => {
       <TableHeader renderHeader={renderTableHeader} />
 
       <LayoutScrollable clipped={(window.innerHeight * 3) / 48 + 10}>
-        <MyDataTable
+        {/* <MyDataTable
           columns={columns}
           data={data}
           loading={loading}
@@ -248,7 +248,7 @@ const Polls = ({ match }) => {
           theme={{ initializer: tableLightTheme, name: "light" }}
           pagination={false}
           conditionalRowStyles={condStyle}
-        />
+        /> */}
       </LayoutScrollable>
 
       <DialogToggler

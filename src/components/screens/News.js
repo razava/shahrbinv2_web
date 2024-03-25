@@ -104,8 +104,8 @@ export default function News() {
         <>
           <TableActions
             actions={tableActions}
-            total={data.length}
-            perPage={data.length}
+            total={data?.length}
+            perPage={data?.length}
             rowData={row}
             index={index}
           />
