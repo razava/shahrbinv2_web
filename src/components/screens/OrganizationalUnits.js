@@ -103,10 +103,12 @@ const OrganizationalUnits = ({ match }) => {
     mutationFn: deleteOrganizationalUnit,
     onSuccess: (res) => {
       getAllOrgans();
+      toast("واحد سازمانی با موفقیت حذف شد.", { type: "success" });
     },
     onError: (err) => {
+      console.log(err.response);
       if (err.response.status == 400) {
-        toast("واحد سازمانی، دسته بندی وابسته دارد.", { type: "error" });
+        toast(err.response.data.detail, { type: "error" });
       }
     },
   });

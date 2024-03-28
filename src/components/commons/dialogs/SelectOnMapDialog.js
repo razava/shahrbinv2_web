@@ -70,7 +70,7 @@ const SelectOnMapDialog = ({
         setLoading(false);
         console.log(res);
         setSearchAddress(res.data.address);
-        // setGeoFences(res.data.geofences);
+        setGeoFences(res.data.regionId);
       },
       errorCallback: () => {},
       requestEnded: () => {},

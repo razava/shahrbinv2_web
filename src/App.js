@@ -16,7 +16,9 @@ import NewForm from "./components/screens/NewForm";
 import Notes from "./components/screens/Notes";
 import Verify from "./components/screens/Verify";
 import ChangePhoneNumber from "./components/screens/Login/ChangePhoneNumber";
-const ForgotPassword = lazy(() => import("./components/screens/Login/ForgotPassword"));
+const ForgotPassword = lazy(() =>
+  import("./components/screens/Login/ForgotPassword")
+);
 const NewReports = lazy(() => import("./components/screens/NewReports"));
 const RegisterReport = lazy(() =>
   import("./components/screens/RegisterReport")
@@ -47,6 +49,7 @@ const ComplaintsUnits = lazy(() =>
   import("./components/screens/ComplaintsUnits")
 );
 const Form = lazy(() => import("./components/screens/Forms"));
+const Tickets = lazy(() => import("./components/screens/Tickets"));
 const queryClient = new QueryClient();
 const App = () => {
   useInitials();
@@ -131,6 +134,10 @@ const App = () => {
                       <AuthorizeRoute path={appRoutes.FAQ} component={FAQ} />
                       <AuthorizeRoute path={appRoutes.news} component={News} />
                       <AuthorizeRoute path={appRoutes.forms} component={Form} />
+                      <AuthorizeRoute
+                        path={appRoutes.tickets}
+                        component={Tickets}
+                      />
                       <AuthorizeRoute
                         path={appRoutes.complaintsCategories}
                         component={ComplaintsCategories}

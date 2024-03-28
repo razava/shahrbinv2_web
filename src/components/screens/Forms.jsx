@@ -115,8 +115,8 @@ function Forms() {
         <>
           <TableActions
             actions={tableActions}
-            total={data.length}
-            perPage={data.length}
+            total={data?.length}
+            perPage={data?.length}
             rowData={row}
             index={index}
           />
@@ -130,7 +130,13 @@ function Forms() {
       <TableHeaderAction
         title="تعریف فرم"
         icon="fab fa-wpforms"
-        onClick={() => history.push("/newForm")}
+        onClick={() => {
+          history.push("/newForm");
+          dispatch({
+            type: appActions.UPDATE_LIST,
+            payload: [],
+          });
+        }}
       />
     );
   };

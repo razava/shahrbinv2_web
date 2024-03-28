@@ -16,7 +16,7 @@ export default function ReportViolations({ data }) {
       {ReportViolations?.map((item) => {
         return (
           <>
-            <h3 class="flex items-center w-full mb-2">
+            <h3 class="flex items-center w-full my-[1em]">
               <span class="flex-grow bg-gray-300 !h-2"></span>
               <span class="mx-3 text-lg font-medium">
                 {convertserverTimeToDateString(item.dateTime)}

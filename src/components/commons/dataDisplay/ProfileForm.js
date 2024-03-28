@@ -39,6 +39,7 @@ const ProfileForm = ({ data, setDialog }) => {
     title: "",
     organization: "",
     twoFactorEnabled: false,
+    smsAlert: false,
   });
   const [preview, setPreview] = useState(undefined);
   const [showPreview, setShowPreview] = useState(false);
@@ -50,16 +51,21 @@ const ProfileForm = ({ data, setDialog }) => {
   console.log(data);
   useEffect(() => {
     const education = data?.education;
-    setFormData({
-      ...formData,
-      firstName: data.firstName ? data.firstName : "",
-      lastName: data.lastName ? data.lastName : "",
-      // userName: data.userName ? data.userName : "",
-      phoneNumber: data.phoneNumber ? data.phoneNumber : "",
-      education: 0,
-      title: data.title ? data.title : "",
-      twoFactorEnabled: data.twoFactorEnabled,
-    });
+    console.log(data.smsAlert);
+    if (data) {
+      console.log(data);
+      setFormData({
+        ...formData,
+        firstName: data.firstName ? data.firstName : "",
+        lastName: data.lastName ? data.lastName : "",
+        // userName: data.userName ? data.userName : "",
+        phoneNumber: data.phoneNumber ? data.phoneNumber : "",
+        education: 0,
+        title: data.title ? data.title : "",
+        twoFactorEnabled: data.twoFactorEnabled,
+        smsAlert: data.smsAlert,
+      });
+    }
   }, [data]);
 
   const AvatarMutation = useMutation({
@@ -221,28 +227,50 @@ const ProfileForm = ({ data, setDialog }) => {
           horizontal={false}
           wrapperClassName="rw3"
         />
-        {formData.phoneNumber ? (
+        <div className=" flex flex-col justify-start mx-24 w-full gap-4">
           <div className=" flex items-center gap-2 mt-2">
-            <Toggle
-              id="biscuit-status"
-              // className="profile-toggle"
-              defaultChecked={formData.twoFactorEnabled}
-              aria-labelledby="biscuit-label"
-              onChange={(e) => {
-                setFormData({
-                  ...formData,
-                  twoFactorEnabled: e.target.checked,
-                });
-              }}
-            />
-            <span id="biscuit-label" className=" text-lg">احراز هویت دو مرحله ای</span>
+            {data && (
+              <Toggle
+                id="sms"
+                aria-labelledby="biscuit-label"
+                checked={formData.smsAlert}
+                onChange={(e) => {
+                  setFormData({
+                    ...formData,
+                    smsAlert: e.target.checked,
+                  });
+                }}
+              />
+            )}
+            <span id="biscuit-label" className=" text-lg">
+              اطلاع رسانی از طریق پیامک
+            </span>
           </div>
-        ) : (
-          <p>
-            جهت فعالسازی احراز هویت دو مرحله ای، باید ابتدا شماره موبایل خود را
-            فعال نمایید.
-          </p>
-        )}
+          {formData.phoneNumber ? (
+            <div className=" flex items-center gap-2 mt-2">
+              <Toggle
+                id="biscuit-status"
+                // className="profile-toggle"
+                checked={formData.twoFactorEnabled}
+                aria-labelledby="biscuit-label"
+                onChange={(e) => {
+                  setFormData({
+                    ...formData,
+                    twoFactorEnabled: e.target.checked,
+                  });
+                }}
+              />
+              <span id="biscuit-label" className=" text-lg">
+                احراز هویت دو مرحله ای
+              </span>
+            </div>
+          ) : (
+            <p className=" text-lg">
+              جهت فعالسازی احراز هویت دو مرحله ای، باید ابتدا شماره موبایل خود
+              را فعال نمایید.
+            </p>
+          )}
+        </div>
       </form>
       <div className="w100 mxa fre py1 px2 border-t-light mt1 gap-2">
         <Button

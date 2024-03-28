@@ -186,12 +186,8 @@ const RegisterReport = () => {
     modalRoot.classList.remove("active");
   };
 
-  const saveAddressChanges = (detail, coordinates, geofences = []) => {
-    let regionId = "";
-    if (geofences) {
-      regionId = findRegionId(regions, geofences);
-    }
-    setValues({ ...values, address: detail, coordinates, region: regionId });
+  const saveAddressChanges = (detail, coordinates, geofences) => {
+    setValues({ ...values, address: detail, coordinates, region: geofences });
     closeModal();
   };
 

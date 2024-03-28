@@ -69,7 +69,13 @@ const Header = () => {
     callAPI({
       caller: UserInfoAPI.getUser,
       successStatus: 200,
-      successCallback: (res) => setData(res.data),
+      successCallback: (res) => {
+        setData(res.data);
+        localStorage.setItem(
+          constants.SHAHRBIN_MANAGEMENT_USERNAME,
+          res.data.userName
+        );
+      },
     });
   };
 

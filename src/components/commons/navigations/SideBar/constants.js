@@ -43,6 +43,14 @@ export const roles = {
     "Manager",
     "Mayor",
   ],
+  tickets: [
+    "Operator",
+    "Executive",
+    "Contractor",
+    "Inspector",
+    "Manager",
+    "Mayor",
+  ],
 };
 
 export const links = [
@@ -173,6 +181,14 @@ export const links = [
     path: "forms",
     roles: roles.forms,
     order: 16,
+  },
+  {
+    id: "link-22",
+    title: "تیکت ها",
+    icon: "fas fa-ticket-alt",
+    path: "tickets",
+    roles: roles.tickets,
+    order: 22,
   },
   {
     id: "link-17",

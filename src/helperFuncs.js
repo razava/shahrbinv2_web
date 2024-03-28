@@ -52,6 +52,7 @@ export const mapUrlToNav = (location, replace) => {
   else if (area === "/allComplaints") return { allComplaints: true };
   else if (area === "/complaints") return { complaints: true };
   else if (area === "/notes") return { notes: true };
+  else if (area === "/tickets") return { tickets: true };
   else if (area === "/organizationalUnits")
     return { organizationalUnits: true };
   return {};
@@ -651,6 +652,15 @@ export const accessibilityByRoles = (path) => {
       "Manager",
       "Mayor",
     ];
+  if (path === "/admin/tickets")
+    return [
+      "Operator",
+      "Executive",
+      "Contractor",
+      "Inspector",
+      "Manager",
+      "Mayor",
+    ];
   if (String(path).toLowerCase().startsWith("/admin/poll/")) return ["Admin"];
 };
 
@@ -954,9 +964,9 @@ export const callAPI = (
       } else if (res.status === 401) {
         showErrorMessage(res);
         if (token) {
-          logout(() => {
-            window.location.pathname = "/login";
-          });
+          // logout(() => {
+          //   window.location.pathname = "/login";
+          // });
         }
       } else {
         showErrorMessage(res);
@@ -977,6 +987,7 @@ export const constants = {
   SHAHRBIN_MANAGEMENT_AUTH_TOKEN_EXPIRATION:
     "SHAHRBIN_MANAGEMENT_AUTH_TOKEN_EXPIRATION",
   SHAHRBIN_MANAGEMENT_USER_ROLES: "SHAHRBIN_MANAGEMENT_USER_ROLES",
+  SHAHRBIN_MANAGEMENT_USERNAME: "SHAHRBIN_MANAGEMENT_USERNAME",
   SHAHRBIN_MANAGEMENT_LOGIN_TIME: "SHAHRBIN_MANAGEMENT_LOGIN_TIME",
   SHAHRBIN_MANAGEMENT_INSTANCE: "SHAHRBIN_MANAGEMENT_INSTANCE",
   SHAHRBIN_MANAGEMENT_INSTANCE_ID: "SHAHRBIN_MANAGEMENT_INSTANCE_ID",
@@ -1017,6 +1028,7 @@ export const appRoutes = {
   changePhoneNumber: "/changePhoneNumber",
   forgotPassword: "/forgotPassword",
   notes: "/admin/notes",
+  tickets: "/admin/tickets",
 };
 
 export const randomColor = () =>

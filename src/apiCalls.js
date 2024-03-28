@@ -6,6 +6,7 @@ import {
 } from "./helperFuncs";
 
 const prefix = process.env.REACT_APP_API_URL;
+const prefix2 = "https://ticketingapi.shetabdahi.ir";
 // ? "https://192.168.1.11"
 // "https://192.168.1.130:3749"
 // https://shahrbin.ashkezar.ir:8181
@@ -440,6 +441,18 @@ export class CommonAPI {
           Authorization: "Bearer " + token,
         },
       })
+      .then((res) => res)
+      .catch((err) => err.response);
+  }
+
+  static getTickets(token, payload, source, instance, queries) {
+    const userName = localStorage.getItem(
+      constants.SHAHRBIN_MANAGEMENT_USERNAME
+    );
+    const initialUrl = `${prefix2}/ProjectClientTicket/Get?userName=${userName}`;
+    const wholeUrl = createQueryParams(initialUrl, queries);
+    return axios
+      .get(wholeUrl)
       .then((res) => res)
       .catch((err) => err.response);
   }
@@ -1442,14 +1455,48 @@ export class ViolationAPI {
       .catch((err) => err.response);
   }
 
-  static handleViolation(token, payload, source, instance, id) {
+  static getCommentViolations(token, payload, source, instance, queries) {
+    const initialUrl = `${prefix}/api/${instance?.id}/StaffReport/CommentViolations`;
+    const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
-      .put(`${prefix}/api/${instance?.id}/StaffReport/ReportViolations/${id}`, payload, {
+      .get(wholeUrl, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
         },
       })
+      .then((res) => res)
+      .catch((err) => err.response);
+  }
+
+  static handleViolation(token, payload, source, instance, id) {
+    return axios
+      .put(
+        `${prefix}/api/${instance?.id}/StaffReport/ReportViolations/${id}`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
+      .then((res) => res)
+      .catch((err) => err.response);
+  }
+
+  static handleCommentViolation(token, payload, source, instance, id) {
+    return axios
+      .put(
+        `${prefix}/api/${instance?.id}/StaffReport/CommentViolations/${id}`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
       .then((res) => res)
       .catch((err) => err.response);
   }
