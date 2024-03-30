@@ -4,6 +4,7 @@ import {
   getFromLocalStorage,
   createQueryParams,
 } from "./helperFuncs";
+import TicketingAxios from "./api/TicketBaseUrl";
 
 const prefix = process.env.REACT_APP_API_URL;
 const prefix2 = "https://ticketingapi.shetabdahi.ir";
@@ -453,6 +454,17 @@ export class CommonAPI {
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl)
+      .then((res) => res)
+      .catch((err) => err.response);
+  }
+
+  static getTicketCategories(token, payload, source, instance, queries) {
+    const userName = localStorage.getItem(
+      constants.SHAHRBIN_MANAGEMENT_USERNAME
+    );
+    return TicketingAxios.get(
+      `${prefix2}/ProjectCommonCategory/Get?userName=${userName}`
+    )
       .then((res) => res)
       .catch((err) => err.response);
   }

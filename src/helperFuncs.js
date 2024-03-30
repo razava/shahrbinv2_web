@@ -661,6 +661,15 @@ export const accessibilityByRoles = (path) => {
       "Manager",
       "Mayor",
     ];
+  if (String(path).toLowerCase().startsWith("/admin/ticket/"))
+    return [
+      "Operator",
+      "Executive",
+      "Contractor",
+      "Inspector",
+      "Manager",
+      "Mayor",
+    ];
   if (String(path).toLowerCase().startsWith("/admin/poll/")) return ["Admin"];
 };
 
@@ -1029,6 +1038,7 @@ export const appRoutes = {
   forgotPassword: "/forgotPassword",
   notes: "/admin/notes",
   tickets: "/admin/tickets",
+  ticket: "/admin/ticket/:id",
 };
 
 export const randomColor = () =>

@@ -4,6 +4,7 @@ import {
   createQueryParams,
 } from "../helperFuncs";
 import axios from "axios";
+import TicketingAxios from "./TicketBaseUrl";
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 const Token =
   getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN) || {};
@@ -167,5 +168,34 @@ export async function getTickets(id) {
       Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiU2hhaHJiaW4iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImNjZGYzMWM1LTJhNjktNDEzMi1iZmRmLTFiZTgyZTFkODE1ZiIsImp0aSI6IjQ4MzU3MmFkLTczODMtNDdjNS05Y2ZkLTA5NDU5OGY1MGVjOSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlByb2plY3QiLCJleHAiOjE3NDMxNTE3MDYsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3QiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0In0.BA1TfqGWjO90iDeVMwfD0Z2r2X6cSzULLw0m-5ZnR8s`,
     },
   });
+  return data.data.data;
+}
+
+export async function openTicket(payload) {
+  const data = await TicketingAxios.post(`/ProjectClientTicket/Open`, payload);
+  return data.data.data;
+}
+
+export async function getTicketById(id) {
+  const userName = localStorage.getItem(constants.SHAHRBIN_MANAGEMENT_USERNAME);
+  const data = await TicketingAxios.get(
+    `/ProjectClientTicket/Get/${id}?userName=${userName}`
+  );
+  return data.data.data;
+}
+
+export async function replyTicket({ payload, id }) {
+  const data = await TicketingAxios.post(
+    `/ProjectClientTicket/Reply/${id}`,
+    payload
+  );
+  return data.data.data;
+}
+
+export async function closeTicket({ payload, id }) {
+  const data = await TicketingAxios.put(
+    `/ProjectClientTicket/Close/${id}`,
+    payload
+  );
   return data.data.data;
 }

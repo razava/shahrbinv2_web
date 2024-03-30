@@ -20,7 +20,7 @@ export async function postFiles(Data) {
     headers: { Authorization: `Bearer ${Token}` },
     "Content-Type": "multipart/form-data",
   });
-  return data.data;
+  return data.data.data;
 }
 
 export async function EditProfile(Data) {
@@ -72,11 +72,8 @@ export async function getFilters() {
 }
 
 export async function getUserFilters() {
-  const data = await axios.get(
-    `/api/${instanceId()}/StaffCommon/UserFilters`,
-    {
-      headers: { Authorization: `Bearer ${Token}` },
-    }
-  );
+  const data = await axios.get(`/api/${instanceId()}/StaffCommon/UserFilters`, {
+    headers: { Authorization: `Bearer ${Token}` },
+  });
   return data.data.data;
 }

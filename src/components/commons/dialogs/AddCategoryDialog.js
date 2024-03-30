@@ -142,7 +142,7 @@ const AddCategoryDialog = ({
       objectionAllowed: data.objectionAllowed ? 1 : 0,
       formId: data.formId ? data.formId : null,
     };
-    console.log(data.editingAllowed , "ed");
+    console.log(data.editingAllowed, "ed");
     setValues({
       title: data.title,
       processId: data.processId,
@@ -176,7 +176,6 @@ const AddCategoryDialog = ({
   const handleChange =
     (name, options = {}) =>
     (e) => {
-      
       let value = e?.target ? e.target.value : e;
       if (options?.onlyDigits) {
         value = String(value).replace(/\D/g, "");

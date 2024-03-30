@@ -99,7 +99,7 @@ const ConfirmReportDialog = ({
       });
       setMedias(ReportData.medias);
       setRegionId(ReportData.address?.regionId || "");
-      console.log(ReportData.medias);
+      setPriority(ReportData.priority)
       setTempMedias(
         ReportData?.medias
           ? ReportData.medias.map((media) => {
@@ -344,6 +344,7 @@ const ConfirmReportDialog = ({
                   { id: 2, title: "زیاد" },
                   { id: 3, title: "فوری" },
                 ]}
+                
                 name="priority"
                 value={priority}
                 handleChange={onTextChange}

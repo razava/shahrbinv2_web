@@ -50,6 +50,7 @@ const ComplaintsUnits = lazy(() =>
 );
 const Form = lazy(() => import("./components/screens/Forms"));
 const Tickets = lazy(() => import("./components/screens/Tickets"));
+const Ticket = lazy(() => import("./components/screens/Ticket"));
 const queryClient = new QueryClient();
 const App = () => {
   useInitials();
@@ -137,6 +138,10 @@ const App = () => {
                       <AuthorizeRoute
                         path={appRoutes.tickets}
                         component={Tickets}
+                      />
+                      <AuthorizeRoute
+                        path={appRoutes.ticket}
+                        component={Ticket}
                       />
                       <AuthorizeRoute
                         path={appRoutes.complaintsCategories}

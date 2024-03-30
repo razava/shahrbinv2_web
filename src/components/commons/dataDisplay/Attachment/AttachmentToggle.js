@@ -42,7 +42,7 @@ const AttachmentToggle = ({
   }, [reset]);
   return (
     <>
-      <Button outline className="f12" onClick={toggleDialog}>
+      <Button outline className="f12 w-2" onClick={toggleDialog}>
         <span className="ml1">پیوست‌ها</span>
         <span>
           <i className="fas fa-paperclip"></i>
