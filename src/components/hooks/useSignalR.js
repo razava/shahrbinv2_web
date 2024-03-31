@@ -12,7 +12,7 @@ import { postConnectionId } from "../../api/commonApi";
 
 const token = getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN);
 const connection = new HubConnectionBuilder()
-  .withUrl(`${process.env.REACT_APP_API_URL}/notifhub`, {
+  .withUrl(`${process.env.REACT_APP_SIGNALR_URL}/notifhub`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
