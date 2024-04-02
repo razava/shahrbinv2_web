@@ -159,7 +159,7 @@ export default function Tickets() {
         width={700}
         // height={800}
         isUnique={false}
-        id="create-poll-dialog"
+        id="open-ticket-dialog"
       >
         <AddTicketDialog refresh={refresh} />
       </DialogToggler>

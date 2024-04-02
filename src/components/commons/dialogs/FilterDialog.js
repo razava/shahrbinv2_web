@@ -136,6 +136,7 @@ const FilterDialog = ({
     setStages(stages);
     setPriorities(priorities);
     console.log(reportsToInclude);
+    console.log(organs);
     onFilter({
       fromDate,
       toDate,
@@ -398,11 +399,12 @@ const FilterDialog = ({
                   isStatic={true}
                   staticData={filtersData.executives}
                   // caller={InfoAPI.getExecutives}
-                  wrapperClassName="col-md-12"
+                  wrapperClassName="col-md-12 h-[50px]"
+                  inputClassName=""
                   nameKey="title"
                   valueKey="value"
                   defaultSelecteds={organs}
-                  maxHeight={300}
+                  maxHeight={200}
                   id="organs-list"
                   isInDialog
                 />

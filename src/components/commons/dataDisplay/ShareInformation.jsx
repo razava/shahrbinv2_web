@@ -194,25 +194,6 @@ export default function ShareInformation({ data }) {
                   </div>
                 );
               })}
-              {reportDetailData?.map((item, index) => {
-                return (
-                  <div className="border-0 border-b border-dashed border-b-gray-600 flex gap-2 items-center  p-2">
-                    <div className=" flex flex-col gap-2">
-                      <div className=" flex">
-                        <div className=" text-black rounded-lg">
-                          {index + 1}
-                          {")"}
-                        </div>
-                        <div className=" pr-2">{item.message} - </div>
-                        <div className=" pr-2">
-                          {convertserverTimeToDateString(item.dateTime)}
-                        </div>
-                      </div>
-                      <div className="">توضیح:{item.comment}</div>
-                    </div>
-                  </div>
-                );
-              })}
             </div>
           </div>
         </div>

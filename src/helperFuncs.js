@@ -1172,7 +1172,7 @@ export const createQueryParams = (url, queries = {}) => {
   if (categoryIds && categoryIds.length > 0)
     categoryIds.forEach((c) => myUrl.searchParams.append("Categories", c));
   if (organs && organs.length > 0)
-    organs.forEach((o) => myUrl.searchParams.append("Execitives", o.id));
+    organs.forEach((o) => myUrl.searchParams.append("Execitives", o.value));
   if (regions && regions.length > 0)
     regions.forEach((r) => myUrl.searchParams.append("Regions", r.value));
   if (roles && roles.length > 0)

@@ -131,6 +131,7 @@ function Forms() {
         title="تعریف فرم"
         icon="fab fa-wpforms"
         onClick={() => {
+          localStorage.removeItem("formBuilder");
           history.push("/newForm");
           dispatch({
             type: appActions.UPDATE_LIST,

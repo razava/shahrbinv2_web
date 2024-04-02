@@ -85,9 +85,12 @@ export default function AddFormDialog({
             localStorage.setItem("formBuilder", "edit");
             localStorage.setItem("formName", data?.title);
             localStorage.setItem("formId", data?.id);
+            const sortedElements = data?.elements.sort(
+              (a, b) => a.order - b.order
+            );
             dispatch({
               type: appActions.UPDATE_LIST,
-              payload: data?.elements.map((item) => JSON.parse(item.meta)),
+              payload: sortedElements.map((item) => JSON.parse(item.meta)),
             });
           }}
           //   loading={loading}

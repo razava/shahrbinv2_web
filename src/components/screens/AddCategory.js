@@ -19,6 +19,7 @@ import Filters from "../helpers/Filters";
 import LayoutScrollable from "../helpers/Layout/LayoutScrollable";
 import Loader from "../helpers/Loader";
 import MyDataTable from "../helpers/MyDataTable";
+import SearchInput from "../helpers/SearchInput";
 
 const modalRoot = document && document.getElementById("modal-root");
 
@@ -27,6 +28,7 @@ const AddCategory = ({ match }) => {
 
   // data states
   const [data, setData] = useState([]);
+  const [filterData, setFilterData] = useState([]);
   const [currentCategory, setCurrentCategory] = useState(null);
 
   // other states
@@ -39,6 +41,8 @@ const AddCategory = ({ match }) => {
   const [loading, setLoading] = useState(true);
   const [editLoading, setEditLoading] = useState(true);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [query, setQuery] = useState("");
+  const [isQuery, setIsQuery] = useState(true);
 
   const queries = {
     ...store.filters,
@@ -150,6 +154,21 @@ const AddCategory = ({ match }) => {
     });
   };
 
+  useEffect(() => {
+    const pereData = data;
+    console.log(query);
+    // const filteredData = data?.filter((item) => {
+    //   console.log(item);
+    //   if (item.title.includes(query)) {
+    //     return item;
+    //   }
+    // });
+    const filteredData = data?.filter((item) =>
+      item.title.toLowerCase().includes(query.toLowerCase())
+    );
+    console.log(filteredData);
+    setFilterData(filteredData);
+  }, [query]);
   // renders
   const renderTableHeader = () => {
     return (
@@ -159,7 +178,16 @@ const AddCategory = ({ match }) => {
           icon="fas fa-stream"
           onClick={() => setAddCategoryDialog(true)}
         />
-        <Filters filterTypes={{ query: true }} />
+        <div className=" flex items-center">
+          <SearchInput
+            isQuery={isQuery}
+            setIsQuery={setIsQuery}
+            // filters={store.filters}
+            setQuery={setQuery}
+            query={query}
+          />
+        </div>
+        {/* <Filters filterTypes={{ query: true }} /> */}
       </>
     );
   };
@@ -218,7 +246,7 @@ const AddCategory = ({ match }) => {
 
       <LayoutScrollable clipped={(window.innerHeight * 3) / 48 + 10}>
         <MyDataTable
-          data={data}
+          data={query ? filterData : data}
           columns={columns}
           theme={{ initializer: tableLightTheme, name: "light" }}
           loading={loading}

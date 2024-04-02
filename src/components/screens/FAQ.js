@@ -19,7 +19,7 @@ export default function FAQ() {
   const [createLoading, setCreateLoading] = useState(false);
   const queryClient = useQueryClient();
   const [mode, setMode] = useState("create");
-  const { data, isLoading } = useQuery({
+  const { data, isLoading ,refetch } = useQuery({
     queryKey: ["FAQ"],
     queryFn: getFAQ,
   });
@@ -41,6 +41,7 @@ export default function FAQ() {
   const onFAQcreated = () => {
     setAddFAQDialog(false);
     modalRoot.classList.remove("active");
+    refetch()
     //
   };
   const renderTableHeader = () => {
