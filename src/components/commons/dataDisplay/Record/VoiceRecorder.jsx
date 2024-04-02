@@ -61,7 +61,7 @@ const VoiceRecorder = ({ addRecord, removeRecord }) => {
     localStorage.setItem("myVoice", recordBlobLink);
     const formData = new FormData();
     formData.append("File", recordFile);
-    formData.append("AttachmentType", 1);
+    formData.append("AttachmentType", 0);
     uploadMutation.mutate(formData);
   };
 

@@ -21,7 +21,7 @@ export default function Objection({ data, onNext }) {
     mutationKey: ["postObjection"],
     mutationFn: postObjection,
     onSuccess: (res) => {
-      toast("درخواست با موفقیت انتقال داده شد.", { type: "success" });
+      toast(res.message, { type: "success" });
       onNext();
     },
     onError: (err) => {},

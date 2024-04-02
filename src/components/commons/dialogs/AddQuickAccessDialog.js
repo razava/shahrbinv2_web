@@ -137,8 +137,8 @@ const AddQuickAccessDialog = ({
       setCreateRequest(false);
       const status = isEditMode ? 204 : 201;
       if (res && res.status === status) {
-        toast("دسترسی سریع جدید با موفقیت اضافه شد.", { type: "success" });
         console.log(res);
+        toast(res.message, { type: "success" });
         onSuccess();
       } else if (serverError(res)) return;
       else if (unKnownError(res)) return;

@@ -23,7 +23,7 @@ export default function AddTicketDialog({ refresh }) {
     mutationFn: openTicket,
     onSuccess: (res) => {
       refresh();
-      toast("تیکت شما با موفقیت ثبت شد.", { type: "success" });
+      toast(res.message, { type: "success" });
     },
     onError: (err) => {},
   });

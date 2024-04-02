@@ -836,10 +836,10 @@ export const pollTypes = [
     id: 1,
     label: "چند انتخابی",
   },
-  {
-    id: 2,
-    label: "توضیحی",
-  },
+  // {
+  //   id: 2,
+  //   label: "توضیحی",
+  // },
 ];
 
 export const mapPollStatus = (status) => {
@@ -967,8 +967,12 @@ export const callAPI = (
       // if request succeeded
       console.log(res);
       if (res.status === successStatus) {
-        console.log(res.headers);
-        successCallback({ ...res.data, headers: res.headers });
+        console.log(res);
+        successCallback({
+          ...res.data,
+          headers: res.headers,
+          message: res.data.message,
+        });
         return;
       } else if (res.status === 401) {
         showErrorMessage(res);

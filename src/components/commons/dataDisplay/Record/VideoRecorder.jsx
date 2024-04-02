@@ -40,7 +40,7 @@ export default function App({ addRecord, removeRecord }) {
     console.log(myFile);
     const formData = new FormData();
     formData.append("File", myFile);
-    formData.append("AttachmentType", 3);
+    formData.append("AttachmentType", 0);
     uploadMutation.mutate(formData);
     return blob;
   };

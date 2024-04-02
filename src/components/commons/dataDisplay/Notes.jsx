@@ -21,7 +21,8 @@ export default function Notes({ data }) {
     mutationFn: postReportNote,
     onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["getReportNotes"] });
-      toast("یادداشت با موفقیت ثبت شد.", { type: "success" });
+      console.log(res);
+      toast(res.message, { type: "success" });
       setNote("");
     },
     onError: (err) => {},
@@ -89,7 +90,6 @@ export default function Notes({ data }) {
     console.log(values);
   }, [values]);
 
-  
   return (
     <div className=" flex flex-col h-full">
       <div

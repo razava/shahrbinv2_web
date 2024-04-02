@@ -61,7 +61,7 @@ export async function postMessageToCitizen({ id, payload }) {
       headers: { Authorization: `Bearer ${Token}` },
     }
   );
-  return data.data.data;
+  return data.data;
 }
 
 export async function getAllNotes() {
@@ -173,7 +173,7 @@ export async function getTickets(id) {
 
 export async function openTicket(payload) {
   const data = await TicketingAxios.post(`/ProjectClientTicket/Open`, payload);
-  return data.data.data;
+  return data.data;
 }
 
 export async function getTicketById(id) {

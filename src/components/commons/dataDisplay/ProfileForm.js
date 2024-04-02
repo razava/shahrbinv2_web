@@ -80,7 +80,7 @@ const ProfileForm = ({ data, setDialog }) => {
     mutationKey: ["Avatar"],
     mutationFn: updateAvatar,
     onSuccess: (res) => {
-      toast("عکس پروفایل با موفقیت به روز رسانی شد.", { type: "success" });
+      toast(res.message, { type: "success" });
     },
     onError: (err) => {},
   });
@@ -98,7 +98,7 @@ const ProfileForm = ({ data, setDialog }) => {
     const file = e.target.files[0];
     const formData = new FormData();
     formData.append("File", file);
-    formData.append("AttachmentType", 1);
+    formData.append("AttachmentType", 0);
     uploadMutation.mutate(formData);
     readFile(file);
   };

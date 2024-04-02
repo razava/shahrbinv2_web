@@ -54,7 +54,7 @@ export default function ChangePhoneNumber() {
     onError: (err) => {
       console.log(err.response);
       if (err.response.status === 428) {
-        localStorage.setItem("verificationToken", err.response.data);
+        localStorage.setItem("verificationToken", err.response.data.data);
         setStep(2);
         setIsShow(true);
       } else {
@@ -77,7 +77,10 @@ export default function ChangePhoneNumber() {
       localStorage.removeItem("countdownTime");
       localStorage.removeItem("CountDownCompleted");
     },
-    onError: (err) => {},
+    onError: (err) => {
+      console.log(err.response);
+      toast(err.response.data.message, { type: "error" });
+    },
   });
 
   const resendOtpMutation = useMutation({
@@ -86,7 +89,8 @@ export default function ChangePhoneNumber() {
     onSuccess: (res) => {},
     onError: (err) => {
       if (err.response.status === 428) {
-        localStorage.setItem("verificationToken", err.response.data);
+        console.log(err.response);
+        localStorage.setItem("verificationToken", err.response.data.data);
         toast("کد تایید مجدد ارسال شد.", { type: "info" });
         localStorage.removeItem("countdownTime");
         localStorage.removeItem("CountDownCompleted");
@@ -107,7 +111,6 @@ export default function ChangePhoneNumber() {
     const value = e.target.value;
     setValues({ ...values, [name]: value });
   };
-
 
   useEffect(() => {
     const hasToken = localStorage.getItem("verificationToken");
@@ -215,26 +218,28 @@ export default function ChangePhoneNumber() {
                   <>
                     <h1 className=" self-start mb-2">فراموشی رمز عبور</h1>
                     <p className=" self-start mt-2 text-lg">
-                      کد دریافت شده توسط پیامک را وارد نمایید.
+                      کد دریافت شده از طریق پیامک را وارد نمایید.
                     </p>
                     <div className="w-full my-1 " dir="ltr">
-                      <OTPInput
-                        value={otp}
-                        onChange={setOtp}
-                        numInputs={6}
-                        renderSeparator={<span>{space}</span>}
-                        renderInput={(props, idx) => (
-                          <input
-                            autoFocus={idx == 0}
-                            pattern="[0-9]*"
-                            {...props}
-                            key={idx}
-                            autocomplete="false"
-                          />
-                        )}
-                        containerStyle=" flex justify-center gap-2 flex-row-reverse"
-                        inputStyle=" !w-20 rounded-md h-20 bg-[#eee] border-none text-black"
-                      />
+                      <form className="" autoComplete="off">
+                        <OTPInput
+                          value={otp}
+                          onChange={setOtp}
+                          numInputs={6}
+                          renderSeparator={<span>{space}</span>}
+                          renderInput={(props, idx) => (
+                            <input
+                              autoFocus={idx == 0}
+                              pattern="[0-9]*"
+                              {...props}
+                              key={idx}
+                              autoComplete="off"
+                            />
+                          )}
+                          containerStyle=" flex justify-center gap-2 flex-row-reverse"
+                          inputStyle=" !w-20 rounded-md h-20 bg-[#eee] border-none text-black"
+                        />
+                      </form>
                     </div>
                     <CountdownTimer
                       setIsShow={(state) => setIsShow(state)}

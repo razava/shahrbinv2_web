@@ -196,13 +196,13 @@ const Violations = ({ match }) => {
   const tabs = [
     {
       id: "violation-tab-1",
-      badge: reportViolations.length,
+      badge: totalRows,
       title: "گزارش‌ها",
       data: reportViolations,
     },
     {
       id: "violation-tab-2",
-      badge: commentViolations.length,
+      badge: totalRows2,
       title: "نظر‌ها",
       data: commentViolations,
     },

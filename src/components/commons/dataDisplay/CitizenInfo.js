@@ -44,14 +44,14 @@ const CitizenInfo = ({ data }) => {
           inputClassName=""
           required={false}
         />
-        <Textarea
+        {/* <Textarea
           value={doesExist(citizenData?.address?.detail)}
           readOnly={true}
           title="آدرس شهروند"
           wrapperClassName="mxa "
           inputClassName=""
           required={false}
-        />
+        /> */}
       </section>
     </section>
   );

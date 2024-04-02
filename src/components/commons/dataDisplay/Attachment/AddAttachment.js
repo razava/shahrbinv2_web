@@ -11,6 +11,7 @@ import ShowAttachments from "../ShowAttachments";
 import DialogButtons from "../../dialogs/DialogButtons";
 import { useMutation } from "@tanstack/react-query";
 import { postFiles } from "../../../../api/commonApi";
+import { toast } from "react-toastify";
 
 const AddAttachment = ({
   open = false,
@@ -43,7 +44,9 @@ const AddAttachment = ({
       console.log(newAttachmnets);
       setAttachments(newAttachmnets);
     },
-    onError: (err) => {},
+    onError: (err) => {
+      toast("مشکلی در بارگذاری فایل به وجود آمد.", { type: "error" });
+    },
   });
 
   // functions
@@ -91,7 +94,7 @@ const AddAttachment = ({
     const formData = new FormData();
     console.log(files[0]);
     formData.append("File", files[0]);
-    formData.append("AttachmentType", 1);
+    formData.append("AttachmentType", 0);
     uploadMutation.mutate(formData);
     console.log("fig");
   };

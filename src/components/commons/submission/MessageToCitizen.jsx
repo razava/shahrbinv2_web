@@ -12,7 +12,7 @@ export default function MessageToCitizen({ data, refresh }) {
     mutationKey: ["messageToCitizen"],
     mutationFn: postMessageToCitizen,
     onSuccess: (res) => {
-      toast("پیام شما با موفقیت به شهروند ارسال شد.", { type: "success" });
+      toast(res.message, { type: "success" });
       setRefrerralData({ ...referralData, messageToCitizen: "" });
       setAttachments([]);
       setClearAttachments(true);

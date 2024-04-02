@@ -33,7 +33,7 @@ export default function AddFormDialog({
     mutationFn: editForm,
     onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["getForms"] });
-      toast("عنوان فرم با موفقیت ویرایش شد.", { type: "success" });
+      toast(res.message, { type: "success" });
     },
     onError: (err) => {},
   });

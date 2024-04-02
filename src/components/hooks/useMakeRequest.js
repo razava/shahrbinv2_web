@@ -53,7 +53,7 @@ const useMakeRequest = (
           setData(res.data.data);
           setError(true);
           setSuccess(true);
-          callback({ ...res, data: res.data.data });
+          callback({ ...res, data: res.data.data, message: res.data.message });
         }
         if (res.status === 401) {
           setError(true);
