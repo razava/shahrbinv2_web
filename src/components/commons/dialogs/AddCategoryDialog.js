@@ -153,7 +153,7 @@ const AddCategoryDialog = ({
       description: data.description,
       objectionAllowed: data.objectionAllowed ? 1 : 0,
       editingAllowed: data.editingAllowed ? 1 : 0,
-      formId: data.form ? data.form.id : "",
+      formId: data.form ? data.form.id : null,
       defaultPriority: data.defaultPriority,
     });
   };

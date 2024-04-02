@@ -69,7 +69,6 @@ const RolesDialog = ({ userId, setCondition }) => {
     setLoading(true);
     try {
       const res = await getNeccessaryData();
-      console.log(res);
       // let regions = res[0];
       // regions.forEach((region) => {
       //   const exists = res[1].find((r) => r === region.id);
@@ -77,7 +76,7 @@ const RolesDialog = ({ userId, setCondition }) => {
       //   else region.selected = false;
       // });
       // setRegions(regions);
-      setRegions(res[0]);
+      setRegions(res[0].data);
       setLoading(false);
     } catch (err) {
       setLoading(false);

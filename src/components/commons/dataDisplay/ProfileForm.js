@@ -229,22 +229,24 @@ const ProfileForm = ({ data, setDialog }) => {
         />
         <div className=" flex flex-col justify-start mx-24 w-full gap-4">
           <div className=" flex items-center gap-2 mt-2">
-            {data && (
-              <Toggle
-                id="sms"
-                aria-labelledby="biscuit-label"
-                checked={formData.smsAlert}
-                onChange={(e) => {
-                  setFormData({
-                    ...formData,
-                    smsAlert: e.target.checked,
-                  });
-                }}
-              />
+            {data && formData.phoneNumber && (
+              <>
+                <Toggle
+                  id="sms"
+                  aria-labelledby="biscuit-label"
+                  checked={formData.smsAlert}
+                  onChange={(e) => {
+                    setFormData({
+                      ...formData,
+                      smsAlert: e.target.checked,
+                    });
+                  }}
+                />
+                <span id="biscuit-label" className=" text-lg">
+                  اطلاع رسانی از طریق پیامک
+                </span>
+              </>
             )}
-            <span id="biscuit-label" className=" text-lg">
-              اطلاع رسانی از طریق پیامک
-            </span>
           </div>
           {formData.phoneNumber ? (
             <div className=" flex items-center gap-2 mt-2">

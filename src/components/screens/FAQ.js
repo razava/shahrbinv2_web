@@ -91,8 +91,8 @@ export default function FAQ() {
         <>
           <TableActions
             actions={tableActions}
-            total={data.length}
-            perPage={data.length}
+            total={data?.length}
+            perPage={data?.length}
             rowData={row}
             index={index}
           />

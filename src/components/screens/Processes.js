@@ -61,7 +61,11 @@ const Processes = ({ match }) => {
     callAPI(
       {
         caller: ConfigurationsAPI.getProcesses,
-        successCallback: (res) => setData(res.data),
+        successCallback: (res) => {
+          setData(res.data);
+          setDialog(false);
+          modalRoot.classList.remove("active");
+        },
         requestEnded: () => setLoading(false),
       },
       queries

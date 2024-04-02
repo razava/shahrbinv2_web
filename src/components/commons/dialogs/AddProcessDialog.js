@@ -68,6 +68,7 @@ const AddProcessDialog = ({
     (name, options = {}) =>
     (e) => {
       let value = e.target ? e.target.value : e;
+      console.log(value);
       if (options?.onlyDigits) {
         value = String(value).replace(/\D/g, "");
       }
@@ -75,7 +76,7 @@ const AddProcessDialog = ({
     };
 
   const createProcess = () => {
-    const actorIds = values.actorIds.map((a) => a.id);
+    const actorIds = values.actorIds;
     const payload = {
       title: values.title,
       actorIds,

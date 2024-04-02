@@ -46,19 +46,19 @@ export default function ChangePhoneNumber() {
     onSuccess: (res) => {
       localStorage.setItem(
         constants.SHAHRBIN_MANAGEMENT_PHONE_NUMBER_TOKEN,
-        res.token
+        res.data.token
       );
       localStorage.setItem(
         constants.SHAHRBIN_MANAGEMENT_NEW_PHONE_NUMBER_TOKEN,
-        res.newToken
+        res.data.newToken
       );
       localStorage.setItem(
         constants.SHAHRBIN_MANAGEMENT_PHONE_NUMBER,
-        res.phoneNumber
+        res.data.phoneNumber
       );
       localStorage.setItem(
         constants.SHAHRBIN_MANAGEMENT_NEW_PHONE_NUMBER,
-        res.newPhoneNumber
+        res.data.newPhoneNumber
       );
       setStep(2);
       //   queryClient.invalidateQueries({ queryKey: ["getReportNotes"] });
@@ -66,7 +66,11 @@ export default function ChangePhoneNumber() {
       //   setNote("");
     },
     onError: (err) => {
-      toast("مشکلی در ارسال درخواست به وجود آمد.", { type: "error" });
+      if (err?.response?.data?.detail) {
+        toast(err?.response?.data?.detail, { type: "error" });
+      } else {
+        toast("مشکلی در ارسال درخواست به وجود آمد.", { type: "error" });
+      }
       //   setValues({
       //     phoneNumber: "",
       //     captcha: "",
@@ -84,7 +88,15 @@ export default function ChangePhoneNumber() {
       localStorage.removeItem(constants.SHAHRBIN_MANAGEMENT_HAS_PHONE_NUMBER);
       toast("شماره موبایل با موفقیت تغییر یافت.", { type: "success" });
     },
-    onError: (err) => {},
+    onError: (err) => {
+      console.log(err.response);
+      toast(
+        err.response?.data?.detail
+          ? err.response?.data?.detail
+          : "مشکلی در ارسال درخواست به وجود آمد.",
+        { type: "error" }
+      );
+    },
   });
 
   const { data, isLoading, isSuccess, refetch } = useQuery({
@@ -99,7 +111,7 @@ export default function ChangePhoneNumber() {
   };
 
   useEffect(() => {
-    if (phNumber) {
+    if (hasPhoneNumber) {
       if (otp.length == 6 && otp2.length == 6) {
         const payload = {
           token1: localStorage.getItem(
@@ -138,16 +150,17 @@ export default function ChangePhoneNumber() {
       const newPhoneNumber = localStorage.getItem(
         constants.SHAHRBIN_MANAGEMENT_NEW_PHONE_NUMBER
       );
+      console.log(phoneNumber);
       setPhNumber(phoneNumber);
       setNewPhNumber(newPhoneNumber);
       console.log(newPhNumber);
     }
   }, [step]);
   useEffect(() => {
-    const hasPhoneNumber = localStorage.getItem(
+    const hasPh = localStorage.getItem(
       constants.SHAHRBIN_MANAGEMENT_HAS_PHONE_NUMBER
     );
-    if (hasPhoneNumber) {
+    if (hasPh) {
       setHasPhoneNumber(true);
     }
   }, []);
@@ -232,7 +245,7 @@ export default function ChangePhoneNumber() {
                   </>
                 ) : (
                   <>
-                    {phNumber && (
+                    {hasPhoneNumber && (
                       <>
                         {" "}
                         <p className="text-xl font-bold leading-tight tracking-tight mt-2">
@@ -257,7 +270,7 @@ export default function ChangePhoneNumber() {
                         </div>
                       </>
                     )}
-                    {phNumber ? (
+                    {hasPhoneNumber ? (
                       <p className="text-xl font-bold leading-tight tracking-tight text-blue mt-5">
                         کد شماره {newPhNumber}
                       </p>
@@ -284,7 +297,7 @@ export default function ChangePhoneNumber() {
                         inputStyle=" !w-20 rounded-md h-20 bg-[#eee] border-none text-black"
                       />
                     </div>
-                    {!phNumber && (
+                    {!hasPhoneNumber && (
                       <p className=" text-center mt-8 text-lg">
                         کد دریافت شده توسط پیامک را وارد نمایید.
                       </p>

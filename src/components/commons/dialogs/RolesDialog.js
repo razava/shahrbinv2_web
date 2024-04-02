@@ -136,7 +136,7 @@ const RolesDialog = ({ userId, setCondition }) => {
             putCategoriesMutation.mutate({
               id: userId,
               payload: {
-                categoryIds: selectedCategories.map((item) => item.id),
+                categoryIds: selectedCategories?.map((item) => item.id),
               },
             });
             saveRoles();
