@@ -50,9 +50,14 @@ const ReportDetails = ({ data }) => {
         </div>
         <div className="w90 mxa frc wrap">
           <TextInput
-            value={doesExist(data?.lastStatus)}
+            value={
+              data?.currentActor?.title +
+              (data?.currentActor?.firstName || data?.currentActor?.lastName
+                ? data?.currentActor?.firstName + data?.currentActor?.lastName
+                : "")
+            }
             readOnly={true}
-            title="وضعیت"
+            title="عامل"
             wrapperClassName="mxa flex-1"
             inputClassName=""
             required={false}

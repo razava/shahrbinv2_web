@@ -19,6 +19,7 @@ import { editForm, getCategoryById } from "../../../api/AdminApi";
 import { useQuery } from "@tanstack/react-query";
 import SelectBox2 from "../../helpers/SelectBox2";
 import Loader from "../../helpers/Loader";
+import { findNodeAndParents } from "../../../utils/functions";
 
 const objectionValues = [
   {
@@ -50,9 +51,7 @@ const AddCategoryDialog = ({
       console.log(data);
       setCategoryId2(data.parentId);
       if (data.parentId != 1) {
-        setParent([
-          { id: data.parentId, title: findParenTitle(data.parentId) },
-        ]);
+        setParent([{ id: data.parentId, title: handelParent(data.parentId) }]);
       }
     },
   });
@@ -182,7 +181,22 @@ const AddCategoryDialog = ({
       }
       setValues({ ...values, [name]: value });
     };
+
+  const handelParent = (Id) => {
+    if (Id == 1) return "";
+    const result = findNodeAndParents(
+      store?.initials?.categories?.categories,
+      Id
+    );
+    if (result) {
+      return result[result.length - 1].title;
+    } else {
+      return "";
+    }
+  };
+
   const findParenTitle = (parentId) => {
+    console.log(parentId);
     if (parentId == 1) return "";
     const categories = store.initials.categories;
     let categoryTitle;
@@ -234,12 +248,14 @@ const AddCategoryDialog = ({
 
   const defaultSelected =
     data?.parentId != 1
-      ? [{ id: data?.parentId, title: findParenTitle(data?.parentId) }]
+      ? [{ id: data?.parentId, title: handelParent(data?.parentId) }]
       : [];
 
   useEffect(() => {
     console.log(values);
   }, [values]);
+
+  console.log(data);
   return (
     <>
       <>
@@ -269,8 +285,9 @@ const AddCategoryDialog = ({
             id="categories"
           /> */}
             <TreeSystem
-              isStatic
-              staticData={store.initials.categories}
+              // isStatic
+              // staticData={store.initials.categories}
+              caller={ConfigurationsAPI.getCategories}
               condition={categoryDialog}
               setCondition={setCategoryDialog}
               onChange={onCategoriesSelected}
@@ -291,7 +308,7 @@ const AddCategoryDialog = ({
                     selected.length > 0
                       ? selected[0].title
                       : categoryId
-                      ? findParenTitle(data?.parentId)
+                      ? handelParent(data?.parentId)
                       : ""
                   }
                 />

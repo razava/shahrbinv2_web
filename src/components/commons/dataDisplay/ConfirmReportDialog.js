@@ -99,7 +99,7 @@ const ConfirmReportDialog = ({
       });
       setMedias(ReportData.medias);
       setRegionId(ReportData.address?.regionId || "");
-      setPriority(ReportData.priority)
+      setPriority(ReportData.priority);
       setTempMedias(
         ReportData?.medias
           ? ReportData.medias.map((media) => {
@@ -344,7 +344,6 @@ const ConfirmReportDialog = ({
                   { id: 2, title: "زیاد" },
                   { id: 3, title: "فوری" },
                 ]}
-                
                 name="priority"
                 value={priority}
                 handleChange={onTextChange}
@@ -356,7 +355,7 @@ const ConfirmReportDialog = ({
 
             <div className=" w-full mxa">
               {ReportData?.form ? (
-                <CategoryForm2 data={ReportData} />
+                <CategoryForm2 readOnly={true} onChange={() => null} data={ReportData} />
               ) : (
                 <div className="w100 mxa">
                   <Textarea

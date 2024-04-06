@@ -21,7 +21,7 @@ export default function Objection({ data, onNext }) {
     mutationKey: ["postObjection"],
     mutationFn: postObjection,
     onSuccess: (res) => {
-      toast(res.message, { type: "success" });
+      toast("درخواست با موفقیت به بازرسی انتقال داده شد.", { type: "success" });
       onNext();
     },
     onError: (err) => {},
@@ -50,7 +50,7 @@ export default function Objection({ data, onNext }) {
         />
       </div>
       <div className="w90 frc mxa mt1 flex items-center gap-5">
-        <AttachmentToggle onAddAttachment={onAddAttachment} />
+        <AttachmentToggle onAddAttachment={onAddAttachment} />  
       </div>
       <div className="w80 mxa fre py1 px2 border-t-light mt1 fixed b0 bg-white">
         <Button

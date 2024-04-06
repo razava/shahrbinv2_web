@@ -22,7 +22,7 @@ export default function Notes({ data }) {
     onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["getReportNotes"] });
       console.log(res);
-      toast(res.message, { type: "success" });
+      toast(res?.message, { type: "success" });
       setNote("");
     },
     onError: (err) => {},

@@ -138,7 +138,7 @@ const AddQuickAccessDialog = ({
       const status = isEditMode ? 204 : 201;
       if (res && res.status === status) {
         console.log(res);
-        toast(res.message, { type: "success" });
+        toast(res?.message, { type: "success" });
         onSuccess();
       } else if (serverError(res)) return;
       else if (unKnownError(res)) return;

@@ -5,7 +5,7 @@ import Tabs from "../../helpers/Tabs";
 import ShowAttachments from "./ShowAttachments";
 import { ReportsAPI } from "../../../apiCalls";
 
-const minHeight = 120;
+const minHeight = 40;
 const modal = document && document.getElementById("modal-root");
 
 const ReportHistory = ({ data }) => {
@@ -31,7 +31,12 @@ const ReportHistory = ({ data }) => {
     return (
       <>
         <span className="w100 f3 frs mb1"></span>
-        <Tabs mainClass="history-tab" activeClass="active">
+        <HistoryDetails history={item} />
+        {item.attachments.length > 0 && (
+          <ShowAttachments medias={item.attachments} />
+        )}
+
+        {/* <Tabs mainClass="history-tab" activeClass="active">
           <div label="جزییات" id="details">
             <HistoryDetails history={item} />
           </div>
@@ -41,7 +46,7 @@ const ReportHistory = ({ data }) => {
           <div label="عامل" id="actor">
             <HistoryActor history={item} />
           </div>
-        </Tabs>
+        </Tabs> */}
       </>
     );
   };
@@ -49,8 +54,14 @@ const ReportHistory = ({ data }) => {
   const accordionData = reportHistory.map((d, i) => ({
     title: (
       <>
-        <span>
-          {reportHistory.length - i} - {d.message}
+        <span className=" text-xl">
+          {reportHistory.length - i} - {d.message} - {d?.actor?.title}
+          {(d?.actor?.firstName || d?.actor?.lastName) &&
+            "(" +
+              ((d?.actor?.firstName ? d?.actor?.firstName : "") +
+                " " +
+                (d?.actor?.lastName ? d?.actor?.lastName : "")) +
+              ")"}
         </span>
         <span className="f1 ts-light">
           {convertserverTimeToDateString(d.dateTime)}
@@ -76,11 +87,11 @@ export default ReportHistory;
 const HistoryDetails = ({ history }) => {
   return (
     <div className="w100 fcs" style={{ minHeight }}>
-      <div className="w90 my05 mxa f1 frs">
+      {/* <div className="w90 my05 mxa f1 frs">
         <span className="f12 frc text-color">
           {convertserverTimeToDateString(history.dateTime)}
         </span>
-      </div>
+      </div> */}
       <div className="w90 my05 mxa f1 frs">
         <span className="text-color f15 ml1">
           <i className="far fa-question-circle"></i>

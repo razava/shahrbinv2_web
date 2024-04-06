@@ -142,7 +142,7 @@ export default function News() {
       <DialogToggler
         condition={addNewsDialog}
         setCondition={setAddNewsDialog}
-        width={500}
+        width={800}
         isUnique={false}
         // loading={createLoading}
         id="add-quickaccess-dialog"

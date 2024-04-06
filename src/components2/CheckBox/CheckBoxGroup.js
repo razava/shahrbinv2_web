@@ -9,6 +9,7 @@ const CheckBoxGroup = ({
   options = [],
   defaultSelecteds = [],
   defaults,
+  readOnly = false,
 }) => {
   //   states
   const [values, setValues] = useState(defaultSelecteds);
@@ -35,7 +36,12 @@ const CheckBoxGroup = ({
             <CheckBox
               key={option.id}
               {...option}
-              onChange={(value) => handleChange(value, i)}
+              disabled={readOnly}
+              onChange={(value) => {
+                if (!readOnly) {
+                  handleChange(value, i);
+                }
+              }}
               checked={values[i]?.checked || false}
             />
           ))}

@@ -28,6 +28,7 @@ const TextArea = ({
   label = "",
   error = false,
   errorMessage = "",
+  readOnly = false,
 }) => {
   // refs
   const inputRef = useRef(null);
@@ -88,6 +89,7 @@ const TextArea = ({
             maxLength={maxLength}
             ref={inputRef}
             style={style.input}
+            readOnly={readOnly}
           />
         </div>
         {error && (

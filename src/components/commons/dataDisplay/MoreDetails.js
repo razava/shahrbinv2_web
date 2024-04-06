@@ -30,9 +30,7 @@ const MoreDetails = ({ data }) => {
           </div>
           <div className="w90 mxa frc wrap">
             <TextInput
-              value={convertserverTimeToDateString(
-                data?.responseDeadline
-              )}
+              value={convertserverTimeToDateString(data?.responseDeadline)}
               readOnly={true}
               title="زمان پاسخگویی"
               wrapperClassName="mxa flex-1"
@@ -58,9 +56,7 @@ const MoreDetails = ({ data }) => {
               required={false}
             />
             <TextInput
-              value={doesExist(
-                data?.isIdentityVisible ? "قابل رویت" : "مخفی"
-              )}
+              value={doesExist(data?.isIdentityVisible ? "قابل رویت" : "مخفی")}
               readOnly={true}
               title="اطلاعات هویتی شهروند"
               wrapperClassName="mxa flex-1"
@@ -82,6 +78,16 @@ const MoreDetails = ({ data }) => {
               readOnly={true}
               title="تعداد نظر‌ها"
               wrapperClassName="mxa flex-1"
+              inputClassName=""
+              required={false}
+            />
+          </div>
+          <div className="w90 mxa wrap">
+            <TextInput
+              value={doesExist(data?.lastStatus)}
+              readOnly={true}
+              title="وضعیت"
+              wrapperClassName="px-1 col-md-6"
               inputClassName=""
               required={false}
             />

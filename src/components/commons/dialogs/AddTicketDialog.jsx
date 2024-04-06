@@ -23,7 +23,7 @@ export default function AddTicketDialog({ refresh }) {
     mutationFn: openTicket,
     onSuccess: (res) => {
       refresh();
-      toast(res.message, { type: "success" });
+      toast(res?.message, { type: "success" });
     },
     onError: (err) => {},
   });

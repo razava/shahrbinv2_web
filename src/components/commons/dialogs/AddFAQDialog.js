@@ -14,7 +14,7 @@ export default function AddFAQDialog({ mode, onSuccess, defaltValues }) {
     mutationFn: mode == "edit" ? editFAQ : makeFAQ,
     onSuccess: (res) => {
       onSuccess();
-      toast(mode == "edit" ? "سوال با موفقیت ویرایش شد." : res.message, {
+      toast(mode == "edit" ? "سوال با موفقیت ویرایش شد." : res?.message, {
         type: "success",
       });
       queryClient.invalidateQueries({ queryKey: ["FAQ"] });

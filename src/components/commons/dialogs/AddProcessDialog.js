@@ -76,7 +76,11 @@ const AddProcessDialog = ({
     };
 
   const createProcess = () => {
-    const actorIds = values.actorIds;
+    console.log(values.actorIds);
+    const actorIds = values.actorIds.map((item) => {
+      return item.id;
+    });
+    console.log(actorIds);
     const payload = {
       title: values.title,
       actorIds,

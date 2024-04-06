@@ -6,6 +6,7 @@ import { createNews, editNews, getNewsById } from "../../../api/AdminApi";
 import { toast } from "react-toastify";
 import { postFiles } from "../../../api/commonApi";
 import { fixURL } from "../../../helperFuncs";
+import QuillEditor from "../../helpers/QuillEditor";
 
 export default function AddNewsDialog({ mode, onSuccess, defaltValues }) {
   const isEditMode = mode === "edit";
@@ -25,9 +26,9 @@ export default function AddNewsDialog({ mode, onSuccess, defaltValues }) {
         url: data?.url,
         image: data?.imageFile.url3,
       });
-       previewRef.current.src = fixURL(data?.imageFile?.url3, false);
-       setPreview(true);
-       setImage(data?.imageFile?.url3);
+      previewRef.current.src = fixURL(data?.imageFile?.url3, false);
+      setPreview(true);
+      setImage(data?.imageFile?.url3);
     }
   }, [data]);
   const queryClient = useQueryClient();
@@ -62,7 +63,7 @@ export default function AddNewsDialog({ mode, onSuccess, defaltValues }) {
     const payload = new FormData();
     payload.append("title", values.title);
     payload.append("description", values.description);
-    payload.append("url", values.url);
+    payload.append("url", values.url ? values.url : "/");
     payload.append("image", image);
     payload.append("isDeleted", false);
     if (mode == "edit") {
@@ -127,17 +128,17 @@ export default function AddNewsDialog({ mode, onSuccess, defaltValues }) {
             wrapperClassName="col-md-12"
           />
         </div>
-        <div className="w100 mxa row">
-          <TextInput
-            title="توضیحات"
-            required={false}
-            value={values.description}
-            name="description"
-            onChange={handleChange}
-            wrapperClassName="col-md-12"
+        <div style={{ textAlign: "right" }} className="w100 px-7 mb-5">
+          <p className="" style={{ marginRight: "15px" }}>
+            {" "}
+            توضیحات
+          </p>
+          <QuillEditor
+            data={values.description}
+            setData={(data) => setValues({ ...values, description: data })}
           />
         </div>
-        <div className="w100 mxa row">
+        {/* <div className="w100 mxa row">
           <TextInput
             title="لینک خبر"
             required={false}
@@ -146,7 +147,7 @@ export default function AddNewsDialog({ mode, onSuccess, defaltValues }) {
             onChange={handleChange}
             wrapperClassName="col-md-12"
           />
-        </div>
+        </div> */}
         <div className="w100 mxa row">
           <TextInput
             title="تصویر"

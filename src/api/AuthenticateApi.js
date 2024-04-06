@@ -2,6 +2,7 @@ import {
   constants,
   getFromLocalStorage,
   createQueryParams,
+  saveToLocalStorage,
 } from "../helperFuncs";
 import axios from "axios";
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
@@ -90,4 +91,37 @@ export async function refreshToken(payload) {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data;
+}
+export async function RefreshToken(payload) {
+  try {
+    const response = await axios.post(
+      `/api/${instanceId}/Authenticate/Refresh`,
+      payload
+    );
+    saveToLocalStorage(
+      constants.SH_CT_ACCESS_TOKEN,
+      response.data.data.jwtToken
+    );
+    saveToLocalStorage(
+      constants.SH_CT_REFRESH_TOKEN,
+      response.data.data.refreshToken
+    );
+    // localStorage.setItem(
+    //   appConstants.SH_CT_ACCESS_TOKEN,
+    //   response.data.jwtToken
+    // );
+    // localStorage.getItem(
+    //   appConstants.SH_CT_REFRESH_TOKEN,
+    //   response.data.refreshToken
+    // );
+    // window.location.reload();
+    return response.data;
+  } catch (error) {
+    // removeFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN);
+    // removeFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_REFRESH_TOKEN);
+    // removeFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN_EXPIRATION);
+    // removeFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_USER_ROLES);
+    // removeFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_INSTANCE_ID);
+    // window.location.href = "/";
+  }
 }

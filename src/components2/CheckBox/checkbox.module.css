@@ -5,10 +5,11 @@
   flex-direction: column;
   margin: 5px;
   position: relative;
+  margin-right: 0px;
 }
 
 .groupLabel {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   color: var(--gray);
   margin-bottom: 10px;
 }
@@ -22,6 +23,7 @@
   align-items: center;
   justify-content: flex-start;
   width: 100%;
+  gap: 10px;
 }
 
 .wrapper {
@@ -48,6 +50,7 @@
   justify-content: center;
   margin: 5px;
   transition: all 0.2s;
+  margin-right: 0px;
 }
 
 .checkbox:hover {
@@ -70,8 +73,8 @@
 }
 
 .checkbox.show {
-  background-color: #06d6a0;
-  border: 2px solid #06d6a0;
+  background-color: var(--primary) !important;
+  border: 2px solid var(--primary) !important;
 }
 
 .checkbox.hide {

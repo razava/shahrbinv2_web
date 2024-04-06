@@ -122,7 +122,6 @@ const Reports = ({ match }) => {
   };
 
   const closeDialog = () => {
-    console.log("shet");
     setDialog(false);
     modalRoot.classList.remove("active");
     // setConfirmDialog(false);

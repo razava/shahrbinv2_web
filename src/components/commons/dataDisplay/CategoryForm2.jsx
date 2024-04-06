@@ -8,7 +8,7 @@ import Header from "../../../components2/Header/Header";
 import DropZone from "../../../components2/FileDrop/DropZone";
 import Message from "../../../components2/Message/Message";
 
-export default function CategoryForm2({ data, onChange }) {
+export default function CategoryForm2({ data, onChange, readOnly = true }) {
   console.log(data);
   let obj = {};
   const names = data.form.elements.map((item) => {
@@ -22,7 +22,7 @@ export default function CategoryForm2({ data, onChange }) {
   const handleChange = (e, name) => {
     console.log(e, name);
     setValues({ ...values, [name]: e });
-    onChange({ ...values, [name]: e });
+    if (!readOnly) onChange({ ...values, [name]: e });
   };
   const defaultValues = JSON.parse(data.comments);
   console.log(defaultValues);
@@ -42,6 +42,7 @@ export default function CategoryForm2({ data, onChange }) {
                 name={item.name}
                 onChange={handleChange}
                 {...meta.props}
+                editable={!readOnly}
               />
             </div>
           );
@@ -69,6 +70,7 @@ export default function CategoryForm2({ data, onChange }) {
                 defaultValue={defaultValues[item.name]}
                 name={item.name}
                 onChange={handleChange}
+                readOnly={readOnly}
                 {...meta.props}
               />
             </div>
@@ -83,6 +85,7 @@ export default function CategoryForm2({ data, onChange }) {
                 defaultValue={defaultValues[item.name]}
                 onChange={(value) => handleChange(value, item.name)}
                 {...meta.props}
+                disabled={false}
               />
             </div>
           );
@@ -94,6 +97,7 @@ export default function CategoryForm2({ data, onChange }) {
             >
               <CheckBoxGroup
                 defaults={defaultValues[item.name]}
+                readOnly={true}
                 // defaultSelecteds={[
                 //   [
                 //     {
