@@ -68,6 +68,7 @@ const AddCategoryDialog = ({
     editingAllowed: "",
     form: "",
     defaultPriority: "",
+    operatorIds: [],
   });
   const [processes, setProcesses] = useState([]);
   const [parents, setParents] = useState([]);
@@ -225,6 +226,9 @@ const AddCategoryDialog = ({
       parentId: categoryId2,
       processId: values.processId ? Number(values.processId) : null,
     };
+    if (!isEditMode) {
+      payload["operatorIds"] = values.operatorIds.map((item) => item.value);
+    }
     setPayload(payload);
     setCreateRequest(true);
   };
@@ -428,6 +432,21 @@ const AddCategoryDialog = ({
               name="editingAllowed"
               handleChange={handleChange}
               required={false}
+            />
+          </div>
+          <div className={"w100 mxa frc row"}>
+            <MultiSelect
+              strings={{ label: "اپراتور" }}
+              caller={ConfigurationsAPI.getOperators}
+              isStatic={false}
+              nameKey="text"
+              valueKey={"value"}
+              maxHeight={160}
+              onChange={(values) => handleChange("operatorIds")(values)}
+              // defaultSelecteds={defaultActors}
+              isInDialog={true}
+              wrapperClassName="col-md-12"
+              id="organs-list"
             />
           </div>
         </form>

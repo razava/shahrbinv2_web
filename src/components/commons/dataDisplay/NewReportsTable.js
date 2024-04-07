@@ -64,7 +64,11 @@ const NewReportsTable = ({ roleId = null, onRefer = (f) => f }) => {
       // dispatch({ type: "setFilters", payload: defaultFilters });
     };
   }, [roleId, page, limit, store.filters]);
-  console.log(data);
+
+  useEffect(() => {
+    dispatch({ type: "setFilters", payload: defaultFilters });
+  }, [store.filters]);
+
   const getTasks = (roleId) => {
     setLoading(true);
     callAPI(

@@ -74,7 +74,7 @@ const NewReports = ({ match }) => {
     queryFn: () => getExcel(),
     enabled: false,
   });
-
+  
   console.log(filtersData);
   // get sources
   useEffect(() => {
@@ -182,7 +182,7 @@ const NewReports = ({ match }) => {
   };
 
   useEffect(() => {
-    if (store.filters.query == "") {
+    if (store?.filters?.query == "") {
       setQuery("");
     }
   }, [store.filters]);

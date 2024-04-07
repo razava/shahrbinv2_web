@@ -1387,6 +1387,21 @@ export class ConfigurationsAPI {
       .catch((err) => err.response);
   }
 
+  static getOperators(token, payload, source, instance) {
+    return axios
+      .get(
+        `${prefix}/api/${instance?.id}/AdminCategory/Operators`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
+      .then((res) => res)
+      .catch((err) => err.response);
+  }
+
   static getAllCategories(token, payload, source, instance, queries) {
     const initialUrl = `${prefix}/api/${instance?.id}/AdminCategory/All`;
     const wholeUrl = createQueryParams(initialUrl, queries);

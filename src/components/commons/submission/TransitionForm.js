@@ -44,6 +44,7 @@ const TransitionForm = ({
   }); // data needed for submit
   const [attachments, setAttachments] = useState([]); // user attachments to be send to selected destination
   const [selectedActors, setSelectedActors] = useState(); // list of users or roles that current user can send this request to.
+  const [closeWebcam, setCloseWebcam] = useState(0);
   const [allActors, setAllActors] = useState([]); // list of users or roles that current user can send this request to.
 
   // other states
@@ -302,7 +303,10 @@ const TransitionForm = ({
         {/* add and show attachments */}
         <Modal
           open={open}
-          onClose={() => setOpen(false)}
+          onClose={() => {
+            setOpen(false);
+            setCloseWebcam((pre) => pre + 1);
+          }}
           center
           modalId="recorder"
           styles={{ direction: "ltr" }}
@@ -311,6 +315,11 @@ const TransitionForm = ({
           <VideoRecorder
             removeRecord={onRemoveRecord}
             addRecord={onAddRecords}
+            closeWebcam={closeWebcam}
+            closeDialog={() => {
+              setOpen(false);
+              setCloseWebcam((pre) => pre + 1);
+            }}
           />
         </Modal>
         <Modal

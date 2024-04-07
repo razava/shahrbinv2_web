@@ -57,7 +57,7 @@ const ReportHistory = ({ data }) => {
         <span className=" text-xl">
           {reportHistory.length - i} - {d.message} - {d?.actor?.title}
           {(d?.actor?.firstName || d?.actor?.lastName) &&
-            "(" +
+            " (" +
               ((d?.actor?.firstName ? d?.actor?.firstName : "") +
                 " " +
                 (d?.actor?.lastName ? d?.actor?.lastName : "")) +

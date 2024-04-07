@@ -65,6 +65,10 @@ const Comments = ({ match }) => {
     };
   }, [store.filters, page, perPage]);
 
+  useEffect(() => {
+    dispatch({ type: "setFilters", payload: defaultFilters });
+  }, [store.filters]);
+
   const getComments = () => {
     setLoading(true);
     callAPI(

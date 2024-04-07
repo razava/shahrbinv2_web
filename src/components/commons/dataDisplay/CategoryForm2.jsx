@@ -24,9 +24,9 @@ export default function CategoryForm2({ data, onChange, readOnly = true }) {
     setValues({ ...values, [name]: e });
     if (!readOnly) onChange({ ...values, [name]: e });
   };
+ 
   const defaultValues = JSON.parse(data.comments);
-  console.log(defaultValues);
-  console.log(defaultValues["عنوان 2"]);
+  
   return (
     <div className="w-[95%] flex flex-col gap-2 mx-auto">
       {data?.form?.elements.map((item) => {

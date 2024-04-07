@@ -977,9 +977,9 @@ export const callAPI = (
       } else if (res.status === 401) {
         showErrorMessage(res);
         if (token) {
-          // logout(() => {
-          //   window.location.pathname = "/login";
-          // });
+          logout(() => {
+            window.location.pathname = "/login";
+          });
         }
       } else {
         showErrorMessage(res);

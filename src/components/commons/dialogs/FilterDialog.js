@@ -37,28 +37,29 @@ const FilterDialog = ({
   const [mapDialog, setMapDialog] = useState(false);
 
   const [allOrgans, setAllOrgans] = useState([]);
+  console.log(store?.filters);
   const [filterData, setFilterData] = useState({
-    fromDate: getDatePickerFormat(store.filters.fromDate),
-    toDate: getDatePickerFormat(store.filters.toDate),
-    query: store.filters.query,
+    fromDate: getDatePickerFormat(store?.filters?.fromDate),
+    toDate: getDatePickerFormat(store?.filters.toDate),
+    query: store?.filters.query,
   });
   const [stages, setStages] = useState([]);
-  const [regions, setRegions] = useState(store.filters.regions);
-  const [statuses, setStatuses] = useState(store.filters.statuses);
-  const [organs, setOrgans] = useState(store.filters.organs);
-  const [geometry, setGeometry] = useState(store.filters.geometry);
+  const [regions, setRegions] = useState(store?.filters.regions);
+  const [statuses, setStatuses] = useState(store?.filters.statuses);
+  const [organs, setOrgans] = useState(store?.filters.organs);
+  const [geometry, setGeometry] = useState(store?.filters.geometry);
   const [reportsToInclude, setReportsToInclude] = useState(
-    store.filters.reportsToInclude
+    store?.filters.reportsToInclude
   );
   const [satisfactionValues, setSatisfactionValues] = useState(
-    store.filters.satisfactionValues
+    store?.filters.satisfactionValues
   );
-  const [priorities, setPriorities] = useState(store.filters.priorities);
+  const [priorities, setPriorities] = useState(store?.filters.priorities);
   const [categoryIds, setCategoryIds] = useState(
-    store.filters.categoryIds || []
+    store?.filters.categoryIds || []
   );
   const [categoryTitles, setCategoryTitles] = useState([]);
-  const [roles, setRoles] = useState(store.filters.roles || []);
+  const [roles, setRoles] = useState(store?.filters.roles || []);
   const [groupCategories, setGroupCategories] = useState(false);
 
   const [categoryDialog, setCategoryDialog] = useState(false);
@@ -91,7 +92,7 @@ const FilterDialog = ({
   const clearFilters = () => {
     onFilter(defaultFilters);
   };
-  console.log(store.filters);
+  console.log(store?.filters);
   const handleChange = (name) => (e) => {
     setFilterData({ ...filterData, [name]: e.target.value });
   };

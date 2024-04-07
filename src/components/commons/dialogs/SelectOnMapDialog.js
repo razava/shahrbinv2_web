@@ -91,8 +91,10 @@ const SelectOnMapDialog = ({
     setLoading(true);
     ParsiMap.routing(value).then((res) => {
       setLoading(false);
-      if (res && res.data.results && res.data.results.length > 0) {
-        setSearchResults(res.data.results);
+      console.log(res);
+      if (res && res?.data?.data?.results && res?.data?.data?.results?.length > 0) {
+        console.log(res);
+        setSearchResults(res.data.data.results);
       }
     });
   };

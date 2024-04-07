@@ -1185,3 +1185,7 @@ ul {
 .react-toggle-track {
   background-color: gray !important;
 }
+
+.rdt_Pagination{
+  border-radius: 0px 0px 10px 10px;
+}

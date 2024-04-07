@@ -19,12 +19,18 @@ const OPTIONS = {
   height: 1080,
 };
 
-export default function App({ addRecord, removeRecord }) {
+export default function App({
+  addRecord,
+  removeRecord,
+  closeDialog,
+  closeWebcam = 0,
+}) {
   const [video, setVideo] = useState();
 
   const recordWebcam = useRecordWebcam(OPTIONS);
   console.log(recordWebcam);
   const getRecordingFileHooks = async () => {
+    if (video) return closeDialog();
     const blob = await recordWebcam.getRecording();
     const blobUrl = URL.createObjectURL(blob);
 
@@ -42,6 +48,7 @@ export default function App({ addRecord, removeRecord }) {
     formData.append("File", myFile);
     formData.append("AttachmentType", 0);
     uploadMutation.mutate(formData);
+    recordWebcam.close();
     return blob;
   };
 
@@ -52,17 +59,24 @@ export default function App({ addRecord, removeRecord }) {
     recordWebcam.open();
   }, []);
 
+  useEffect(() => {
+    if (closeWebcam != 0) {
+      console.log(222);
+      recordWebcam.close();
+    }
+  }, [closeWebcam]);
+  
+
   const uploadMutation = useMutation({
     mutationKey: ["File"],
     mutationFn: postFiles,
     onSuccess: (res) => {
+      recordWebcam.close();
       toast("ویدیو شما با موفقیت بارگذاری شد", { type: "success" });
       addRecord(res, "video");
     },
     onError: (err) => {},
   });
-
-  console.log(video);
 
   useEffect(() => {
     if (localStorage.getItem("myVideo")) {

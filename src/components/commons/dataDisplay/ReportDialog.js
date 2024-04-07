@@ -67,7 +67,8 @@ const ReportDialog = ({
     setRoles(roles);
   }, []);
 
-  console.log(role);
+  const haveForm = data?.comments?.[0] == "{";
+  console.log(haveForm);
   const userRoles = getUserRoles();
   const isExecutive = hasRole(userRoles, ["Executive"]);
   const isInspector = hasRole(userRoles, ["Inspector"]);
@@ -96,7 +97,7 @@ const ReportDialog = ({
                 <CategoryForm data={data} />
               </article>
             )}
-            {data?.form ? (
+            {haveForm ? (
               <article label="فرم" id="formmm">
                 <CategoryForm2 data={data} />
               </article>
