@@ -34,8 +34,8 @@ export default function CategoryForm2({ data, onChange, readOnly = true }) {
         if (item.elementType === "text") {
           return (
             <div
-              //   style={{ order: item.order }}
-              className={` order-${item.order}`}
+                style={{ order: item.order }}
+              // className={` order-${item.order}`}
             >
               <TextInput
                 defaultValue={defaultValues[item.name]}
@@ -49,8 +49,8 @@ export default function CategoryForm2({ data, onChange, readOnly = true }) {
         } else if (item.elementType == "select") {
           return (
             <div
-              //   style={{ order: item.order }}
-              className={` order-${item.order}`}
+                style={{ order: item.order }}
+              // className={` order-${item.order}`}
             >
               <Optional
                 defaultSelecteds={defaultValues[item.name]}
@@ -63,8 +63,8 @@ export default function CategoryForm2({ data, onChange, readOnly = true }) {
         } else if (item.elementType == "textarea") {
           return (
             <div
-              //   style={{ order: item.order }}
-              className={` order-${item.order}`}
+                style={{ order: item.order }}
+              // className={` order-${item.order}`}
             >
               <TextArea
                 defaultValue={defaultValues[item.name]}
@@ -78,8 +78,8 @@ export default function CategoryForm2({ data, onChange, readOnly = true }) {
         } else if (item.elementType == "radio") {
           return (
             <div
-              //   style={{ order: item.order }}
-              className={` order-${item.order}`}
+                style={{ order: item.order }}
+              // className={` order-${item.order}`}
             >
               <RadioGroup
                 defaultValue={defaultValues[item.name]}
@@ -92,8 +92,8 @@ export default function CategoryForm2({ data, onChange, readOnly = true }) {
         } else if (item.elementType == "checkbox") {
           return (
             <div
-              //   style={{ order: item.order }}
-              className={` order-${item.order}`}
+                style={{ order: item.order }}
+              // className={` order-${item.order}`}
             >
               <CheckBoxGroup
                 defaults={defaultValues[item.name]}

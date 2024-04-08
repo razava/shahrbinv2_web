@@ -55,19 +55,14 @@ const Comments = ({ match }) => {
     if (store.refresh.page === match.path) {
       getComments();
     }
+    return () => {
+      dispatch({ type: "setFilters", payload: defaultFilters });
+    };
   }, [store.refresh.call]);
 
   useEffect(() => {
     getComments();
-
-    return () => {
-      // dispatch({ type: "setFilters", payload: defaultFilters });
-    };
   }, [store.filters, page, perPage]);
-
-  useEffect(() => {
-    dispatch({ type: "setFilters", payload: defaultFilters });
-  }, [store.filters]);
 
   const getComments = () => {
     setLoading(true);
@@ -249,10 +244,12 @@ const Comments = ({ match }) => {
                 columns={columns}
                 theme={{ initializer: tableLightTheme, name: "light" }}
                 loading={loading}
+                setLoading={setLoading}
                 pagination={true}
                 totalRows={totalRows}
                 onRowsPageChange={onRowsPageChange}
                 onPageChange={onPageChange}
+                // filters={true}
               />
             </>
           </div>

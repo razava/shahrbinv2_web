@@ -97,6 +97,17 @@ export async function getCategoryById(id) {
   return response.data.data;
 }
 
+export async function editCategory({ Data, id }) {
+  const data = await axios.put(
+    `/api/${instanceId()}/AdminCategory/${id}`,
+    Data,
+    {
+      headers: { Authorization: `Bearer ${Token}` },
+    }
+  );
+  return data.data;
+}
+
 export async function getForms() {
   const data = await axios.get(`/api/${instanceId()}/AdminForms`, {
     headers: { Authorization: `Bearer ${Token}` },

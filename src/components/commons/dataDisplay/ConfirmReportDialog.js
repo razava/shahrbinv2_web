@@ -240,7 +240,8 @@ const ConfirmReportDialog = ({
       title: "خصوصی",
     },
   ];
-  console.log(priority);
+  const haveForm = ReportData?.comments?.[0] == "{";
+
   return (
     <>
       {ReportData && (
@@ -354,8 +355,12 @@ const ConfirmReportDialog = ({
             </div>
 
             <div className=" w-full mxa">
-              {ReportData?.form ? (
-                <CategoryForm2 readOnly={true} onChange={() => null} data={ReportData} />
+              {haveForm ? (
+                <CategoryForm2
+                  readOnly={true}
+                  onChange={() => null}
+                  data={ReportData}
+                />
               ) : (
                 <div className="w100 mxa">
                   <Textarea

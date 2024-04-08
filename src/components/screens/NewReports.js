@@ -217,46 +217,7 @@ const NewReports = ({ match }) => {
             setQuery={setQuery}
             query={query}
           />
-          {/* <div
-            className=" flex items-center !border border-solid border-gray-300 rounded-lg px-1 h-16 w-80 gap-1 p-2 ml-5"
-          >
-            {isQuery && (
-              <span
-                onClick={() => {
-                  setIsQuery(false);
-                  dispatch({
-                    type: "setFilters",
-                    payload: { ...store.filters, query: query },
-                  });
-                }}
-                className="w-8 cursor-pointer"
-              >
-                <i className="far fa-search text-primary !text-[16px]"></i>
-              </span>
-            )}
-            {!isQuery && (
-              <span
-                onClick={() => {
-                  setIsQuery(true);
-                  dispatch({
-                    type: "setFilters",
-                    payload: { ...store.filters, query: "" },
-                  });
-                }}
-                className="w-8 cursor-pointer"
-              >
-                <i className="fas fa-times text-primary !text-[16px]"></i>
-              </span>
-            )}
-            <input
-              value={query}
-              className=" h-full rounded-lg border-none flex-1 bg text-xl focus:outline-none ring-offset-white  bg--200 "
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder={"جستجو..."}
-            ></input>
-          </div> */}
-          <span
+          {/* <span
             data-tooltip-id="excel"
             className=" cursor-pointer"
             onClick={exportToExcel}
@@ -270,7 +231,7 @@ const NewReports = ({ match }) => {
             id="excel"
             place="bottom"
             content="خروجی excel"
-          />
+          /> */}
 
           <Filters filterTypes={filterTypes} filtersData={filtersData} />
         </div>

@@ -23,7 +23,7 @@ const Satisfaction = ({ data }) => {
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["Satisfaction"],
+    queryKey: ["Satisfaction", data.id],
     queryFn: () => getSatisfaction(data.id),
   });
   console.log(satisfactionData);
@@ -79,6 +79,17 @@ const Satisfaction = ({ data }) => {
                 setValues({ ...values, comments: e.target.value })}
               value={values.comments}
             />
+            {satisfactionData?.history && (
+              <Textarea
+                placeholder="تاریخچه"
+                wrapperClassName="mb-2"
+                inputClassName="mh150"
+                readOnly={true}
+                // handleChange={(name) => (e) =>
+                //   setValues({ ...values, comments: e.target.value })}
+                value={satisfactionData?.history}
+              />
+            )}
           </>
         )}
       </section>

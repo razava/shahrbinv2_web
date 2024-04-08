@@ -20,6 +20,8 @@ import LayoutScrollable from "../helpers/Layout/LayoutScrollable";
 import Loader from "../helpers/Loader";
 import MyDataTable from "../helpers/MyDataTable";
 import SearchInput from "../helpers/SearchInput";
+import { editCategory } from "../../api/AdminApi";
+import { useMutation } from "@tanstack/react-query";
 
 const modalRoot = document && document.getElementById("modal-root");
 
@@ -85,6 +87,17 @@ const AddCategory = ({ match }) => {
     });
     return children;
   };
+
+  //Queries
+  const editCategoryMutation = useMutation({
+    mutationKey: ["editCategory"],
+    mutationFn: editCategory,
+    onSuccess: (res) => {
+    toast("وضعیت دسته‌بندی با موفقیت به‌روز شد.", { type: "success" });
+      getCategories();
+    },
+    onError: (err) => {},
+  });
 
   function flatten(data) {
     let result = [];
@@ -203,7 +216,11 @@ const AddCategory = ({ match }) => {
       id: `category-${2}`,
       title: (row) => (row?.isDeleted ? "فعال کردن" : "غیر‌فعال کردن"),
       icon: (row) => (row?.isDeleted ? "fas fa-recycle" : "fas fa-times"),
-      onClick: (row) => deleteCategory(row.id),
+      onClick: (row) =>
+        editCategoryMutation.mutate({
+          Data: { isDeleted: !row.isDeleted },
+          id: row.id,
+        }),
     },
   ];
 

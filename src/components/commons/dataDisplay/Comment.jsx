@@ -24,9 +24,7 @@ export default function Comment({ data }) {
                 {" "}
                 {data.user.title}{" "}
                 <span className=" text-lg">
-                  (
-                  {convertserverTimeToDateString("2023-12-21T15:13:46.3410003")}
-                  )
+                  ({convertserverTimeToDateString(data.dateTime)})
                 </span>
               </>
             )}
@@ -46,11 +44,7 @@ export default function Comment({ data }) {
                   <>
                     {data.reply.user.firstName} {data.reply.user.lastName}{" "}
                     <span className=" text-lg">
-                      (
-                      {convertserverTimeToDateString(
-                        "2023-12-21T15:13:46.3410003"
-                      )}
-                      )
+                      ({convertserverTimeToDateString(data.reply.dateTime)})
                     </span>
                   </>
                 ) : (
@@ -58,11 +52,7 @@ export default function Comment({ data }) {
                     {" "}
                     {data.reply.user.title}{" "}
                     <span className=" text-lg">
-                      (
-                      {convertserverTimeToDateString(
-                        "2023-12-21T15:13:46.3410003"
-                      )}
-                      )
+                      ({convertserverTimeToDateString(data.reply.dateTime)})
                     </span>
                   </>
                 )}

@@ -434,21 +434,23 @@ const AddCategoryDialog = ({
               required={false}
             />
           </div>
-          <div className={"w100 mxa frc row"}>
-            <MultiSelect
-              strings={{ label: "اپراتور" }}
-              caller={ConfigurationsAPI.getOperators}
-              isStatic={false}
-              nameKey="text"
-              valueKey={"value"}
-              maxHeight={160}
-              onChange={(values) => handleChange("operatorIds")(values)}
-              // defaultSelecteds={defaultActors}
-              isInDialog={true}
-              wrapperClassName="col-md-12"
-              id="organs-list"
-            />
-          </div>
+          {!isEditMode && (
+            <div className={"w100 mxa frc row"}>
+              <MultiSelect
+                strings={{ label: "اپراتور" }}
+                caller={ConfigurationsAPI.getOperators}
+                isStatic={false}
+                nameKey="text"
+                valueKey={"value"}
+                maxHeight={160}
+                onChange={(values) => handleChange("operatorIds")(values)}
+                // defaultSelecteds={defaultActors}
+                isInDialog={true}
+                wrapperClassName="col-md-12"
+                id="organs-list"
+              />
+            </div>
+          )}
         </form>
         <div className="w100 mxa fre py1 px2 border-t-light mt1">
           <Button
