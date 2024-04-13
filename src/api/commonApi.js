@@ -4,7 +4,7 @@ import {
   createQueryParams,
 } from "../helperFuncs";
 import axios from "axios";
-axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+axios.defaults.baseURL = window.__ENV__?.REACT_APP_API_URL;
 // const prefix = process.env.REACT_APP_API_URL;
 const Token =
   getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN) || {};
@@ -73,6 +73,13 @@ export async function getFilters() {
 
 export async function getUserFilters() {
   const data = await axios.get(`/api/${instanceId()}/StaffCommon/UserFilters`, {
+    headers: { Authorization: `Bearer ${Token}` },
+  });
+  return data.data.data;
+}
+
+export async function getCategoryFormById(id) {
+  const data = await axios.get(`/api/${instanceId()}/StaffCommon/Form/${id}`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data.data;

@@ -6,7 +6,7 @@ import {
 } from "./helperFuncs";
 import TicketingAxios from "./api/TicketBaseUrl";
 
-const prefix = process.env.REACT_APP_API_URL;
+const prefix = window.__ENV__?.REACT_APP_API_URL;
 const prefix2 = "https://ticketingapi.shetabdahi.ir";
 // ? "https://192.168.1.11"
 // "https://192.168.1.130:3749"

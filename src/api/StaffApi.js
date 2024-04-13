@@ -5,7 +5,7 @@ import {
 } from "../helperFuncs";
 import axios from "axios";
 import TicketingAxios from "./TicketBaseUrl";
-axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+axios.defaults.baseURL = window.__ENV__?.REACT_APP_API_URL;
 const Token =
   getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN) || {};
 const instanceId = getFromLocalStorage(

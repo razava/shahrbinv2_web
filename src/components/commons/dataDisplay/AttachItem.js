@@ -18,8 +18,8 @@ const AttachItem = ({
 
   const getUrl = (slag) =>
     (process.env.NODE_ENV === "development"
-      ? process.env.REACT_APP_API_URL
-      : process.env.REACT_APP_API_URL) + `/${slag}`;
+      ? window.__ENV__?.REACT_APP_API_URL
+      : window.__ENV__?.REACT_APP_API_URL) + `/${slag}`;
 
   const getSource = (media) => {
     const file = media.file;

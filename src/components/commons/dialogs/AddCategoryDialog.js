@@ -66,7 +66,7 @@ const AddCategoryDialog = ({
     description: "",
     objectionAllowed: "",
     editingAllowed: "",
-    form: "",
+    formId: null,
     defaultPriority: "",
     operatorIds: [],
   });
@@ -225,6 +225,7 @@ const AddCategoryDialog = ({
       editingAllowed: Number(values.objectionAllowed) === 1 ? true : false,
       parentId: categoryId2,
       processId: values.processId ? Number(values.processId) : null,
+      formId: values.formId ? values.formId : null,
     };
     if (!isEditMode) {
       payload["operatorIds"] = values.operatorIds.map((item) => item.value);

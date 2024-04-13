@@ -7,6 +7,8 @@ import CheckBoxGroup from "../../../components2/CheckBox/CheckBoxGroup";
 import Header from "../../../components2/Header/Header";
 import DropZone from "../../../components2/FileDrop/DropZone";
 import Message from "../../../components2/Message/Message";
+import { getCategoryFormById } from "../../../api/commonApi";
+import { useQuery } from "@tanstack/react-query";
 
 export default function CategoryForm2({ data, onChange, readOnly = true }) {
   console.log(data);
@@ -24,21 +26,37 @@ export default function CategoryForm2({ data, onChange, readOnly = true }) {
     setValues({ ...values, [name]: e });
     if (!readOnly) onChange({ ...values, [name]: e });
   };
- 
-  const defaultValues = JSON.parse(data.comments);
-  
+
+  const defaultValues = JSON.parse(data.comments).values;
+  const formId = JSON.parse(data.comments).formId;
+
+  //queries
+  const { data: categoryForm, isLoading } = useQuery({
+    queryKey: ["CategoryForm", formId],
+    queryFn: () => getCategoryFormById(formId),
+  });
+  console.log(categoryForm);
+
+  const findValue = (order) => {
+    console.log(order);
+    const obj = defaultValues.find((item) => item.id == order);
+    return obj.value;
+  };
+
   return (
     <div className="w-[95%] flex flex-col gap-2 mx-auto">
-      {data?.form?.elements.map((item) => {
+      {categoryForm?.elements.map((item,idx) => {
+        console.log(item);
         const meta = JSON.parse(item.meta);
         if (item.elementType === "text") {
           return (
             <div
-                style={{ order: item.order }}
+              style={{ order: item.order }}
               // className={` order-${item.order}`}
+              key={idx}
             >
               <TextInput
-                defaultValue={defaultValues[item.name]}
+                defaultValue={findValue(item.order)}
                 name={item.name}
                 onChange={handleChange}
                 {...meta.props}
@@ -49,11 +67,12 @@ export default function CategoryForm2({ data, onChange, readOnly = true }) {
         } else if (item.elementType == "select") {
           return (
             <div
-                style={{ order: item.order }}
+              style={{ order: item.order }}
               // className={` order-${item.order}`}
+              key={idx}
             >
               <Optional
-                defaultSelecteds={defaultValues[item.name]}
+                defaultSelecteds={findValue(item.order)}
                 handleChange2={handleChange}
                 name={item.name}
                 field={meta}
@@ -63,11 +82,12 @@ export default function CategoryForm2({ data, onChange, readOnly = true }) {
         } else if (item.elementType == "textarea") {
           return (
             <div
-                style={{ order: item.order }}
+              style={{ order: item.order }}
               // className={` order-${item.order}`}
+              key={idx}
             >
               <TextArea
-                defaultValue={defaultValues[item.name]}
+                defaultValue={findValue(item.order)}
                 name={item.name}
                 onChange={handleChange}
                 readOnly={readOnly}
@@ -78,11 +98,12 @@ export default function CategoryForm2({ data, onChange, readOnly = true }) {
         } else if (item.elementType == "radio") {
           return (
             <div
-                style={{ order: item.order }}
+              style={{ order: item.order }}
               // className={` order-${item.order}`}
+              key={idx}
             >
               <RadioGroup
-                defaultValue={defaultValues[item.name]}
+                defaultValue={findValue(item.order)}
                 onChange={(value) => handleChange(value, item.name)}
                 {...meta.props}
                 disabled={false}
@@ -92,11 +113,12 @@ export default function CategoryForm2({ data, onChange, readOnly = true }) {
         } else if (item.elementType == "checkbox") {
           return (
             <div
-                style={{ order: item.order }}
+              style={{ order: item.order }}
               // className={` order-${item.order}`}
+              key={idx}
             >
               <CheckBoxGroup
-                defaults={defaultValues[item.name]}
+                defaults={findValue(item.order)}
                 readOnly={true}
                 // defaultSelecteds={[
                 //   [

@@ -1,14 +1,14 @@
 {
   "name": "shahrbin-admin",
-  "version": "0.2.18",
+  "version": "0.2.19",
   "private": true,
-  "homepage":".",
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^3.0.2",
     "@ckeditor/ckeditor5-upload": "^40.2.0",
     "@hassanmojab/react-modern-calendar-datepicker": "^3.1.7",
     "@headlessui/react": "^1.7.18",
     "@heroicons/react": "^2.1.1",
+    "@mantine/hooks": "^7.7.1",
     "@microsoft/signalr": "^5.0.6",
     "@moji7798/ckeditor5-custom-build": "^0.0.3",
     "@react-pdf/renderer": "^3.3.4",

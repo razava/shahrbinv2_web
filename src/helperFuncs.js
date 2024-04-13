@@ -559,8 +559,8 @@ export const downloadImage = (url) => {
   const link = document.createElement("a");
   link.href = `${
     process.env.NODE_ENV === "development"
-      ? process.env.REACT_APP_API_URL
-      : process.env.REACT_APP_API_URL
+      ? window.__ENV__?.REACT_APP_API_URL
+      : window.__ENV__?.REACT_APP_API_URL
   }/${url}`;
   link.download = url;
   link.setAttribute("target", "_blank");
@@ -890,8 +890,10 @@ export const childrenCount = (node) => node.children.length;
 
 export const fixURL = (path, isAPIAddress = true) => {
   return process.env.NODE_ENV === "development"
-    ? `${process.env.REACT_APP_API_URL}/${isAPIAddress ? "api" : ""}${path}`
-    : `${process.env.REACT_APP_API_URL}/${isAPIAddress ? "api" : ""}${path}`;
+    ? `${window.__ENV__?.REACT_APP_API_URL}/${isAPIAddress ? "api" : ""}${path}`
+    : `${window.__ENV__?.REACT_APP_API_URL}/${
+        isAPIAddress ? "api" : ""
+      }${path}`;
 };
 
 export const showErrorMessage = (res) => {

@@ -4,7 +4,7 @@ import PHImage from "../../../assets/Images/item_profilepic_placeholder.png";
 
 export default function Comment({ data }) {
   console.log(data.dateTime);
-  const avatarUrl = `${process.env.REACT_APP_API_URL}/${data?.user.avatar?.url4}`;
+  const avatarUrl = `${window.__ENV__?.REACT_APP_API_URL}/${data?.user.avatar?.url4}`;
   const Avatar = data?.user?.avatar?.url4 ? avatarUrl : PHImage;
   return (
     <div className=" border border-solid border-gray-300 w-full flex flex-col rounded-md p-6">

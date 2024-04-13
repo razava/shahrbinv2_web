@@ -4,7 +4,7 @@ import {
   createQueryParams,
 } from "../helperFuncs";
 import axios from "axios";
-axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+axios.defaults.baseURL = window.__ENV__?.REACT_APP_API_URL;
 const Token =
   getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN) || {};
 // const instanceId = getFromLocalStorage(
@@ -196,11 +196,12 @@ export async function getUserRolesByAdmin(id) {
   return data.data.data;
 }
 
-export async function getUserReports(id) {
+export async function getUserReports({ id, pageNumber = 1, pageSize = 8 }) {
   const data = await axios.get(
     `/api/${instanceId()}/AdminUserManagement/UserReports/${id}`,
     {
       headers: { Authorization: `Bearer ${Token}` },
+      params: { pageNumber: pageNumber, pageSize: pageSize },
     }
   );
   return data.data.data;

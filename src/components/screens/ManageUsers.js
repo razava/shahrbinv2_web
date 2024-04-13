@@ -321,7 +321,7 @@ const ManageUsers = ({ match }) => {
         setCondition={setUsersDialog}
         dialogId={dialogData?.id}
         width={700}
-        height={500}
+        // height={500}
         // fixedDimension={false}
         id="Users-dialog"
       >
