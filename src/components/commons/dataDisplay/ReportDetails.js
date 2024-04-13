@@ -99,13 +99,13 @@ const ReportDetails = ({ data }) => {
             required={false}
           />
         </div>
-        <Textarea
+        {/* <Textarea
           value={data?.form ? "" : doesExist(data?.comments)}
           readOnly={true}
           title="توضیحات"
           wrapperClassName="mxa"
           inputClassName="mh150 of-x-hidden"
-        />
+        /> */}
       </div>
     </section>
   );

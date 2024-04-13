@@ -13,22 +13,18 @@ import { useQuery } from "@tanstack/react-query";
 export default function CategoryForm2({ data, onChange, readOnly = true }) {
   console.log(data);
   let obj = {};
-  const names = data.form.elements.map((item) => {
-    if (item.elementType !== "message" || item.elementType !== "header")
-      obj[item.name] = "";
-  });
   const [values, setValues] = useState(obj);
   console.log(obj);
   console.log(values);
-  const { category } = data;
+  
   const handleChange = (e, name) => {
     console.log(e, name);
     setValues({ ...values, [name]: e });
     if (!readOnly) onChange({ ...values, [name]: e });
   };
 
-  const defaultValues = JSON.parse(data.comments).values;
-  const formId = JSON.parse(data.comments).formId;
+  const defaultValues = JSON.parse(data?.comments)?.values;
+  const formId = JSON.parse(data?.comments)?.formId;
 
   //queries
   const { data: categoryForm, isLoading } = useQuery({
