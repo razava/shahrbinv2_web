@@ -2,12 +2,19 @@ import React, { useEffect, useState } from "react";
 import DropDown from "../../DropDown/DropDown";
 import TextInput from "../../TextInput/TextInput";
 
-const Optional = ({ field = {}, defaultSelecteds = [], readOnly = false }) => {
+const Optional = ({
+  field = {},
+  defaultSelecteds = [],
+  readOnly = false,
+  handleChange2,
+  name,
+}) => {
   const [selecteds, setSelecteds] = useState([defaultSelecteds]);
 
   const handleChange = (selecteds) => {
     if (!readOnly) {
       setSelecteds(selecteds);
+      handleChange2(selecteds, name);
     }
   };
   console.log(defaultSelecteds);
@@ -17,6 +24,7 @@ const Optional = ({ field = {}, defaultSelecteds = [], readOnly = false }) => {
       setSelecteds([defaultSelecteds]);
     }
   }, []);
+
   return (
     <>
       <DropDown

@@ -16,7 +16,7 @@ export default function CategoryForm2({ data, onChange, readOnly = true }) {
   const [values, setValues] = useState(obj);
   console.log(obj);
   console.log(values);
-  
+
   const handleChange = (e, name) => {
     console.log(e, name);
     setValues({ ...values, [name]: e });
@@ -32,6 +32,7 @@ export default function CategoryForm2({ data, onChange, readOnly = true }) {
     queryFn: () => getCategoryFormById(formId),
   });
   console.log(categoryForm);
+  console.log(defaultValues);
 
   const findValue = (order) => {
     console.log(order);
@@ -41,7 +42,7 @@ export default function CategoryForm2({ data, onChange, readOnly = true }) {
 
   return (
     <div className="w-[95%] flex flex-col gap-2 mx-auto">
-      {categoryForm?.elements.map((item,idx) => {
+      {categoryForm?.elements.map((item, idx) => {
         console.log(item);
         const meta = JSON.parse(item.meta);
         if (item.elementType === "text") {

@@ -24,6 +24,8 @@ import LayoutScrollable from "../helpers/Layout/LayoutScrollable";
 import IsIdentityVisible from "../helpers/IsIdentityVisible";
 import AttachmentToggle from "../commons/dataDisplay/Attachment/AttachmentToggle";
 import NavigatableDialog from "../helpers/NavigatableDialog";
+import CategoryForm2 from "../commons/dataDisplay/CategoryForm2";
+import RegisterCategoryForm from "../commons/dataDisplay/RegisterCategoryForm";
 
 const modalRoot = document && document.getElementById("modal-root");
 
@@ -53,6 +55,7 @@ const RegisterReport = () => {
   const [attachments, setAttachments] = useState([]);
   const [categoryId, setCategoryId] = useState(null);
   const [categoryTitle, setCategoryTitle] = useState("");
+  const [category, setCategory] = useState("");
   const [reportId, setReportId] = useState(null);
   const [referDialog, setReferDialog] = useState(false);
   const [dialogData, setDialogData] = useState(null);
@@ -125,7 +128,10 @@ const RegisterReport = () => {
       console.log(regionId);
       callRegister({
         categoryId: categoryId,
-        comments: values.comments,
+        comments: JSON.stringify({
+          values: values.comments,
+          formId: category.form.id,
+        }),
         phoneNumber: fixDigit(values.phoneNumber, true),
         firstName: values.firstName,
         lastName: values.lastName,
@@ -171,10 +177,13 @@ const RegisterReport = () => {
     console.log(selecteds[0]);
     if (selecteds.length > 0) {
       const selected = selecteds[0];
+      console.log(selected);
+      setCategory(selected);
       setCategoryTitle(selected.title);
       setCategoryId(selected.id);
       setValues({ ...values, defaultPriority: selecteds[0].defaultPriority });
     } else {
+      setCategory("");
       setCategoryTitle("");
       setCategoryId(null);
     }
@@ -217,6 +226,9 @@ const RegisterReport = () => {
     console.log(attachs);
     setAttachments(attachs);
   };
+  useEffect(() => {
+    console.log(values);
+  }, [values]);
 
   const visibilityOptions = [
     {
@@ -235,6 +247,12 @@ const RegisterReport = () => {
   useEffect(() => {
     console.log(values.region);
   }, [values.region]);
+
+  const hasAttachment = category?.form?.elements?.find(
+    (item) => item.elementType == "dropzone"
+  );
+
+  console.log(hasAttachment);
   return (
     <>
       <LayoutScrollable>
@@ -359,7 +377,7 @@ const RegisterReport = () => {
                 onChange={setIsIdentityVisible}
               />
             </div>
-            <div className={"w100 mxa row"}>
+            <div className={"w100 row"}>
               <SelectBox
                 staticData
                 options={[
@@ -373,24 +391,34 @@ const RegisterReport = () => {
                 handleChange={handleChange}
                 handle={["title"]}
                 label="اولویت"
-                wrapperClassName="col-md-6 col-sm-12 col-12 mx-auto"
+                wrapperClassName="col-md-6 col-sm-12"
               />
             </div>
-          </div>{" "}
-          <div className="w100 mxa">
-            <Textarea
-              value={values.comments}
-              name="comments"
-              handleChange={handleChange}
-              title="توضیحات"
-              wrapperClassName="mxa"
-              inputClassName="w100 mxa"
-              defaultStyles={true}
-            />
           </div>
-          <div className="w90 mxa frc mt1 px3">
-            <AttachmentToggle onAddAttachment={onAddAttachment} reset={reset} />
-          </div>
+          {category && (
+            <>
+              <div className=" w-[88%] mx-auto h-2 my-3 bg-gray-200"></div>
+              <div className="w100 px-36">
+                <RegisterCategoryForm
+                  onChange={(data) => setValues({ ...values, comments: data })}
+                  data={{ category: category }}
+                  addAttachment={(data) => {
+                    console.log(data);
+                    setAttachments(data);
+                  }}
+                />{" "}
+              </div>
+            </>
+          )}
+          {!hasAttachment && (
+            <div className="w90 mxa frc mt1 px3">
+              <AttachmentToggle
+                onAddAttachment={onAddAttachment}
+                reset={reset}
+              />
+            </div>
+          )}
+
           <div className="w100 mxa fre py1 px2 border-t-light mt1">
             <Button
               title="ثبت درخواست"

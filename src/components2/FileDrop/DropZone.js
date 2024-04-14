@@ -10,6 +10,8 @@ import Icon from "../Icon/Icon";
 import { allFormats } from "./constants";
 import File from "./File";
 import styles from "./style.module.css";
+import { useMutation } from "@tanstack/react-query";
+import { postFiles } from "../../api/commonApi";
 
 const DropZone = ({
   placeholder = "فایل را بکشید و اینجا رها کنید.",
@@ -30,9 +32,21 @@ const DropZone = ({
 }) => {
   //   refrences
   const inputRef = useRef(null);
-  
+  //queries
+  const postFilesMutation = useMutation({
+    mutationKey: ["postFiles"],
+    mutationFn: postFiles,
+    onSuccess: (res) => {
+      setFileIds([...fileIds, { id: res.id }]);
+      setFiles([...files, temporaryFiles]);
+      onChange([...fileIds, { id: res.data.id }], name);
+    },
+    onError: (err) => {},
+  });
   //   states
   const [files, setFiles] = useState([]);
+  const [fileIds, setFileIds] = useState([]);
+  const [temporaryFiles, setTemporaryFiles] = useState([]);
   const [highlight, setHighlight] = useState(false);
   console.log(files);
   // classNames
@@ -70,15 +84,25 @@ const DropZone = ({
 
   const onAddFile = (e) => {
     const { isValid } = validate(e.target.files);
+    console.log(333);
+
     if (!isValid) return;
     const newFiles = Array.from(e.target.files).map((f) => {
       f.id = `dz-f-${files.length}`;
       return f;
     });
-    setFiles([...files, ...newFiles]);
-    onChange([...files, ...newFiles], name);
+    const formData = new FormData();
+    setTemporaryFiles(newFiles[0]);
+    formData.append("File", newFiles[0]);
+    // newFiles.map((item) => {
+    //   console.log(item);
+    // })
+    formData.append("AttachmentType", 0);
+    postFilesMutation.mutate(formData);
+    // setFiles([...files, ...newFiles]);
+    // onChange([...files, ...newFiles], name);
   };
-
+  console.log(fileIds);
   const onRemove = (file) => {
     const updatedFiles = files.filter((f) => String(f.id) !== String(file.id));
     setFiles(updatedFiles);
@@ -103,10 +127,14 @@ const DropZone = ({
     const file = e.dataTransfer.files[0];
     if (file) {
       file.id = `dz-f-${files.length}`;
+      const formData = new FormData();
+      formData.append("File", file);
+      formData.append("AttachmentType", 0);
       setFiles([...files, file]);
       onChange([...files, file], name);
     }
   };
+  console.log(files);
   return (
     <>
       <section

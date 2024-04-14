@@ -20,7 +20,7 @@ export async function postFiles(Data) {
     headers: { Authorization: `Bearer ${Token}` },
     "Content-Type": "multipart/form-data",
   });
-  return data.data.data;
+  return data.data;
 }
 
 export async function EditProfile(Data) {
