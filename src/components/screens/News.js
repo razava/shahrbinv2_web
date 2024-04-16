@@ -28,7 +28,6 @@ export default function News() {
     mutationKey: ["News"],
     mutationFn: editNews,
     onSuccess: (res) => {
-      toast("وضعیت خبر با موفقیت بروزرسانی شد.", { type: "success" });
       queryClient.invalidateQueries({ queryKey: ["News"] });
     },
     onError: (err) => {},

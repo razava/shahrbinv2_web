@@ -86,7 +86,7 @@ export default function ChangePhoneNumber() {
       //   queryClient.invalidateQueries({ queryKey: ["getReportNotes"] });
       logout(() => history.push(appRoutes.login));
       localStorage.removeItem(constants.SHAHRBIN_MANAGEMENT_HAS_PHONE_NUMBER);
-      toast("شماره موبایل با موفقیت تغییر یافت.", { type: "success" });
+      // toast("شماره موبایل با موفقیت تغییر یافت.", { type: "success" });
     },
     onError: (err) => {
       console.log(err.response);

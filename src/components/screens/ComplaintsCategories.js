@@ -75,14 +75,12 @@ const ComplaintsCategories = ({ match }) => {
   };
 
   const onCategoryCreated = () => {
-    toast("واحد جدید با موفقیت اضافه شد.", { type: "success" });
     setAddCategoryDialog(false);
     modalRoot.classList.remove("active");
     getAllCategories();
   };
 
   const onCategoryEdited = () => {
-    toast("دسته‌بندی با موفقیت ویرایش شد.", { type: "success" });
     setEditDialog(false);
     modalRoot.classList.remove("active");
     setDialogData(null);

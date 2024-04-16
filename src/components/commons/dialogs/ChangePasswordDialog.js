@@ -56,15 +56,14 @@ const ChangePasswordDialog = ({ id, setCondition, type = 1 }) => {
 
   const [, loading] = useMakeRequest(
     type === 1 ? AuthenticateAPI.resetPassword : AuthenticateAPI.changePassword,
-    204,
+    200,
     makeRequest,
     payload,
     (res) => {
       setMakeRequest(false);
       // setCondition(false);
       // modalRoot.classList.remove("active");
-      if (res.status === 204) {
-        toast("رمز عبور با موفقیت تنظیم شد.", { type: "success" });
+      if (res.status === 200) {
       } else if (serverError(res)) return;
       else if (unKnownError(res)) return;
     },

@@ -49,14 +49,13 @@ const ViolationDialog = ({
 
   const [] = useMakeRequest(
     ViolationAPI.handleViolation,
-    204,
+    200,
     submitRequest,
     payload,
     (res) => {
       setSubmitRequest(false);
       setLoading(false);
-      if (res && res.status === 204) {
-        toast("گزارش تخلف با موفقیت بررسی شد.", { type: "success" });
+      if (res && res.status === 200) {
         onSuccess();
       } else if (serverError(res)) return;
       else if (unKnownError(res)) return;

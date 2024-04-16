@@ -21,7 +21,6 @@ export default function CloseTicketDialog({ id, closedDialog }) {
       modalRoot.classList.remove("active");
       closedDialog();
       history.push(appRoutes.tickets);
-      toast("تیکت با موفقیت بسته شد.", { type: "success" });
     },
     onError: (err) => {},
   });

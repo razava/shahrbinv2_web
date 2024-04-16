@@ -53,7 +53,6 @@ export default function OperatorCategories({ userId }) {
     onSuccess: (res) => {
       refetch();
       // queryClient.invalidateQueries({ queryKey: ["getReportNotes"] });
-      toast("دسته بندی ها با موفقیت به روزرسانی شد.", { type: "success" });
     },
     onError: (err) => {},
   });

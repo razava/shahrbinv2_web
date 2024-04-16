@@ -75,10 +75,6 @@ const EditForm = ({
       payload,
       successCallback: (res) => {
         successCallback(res);
-        toast(
-          res.data.message ? res.data.message : "ویرایش با موفقیت انجام شد.",
-          { type: "success" }
-        );
       },
       requestEnded: () => {
         modalRoot.classList.remove("active");

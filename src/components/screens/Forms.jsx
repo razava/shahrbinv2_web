@@ -42,7 +42,6 @@ function Forms() {
     mutationFn: deleteForm,
     onSuccess: (res) => {
       refetch();
-      toast("فرم با موفقیت حذف شد.", { type: "success" });
     },
     onError: (err) => {},
   });

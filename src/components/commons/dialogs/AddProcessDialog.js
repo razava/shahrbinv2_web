@@ -92,13 +92,13 @@ const AddProcessDialog = ({
   console.log(defaultActors);
   const [, loading] = useMakeRequest(
     isEditMode ? ProcessesAPI.updateProcess : ProcessesAPI.createProcess,
-    isEditMode ? 204 : 201,
+    isEditMode ? 200 : 201,
     createRequest,
     payload,
     (res) => {
       setCreateRequest(false);
       console.log(res);
-      const status = isEditMode ? 204 : 201;
+      const status = isEditMode ? 200 : 201;
       if (res && res.status === status) {
         onSuccess();
       } else if (serverError(res)) return;

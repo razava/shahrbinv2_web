@@ -84,7 +84,7 @@ const CategoryForm = ({ data }) => {
     const plateNumberValues = {};
     const textAreaValues = {};
     textElements.forEach((e) => {
-      textValues[e.name] =   [e.name] || "";
+      textValues[e.name] = [e.name] || "";
     });
     selectElements.forEach((e) => {
       selectValues[e.name] = citizenValues[e.name] || "";
@@ -208,18 +208,18 @@ const CategoryForm = ({ data }) => {
 
   const [, loading] = useMakeRequest(
     ReportsAPI.updateCitizenRequest,
-    204,
+    200,
     editRequest,
     payload,
     (res) => {
       setEditRequest(false);
-      if (res && res.status === 204) {
-        toast("ویرایش انجام شد.", { type: "success" });
+      if (res && res.status === 200) {
       } else if (serverError(res)) return;
       else if (unKnownError(res)) return;
     },
     data?.id
   );
+
   return (
     <>
       <div className="w90 mxa fcc">

@@ -39,14 +39,13 @@ export default function CommentActions({ data, refresh, onNext }) {
 
   const [] = useMakeRequest(
     ViolationAPI.handleCommentViolation,
-    204,
+    200,
     submitRequest,
     payload,
     (res) => {
       setSubmitRequest(false);
       //   setLoading(false);
-      if (res && res.status === 204) {
-        toast("گزارش تخلف با موفقیت بررسی شد.", { type: "success" });
+      if (res && res.status === 200) {
         onNext();
         refresh();
       } else if (serverError(res)) return;

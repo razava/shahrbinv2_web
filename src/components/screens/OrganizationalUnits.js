@@ -77,14 +77,12 @@ const OrganizationalUnits = ({ match }) => {
   };
 
   const onUnitCreated = () => {
-    toast("واحد جدید با موفقیت اضافه شد.", { type: "success" });
     setAddUnitDialog(false);
     modalRoot.classList.remove("active");
     getAllOrgans();
   };
 
   const onOrganizationEdited = () => {
-    toast("واحد با موفقیت ویرایش شد.", { type: "success" });
     setEditDialog(false);
     modalRoot.classList.remove("active");
     setDialogData(null);
@@ -103,7 +101,6 @@ const OrganizationalUnits = ({ match }) => {
     mutationFn: deleteOrganizationalUnit,
     onSuccess: (res) => {
       getAllOrgans();
-      toast("واحد سازمانی با موفقیت حذف شد.", { type: "success" });
     },
     onError: (err) => {
       console.log(err.response);

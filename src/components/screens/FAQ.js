@@ -27,7 +27,6 @@ export default function FAQ() {
     mutationKey: ["FAQ"],
     mutationFn: editFAQ,
     onSuccess: (res) => {
-      toast("وضعیت سوال با موفقیت بروزرسانی شد.", { type: "success" });
       queryClient.invalidateQueries({ queryKey: ["FAQ"] });
     },
     onError: (err) => {},

@@ -107,12 +107,12 @@ const AddOrganizationalUnit = ({
     isEditMode
       ? OrganizationalUnitAPI.updateUnit
       : OrganizationalUnitAPI.createUnit,
-    isEditMode ? 204 : 201,
+    isEditMode ? 200 : 201,
     createRequest,
     payload,
     (res) => {
       setCreateRequest(false);
-      const status = isEditMode ? 204 : 201;
+      const status = isEditMode ? 200 : 201;
       if (res && res.status === status) {
         onSuccess();
       } else if (serverError(res)) return;

@@ -2875,15 +2875,14 @@ const TreeSelect2 = ({ userId, setCondition }) => {
 
   const [, saveLoading] = useMakeRequest(
     UserInfoAPI.saveRoles,
-    204,
+    200,
     makeRequest,
     { roles: roles },
     (res) => {
       setMakeRequest(false);
       setCondition(false);
       modalRoot.classList.remove("active");
-      if (res.status === 204) {
-        toast("تغییرات با موفقیت ذخیره شد.", { type: "success" });
+      if (res.status === 200) {
       } else if (serverError(res)) return;
       else if (unKnownError(res)) return;
     },
@@ -2949,5 +2948,3 @@ const TreeSelect2 = ({ userId, setCondition }) => {
 };
 
 export default TreeSelect2;
-
-

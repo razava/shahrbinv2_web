@@ -91,15 +91,14 @@ const RolesDialog = ({ userId, setCondition }) => {
 
   const [, saveLoading] = useMakeRequest(
     UserInfoAPI.saveUserRegions,
-    204,
+    200,
     makeRequest,
     payload,
     (res) => {
       setMakeRequest(false);
       // setCondition(false);
       modalRoot.classList.remove("active");
-      if (res.status === 204) {
-        toast("تغییرات با موفقیت ذخیره شد.", { type: "success" });
+      if (res.status === 200) {
       } else if (serverError(res)) return;
       else if (unKnownError(res)) return;
     },

@@ -85,10 +85,10 @@ const QuickAccess = ({ match }) => {
     callAPI(
       {
         caller: QuickAccessAPI.editAccess,
-        successStatus: 204,
+        successStatus: 200,
         payload: formData,
         successCallback: () => {
-          toast("عملیات با موفقیت انجام شد.", { type: "success" });
+          // toast("عملیات با موفقیت انجام شد.", { type: "success" });
           getPolls();
         },
         requestEnded: () => setLoading(false),

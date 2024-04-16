@@ -22,7 +22,6 @@ export default function Notes({ data }) {
     onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["getReportNotes"] });
       console.log(res);
-      toast(res?.message, { type: "success" });
       setNote("");
     },
     onError: (err) => {},
@@ -33,7 +32,6 @@ export default function Notes({ data }) {
     mutationFn: putReportNote,
     onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["getReportNotes"] });
-      toast("یادداشت با موفقیت ویرایش شد.", { type: "success" });
     },
     onError: (err) => {},
   });
@@ -43,7 +41,6 @@ export default function Notes({ data }) {
     mutationFn: deleteReportNote,
     onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["getReportNotes"] });
-      toast("یادداشت با موفقیت حذف شد.", { type: "success" });
     },
     onError: (err) => {},
   });

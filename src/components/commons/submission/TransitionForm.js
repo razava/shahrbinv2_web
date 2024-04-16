@@ -179,8 +179,7 @@ const TransitionForm = ({
         caller: ReportsAPI.sendMessageToCitizen,
         successStatus: 200,
         payload,
-        successCallback: (res) =>
-          toast("پیام شما با موفقیت به شهروند ارسال شد.", { type: "success" }),
+        successCallback: (res) => {},
         requestEnded: () => setLoading(false),
       },
       data?.id

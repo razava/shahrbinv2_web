@@ -3,7 +3,7 @@ import { Route, Switch, withRouter } from "react-router-dom";
 import Layout from "./Layout";
 import SideBar from "./components/commons/navigations/SideBar/SideBar";
 import Header from "./components/commons/navigations/Header";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Flip, Zoom } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AuthorizeRoute from "./components/commons/authorization/AuthorizeRoute";
 import { appRoutes } from "./helperFuncs";
@@ -57,7 +57,12 @@ const App = () => {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <ToastContainer newestOnTop={true} rtl={true} className="f15" />
+        <ToastContainer
+          transition={Flip}
+          newestOnTop={true}
+          rtl={true}
+          className="f15"
+        />
         <div id="content">
           <Suspense fallback={<Progress />}>
             <Switch>

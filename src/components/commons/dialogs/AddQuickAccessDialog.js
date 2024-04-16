@@ -130,15 +130,13 @@ const AddQuickAccessDialog = ({
 
   const [, loading] = useMakeRequest(
     isEditMode ? QuickAccessAPI.editAccess : QuickAccessAPI.createAccess,
-    isEditMode ? 204 : 201,
+    isEditMode ? 200 : 201,
     createRequest,
     payload,
     (res) => {
       setCreateRequest(false);
-      const status = isEditMode ? 204 : 201;
+      const status = isEditMode ? 200 : 201;
       if (res && res.status === status) {
-        console.log(res);
-        toast(res?.message, { type: "success" });
         onSuccess();
       } else if (serverError(res)) return;
       else if (unKnownError(res)) return;

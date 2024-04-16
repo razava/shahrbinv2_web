@@ -15,7 +15,6 @@ export default function EditNoteDialog({ noteData }) {
     mutationKey: ["putNote"],
     mutationFn: putReportNote,
     onSuccess: (res) => {
-      toast("یادداشت با موفقیت ویرایش شد.", { type: "success" });
       queryClient.invalidateQueries({ queryKey: ["notes"] });
       modalRoot.classList.remove("modal-root");
     },

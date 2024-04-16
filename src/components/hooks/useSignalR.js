@@ -81,7 +81,6 @@ const useSignalR = (callBack = (f) => f) => {
         postConnectionIdMutation.mutate(connection.connectionId);
         connection.on("Update", (data) => {
           callBack(data);
-          toast("یک درخواست جدید ثبت شد.", { type: "info" });
         });
       } catch (err) {
         console.error("SignalR connection failed: ", err);

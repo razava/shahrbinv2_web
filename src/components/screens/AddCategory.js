@@ -93,7 +93,6 @@ const AddCategory = ({ match }) => {
     mutationKey: ["editCategory"],
     mutationFn: editCategory,
     onSuccess: (res) => {
-    toast("وضعیت دسته‌بندی با موفقیت به‌روز شد.", { type: "success" });
       getCategories();
     },
     onError: (err) => {},
@@ -140,14 +139,12 @@ const AddCategory = ({ match }) => {
   };
 
   const onCategoryCreated = () => {
-    toast("دسته‌بندی جدید با موفقیت اضافه شد.", { type: "success" });
     setDialog(false);
     modalRoot.classList.remove("active");
     getCategories();
   };
 
   const onCategoryEdited = () => {
-    toast("دسته‌بندی با موفقیت به‌روز شد.", { type: "success" });
     setDialog(false);
     modalRoot.classList.remove("active");
     getCategories();
@@ -158,11 +155,10 @@ const AddCategory = ({ match }) => {
     callAPI({
       caller: ConfigurationsAPI.deleteCategory,
       successCallback: () => {
-        toast("دسته‌بندی با موفقیت حذف شد.", { type: "success" });
         getCategories();
       },
       payload: id,
-      successStatus: 204,
+      successStatus: 200,
       requestEnded: () => setDeleteLoading(false),
     });
   };

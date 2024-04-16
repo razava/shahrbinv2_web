@@ -40,7 +40,7 @@ export default function Ticket() {
       setClearAttachments(true);
       setAttachments([]);
       setValues({ messageContent: "" });
-      toast("پیام شما با موفقیت ارسال شد.", { type: "success" });
+      // toast("پیام شما با موفقیت ارسال شد.", { type: "success" });
     },
     onError: (err) => {},
   });

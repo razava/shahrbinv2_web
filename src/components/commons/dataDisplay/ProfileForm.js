@@ -129,15 +129,14 @@ const ProfileForm = ({ data, setDialog }) => {
 
   const [, loading] = useMakeRequest(
     UserInfoAPI.updateUser,
-    204,
+    200,
     makeRequest,
     payload,
     (res) => {
       setMakeRequest(false);
       setDialog(false);
       modalRoot.classList.remove("active");
-      if (res.status === 204) {
-        toast("تغییرات با موفقیت ذخیره شد.", { type: "success" });
+      if (res.status === 200) {
         dispatch({ type: "setApiCall", payload: true });
       } else if (serverError(res)) return;
       else if (unKnownError(res)) return;

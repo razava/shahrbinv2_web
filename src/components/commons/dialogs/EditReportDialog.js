@@ -132,10 +132,9 @@ const EditReportDialog = ({ report = {}, onSuccess = (f) => f }) => {
     callAPI(
       {
         caller: ReportsAPI.updateReport,
-        successStatus: 204,
+        successStatus: 200,
         payload,
         successCallback: () => {
-          toast("درخواست با موفقیت ویرایش شد", { type: "success" });
           onSuccess({ withRefer, report });
         },
         requestEnded: () =>

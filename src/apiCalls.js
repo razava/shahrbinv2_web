@@ -5,6 +5,7 @@ import {
   createQueryParams,
 } from "./helperFuncs";
 import TicketingAxios from "./api/TicketBaseUrl";
+import { toast } from "react-toastify";
 
 const prefix = window.__ENV__?.REACT_APP_API_URL;
 const prefix2 = "https://ticketingapi.shetabdahi.ir";
@@ -14,13 +15,13 @@ const prefix2 = "https://ticketingapi.shetabdahi.ir";
 // const prefix = process.env.REACT_APP_API_URL;
 axios.interceptors.response.use(
   function (response) {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
     console.log(response);
     console.log(response.data?.data);
-    // if (response.data?.data) {
-    //   return response.data.data;
-    // }
+    if (response.status == 200 || response.status == 201) {
+      if (response.data?.message) {
+        toast(response.data?.message, { type: "success" });
+      }
+    }
     return response;
   },
   function (error) {
@@ -1389,15 +1390,12 @@ export class ConfigurationsAPI {
 
   static getOperators(token, payload, source, instance) {
     return axios
-      .get(
-        `${prefix}/api/${instance?.id}/AdminCategory/Operators`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-        }
-      )
+      .get(`${prefix}/api/${instance?.id}/AdminCategory/Operators`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      })
       .then((res) => res)
       .catch((err) => err.response);
   }

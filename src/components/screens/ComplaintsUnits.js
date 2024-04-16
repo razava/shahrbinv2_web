@@ -75,14 +75,12 @@ const ComplaintsUnits = ({ match }) => {
   };
 
   const onUnitCreated = () => {
-    toast("واحد جدید با موفقیت اضافه شد.", { type: "success" });
     setAddUnitDialog(false);
     modalRoot.classList.remove("active");
     getAllUnits();
   };
 
   const onUnitEdited = () => {
-    toast("واحد سازمانی با موفقیت ویرایش شد.", { type: "success" });
     setEditDialog(false);
     modalRoot.classList.remove("active");
     setDialogData(null);

@@ -97,18 +97,10 @@ const RegisterForm = ({
     callAPI(
       {
         caller,
-        successStatus: edit ? 204 : 201,
+        successStatus: edit ? 200 : 201,
         payload,
         successCallback: (res) => {
           successCallback(res);
-          toast(
-            res.data.message
-              ? res.data.message
-              : edit
-              ? "ویرایش یا موفقیت انجام شد."
-              : "کاربر جدید با موفقیت ایجاد شد.",
-            { type: "success" }
-          );
         },
         requestEnded: () => {
           // modalRoot.classList.remove("active");

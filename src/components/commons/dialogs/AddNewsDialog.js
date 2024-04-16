@@ -48,10 +48,6 @@ export default function AddNewsDialog({ mode, onSuccess, defaltValues }) {
     mutationFn: mode == "edit" ? editNews : createNews,
     onSuccess: (res) => {
       onSuccess();
-      toast(
-        mode == "edit" ? "خبر با موفقیت ویرایش شد." : "خبر با موفقیت اضافه شد.",
-        { type: "success" }
-      );
       queryClient.invalidateQueries({ queryKey: ["News"] });
     },
     onError: (err) => {},

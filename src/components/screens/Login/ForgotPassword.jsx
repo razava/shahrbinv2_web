@@ -73,7 +73,7 @@ export default function ChangePhoneNumber() {
     mutationFn: resetPassword,
     onSuccess: (res) => {
       logout(() => history.push(appRoutes.login));
-      toast("رمز عبور شما با موفقیت تغییر یافت.", { type: "success" });
+      // toast("رمز عبور شما با موفقیت تغییر یافت.", { type: "success" });
       localStorage.removeItem("countdownTime");
       localStorage.removeItem("CountDownCompleted");
     },

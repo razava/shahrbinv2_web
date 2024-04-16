@@ -36,7 +36,6 @@ const Satisfaction = ({ data }) => {
         successStatus: 201,
         payload: values,
         successCallback: (res) => {
-          toast("خشنودی‌سنجی با موفقیت ثبت شد.", { type: "success" });
           refetch();
         },
         requestEnded: () => {

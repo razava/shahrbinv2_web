@@ -393,7 +393,6 @@ const CreatePoll = ({ onPollCreated = (f) => f, pollData }) => {
     (res) => {
       setPublishRequest(false);
       if (res.status === 201) {
-        toast("نظرسنجی با موفقیت ایجاد شد.", { type: "success" });
         onPollCreated();
       }
     },

@@ -43,7 +43,7 @@ const Polls = ({ match }) => {
     mutationKey: ["putPolls"],
     mutationFn: putPolls,
     onSuccess: (res) => {
-      toast("عملیات با موفقیت انجام شد.", { type: "success" });
+      // toast("عملیات با موفقیت انجام شد.", { type: "success" });
       getPolls();
     },
     onError: (err) => {},
@@ -196,9 +196,9 @@ const Polls = ({ match }) => {
       {
         caller: PollAPI.changePollStatus,
         payload: { isDeleted: !isDeleted },
-        successStatus: 204,
+        successStatus: 200,
         successCallback: (res) => {
-          toast("عملیات با موفقیت انجام شد.", { type: "success" });
+          // toast("عملیات با موفقیت انجام شد.", { type: "success" });
           getPolls();
         },
         requestEnded: () => {

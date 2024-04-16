@@ -34,7 +34,6 @@ function NewForm() {
     mutationKey: ["postForm"],
     mutationFn: postForm,
     onSuccess: (res) => {
-      toast("فرم با موفقیت ایجاد شد.", { type: "success" });
       history.push("/admin/forms");
     },
     onError: (err) => {},
@@ -45,7 +44,6 @@ function NewForm() {
     mutationFn: editForm,
     onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["getForms"] });
-      toast("فرم با موفقیت ویرایش شد.", { type: "success" });
       history.push("/admin/forms");
       localStorage.removeItem("formBuilder");
       localStorage.removeItem("formName");

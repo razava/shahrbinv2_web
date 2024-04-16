@@ -17,7 +17,6 @@ const VoiceRecorder = ({ addRecord, removeRecord }) => {
     mutationKey: ["File"],
     mutationFn: postFiles,
     onSuccess: (res) => {
-      toast("صوت شما با موفقیت بارگذاری شد", { type: "success" });
       addRecord(res, "voice");
     },
     onError: (err) => {},

@@ -72,7 +72,6 @@ export default function App({
     mutationFn: postFiles,
     onSuccess: (res) => {
       recordWebcam.close();
-      toast("ویدیو شما با موفقیت بارگذاری شد", { type: "success" });
       addRecord(res, "video");
     },
     onError: (err) => {},

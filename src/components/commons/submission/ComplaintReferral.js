@@ -91,7 +91,6 @@ const ComplaintReferral = ({
       caller: ComplaintsAPI.referComplaint,
       payload,
       successCallback: (res) => {
-        toast("شکایت ارجاع داده شد.", { type: "success" });
         modal.classList.remove("active");
         setDialog(false);
         refresh();
@@ -112,7 +111,6 @@ const ComplaintReferral = ({
       caller: ComplaintsAPI.finishComplaint,
       payload,
       successCallback: (res) => {
-        toast("بررسی شکایت به پایان رسید.", { type: "success" });
         modal.classList.remove("active");
         setDialog(false);
         refresh();

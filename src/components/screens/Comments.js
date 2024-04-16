@@ -121,7 +121,6 @@ const Comments = ({ match }) => {
     (res) => {
       setSendAnwserRequest(false);
       if (res && res.status === 200) {
-        toast("پاسخ شما با موفقیت ارسال شد", { type: "success" });
         setAnswerDialog(false);
         setDialogData(null);
         setAnswerText("");
@@ -134,13 +133,12 @@ const Comments = ({ match }) => {
 
   const [, deleteLoading] = useMakeRequest(
     ReportsAPI.deleteComment,
-    204,
+    200,
     deleteCommentRequest,
     null,
     (res) => {
       setDeleteCommentRequest(false);
-      if (res && res.status === 204) {
-        toast("نظر کاربر با موفقیت حذف شد.", { type: "success" });
+      if (res && res.status === 200) {
         setAnswerDialog(false);
         setDialogData(null);
         modalRoot.classList.remove("active");

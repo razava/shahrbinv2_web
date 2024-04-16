@@ -41,7 +41,6 @@ const Referral = ({ data, refresh, onNext = (f) => f }) => {
         },
         successCallback: (res) => {
           console.log(res);
-          toast("درخواست با موفقیت ارجاع داده شد.", { type: "success" });
           refresh();
         },
       },

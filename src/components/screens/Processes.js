@@ -79,14 +79,12 @@ const Processes = ({ match }) => {
   };
 
   const onProcessCreated = () => {
-    toast("فرآیند جدید با موفقیت اضافه شد.", { type: "success" });
     setDialog(false);
     modalRoot.classList.remove("active");
     getProccesses();
   };
 
   const onProccessUpdated = () => {
-    toast("فرآیند با موفقیت ویرایش شد.", { type: "success" });
     setDialog(false);
     modalRoot.classList.remove("active");
     getProccesses();
