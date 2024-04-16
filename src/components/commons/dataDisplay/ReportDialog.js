@@ -20,6 +20,7 @@ import Objection from "../submission/Objection";
 import ShareInformation from "./ShareInformation";
 import ReportActions from "../submission/ReportActions";
 import ReportViolations from "../submission/ReportViolations";
+import UserReports from "../dialogs/UserReports";
 
 const modal = document && document.getElementById("modal-root");
 
@@ -72,6 +73,7 @@ const ReportDialog = ({
   const userRoles = getUserRoles();
   const isExecutive = hasRole(userRoles, ["Executive"]);
   const isInspector = hasRole(userRoles, ["Inspector"]);
+  const isAdmin = hasRole(userRoles, ["Admin"]);
   const checkRoles = userRoles.includes("Operator");
   console.log(defTab == "ReportViolations");
   return (
@@ -112,6 +114,9 @@ const ReportDialog = ({
             </article>
             <article label="نظرات شهروندان" id="reportComments">
               <ReportComments data={data} />
+            </article>
+            <article label="دیگر درخواست ها" id="requests">
+              <UserReports userId={data?.citizenId} />
             </article>
             <article label="یادداشت ها" id="notes">
               <Notes data={data} />

@@ -124,11 +124,11 @@ const UsersDialog = ({
                 <OperatorCategories userId={dialogData?.id} />
               </article>
             )}
-            {isCitizen && (
+            {/* {isCitizen && (
               <article label="درخواست ها" id="requests">
                 <UserReports userId={dialogData?.id} />
               </article>
-            )}
+            )} */}
             <article label="تغییر رمز عبور" id="password">
               <ChangePasswordDialog
                 id={dialogData?.id}
