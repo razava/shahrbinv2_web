@@ -63,35 +63,35 @@ const instanceId = () => {
 };
 
 export async function getNews() {
-  const data = await axios.get(`/api/${instanceId()}/AdminNews`, {
+  const data = await axios.get(`/api/AdminNews`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data.data;
 }
 
 export async function getNewsById(id) {
-  const data = await axios.get(`/api/${instanceId()}/AdminNews/${id}`, {
+  const data = await axios.get(`/api/AdminNews/${id}`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data.data;
 }
 
 export async function createNews(Data) {
-  const data = await axios.post(`/api/${instanceId()}/AdminNews`, Data, {
+  const data = await axios.post(`/api/AdminNews`, Data, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data;
 }
 
 export async function editNews({ Data, id }) {
-  const data = await axios.put(`/api/${instanceId()}/AdminNews/${id}`, Data, {
+  const data = await axios.put(`/api/AdminNews/${id}`, Data, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data;
 }
 
 export async function getCategoryById(id) {
-  const response = await axios.get(`/api/${instanceId()}/AdminCategory/${id}`, {
+  const response = await axios.get(`/api/AdminCategory/${id}`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return response.data.data;
@@ -99,7 +99,7 @@ export async function getCategoryById(id) {
 
 export async function editCategory({ Data, id }) {
   const data = await axios.put(
-    `/api/${instanceId()}/AdminCategory/${id}`,
+    `/api/AdminCategory/${id}`,
     Data,
     {
       headers: { Authorization: `Bearer ${Token}` },
@@ -109,21 +109,21 @@ export async function editCategory({ Data, id }) {
 }
 
 export async function getForms() {
-  const data = await axios.get(`/api/${instanceId()}/AdminForms`, {
+  const data = await axios.get(`/api/AdminForms`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data.data;
 }
 
 export async function getFormById(id) {
-  const data = await axios.get(`/api/${instanceId()}/AdminForms/${id}`, {
+  const data = await axios.get(`/api/AdminForms/${id}`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data.data;
 }
 
 export async function postForm(payload) {
-  const data = await axios.post(`/api/${instanceId()}/AdminForms`, payload, {
+  const data = await axios.post(`/api/AdminForms`, payload, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data;
@@ -131,7 +131,7 @@ export async function postForm(payload) {
 
 export async function editForm({ id, payload }) {
   const data = await axios.put(
-    `/api/${instanceId()}/AdminForms/${id}`,
+    `/api/AdminForms/${id}`,
     payload,
     {
       headers: { Authorization: `Bearer ${Token}` },
@@ -141,7 +141,7 @@ export async function editForm({ id, payload }) {
 }
 
 export async function deleteForm(id) {
-  const data = await axios.delete(`/api/${instanceId()}/AdminForms/${id}`, {
+  const data = await axios.delete(`/api/AdminForms/${id}`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data;
@@ -149,7 +149,7 @@ export async function deleteForm(id) {
 
 export async function getOperatorCategories(id) {
   const data = await axios.get(
-    `/api/${instanceId()}/AdminUserManagement/Categories/${id}`,
+    `/api/AdminUserManagement/Categories/${id}`,
     {
       headers: { Authorization: `Bearer ${Token}` },
     }
@@ -159,7 +159,7 @@ export async function getOperatorCategories(id) {
 
 export async function putOperatorCategories({ id, payload }) {
   const data = await axios.put(
-    `/api/${instanceId()}/AdminUserManagement/Categories/${id}`,
+    `/api/AdminUserManagement/Categories/${id}`,
     payload,
     {
       headers: { Authorization: `Bearer ${Token}` },
@@ -170,7 +170,7 @@ export async function putOperatorCategories({ id, payload }) {
 
 export async function deleteOrganizationalUnit(id) {
   const data = await axios.delete(
-    `/api/${instanceId()}/AdminOrganizationalUnit/${id}`,
+    `/api/AdminOrganizationalUnit/${id}`,
     {
       headers: { Authorization: `Bearer ${Token}` },
     }
@@ -179,7 +179,7 @@ export async function deleteOrganizationalUnit(id) {
 }
 
 export async function deleteProcess(id) {
-  const data = await axios.delete(`/api/${instanceId()}/AdminProcesses/${id}`, {
+  const data = await axios.delete(`/api/AdminProcesses/${id}`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   console.log(data);
@@ -188,7 +188,7 @@ export async function deleteProcess(id) {
 
 export async function getUserRolesByAdmin(id) {
   const data = await axios.get(
-    `/api/${instanceId()}/AdminUserManagement/Roles/${id}`,
+    `/api/AdminUserManagement/Roles/${id}`,
     {
       headers: { Authorization: `Bearer ${Token}` },
     }
@@ -198,7 +198,7 @@ export async function getUserRolesByAdmin(id) {
 
 export async function getUserReports({ id, pageNumber = 1, pageSize = 8 }) {
   const data = await axios.get(
-    `/api/${instanceId()}/AdminUserManagement/UserReports/${id}`,
+    `/api/AdminUserManagement/UserReports/${id}`,
     {
       headers: { Authorization: `Bearer ${Token}` },
       params: { pageNumber: pageNumber, pageSize: pageSize },
@@ -209,7 +209,7 @@ export async function getUserReports({ id, pageNumber = 1, pageSize = 8 }) {
 
 export async function putPolls({ id, payload }) {
   const data = await axios.put(
-    `/api/${instanceId()}/AdminPolls/Edit/${id}`,
+    `/api/AdminPolls/Edit/${id}`,
     payload,
     {
       headers: { Authorization: `Bearer ${Token}` },

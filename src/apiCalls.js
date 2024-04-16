@@ -33,9 +33,7 @@ axios.interceptors.response.use(
 
 export class ReportsAPI {
   static getTasks(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${
-      instance?.id ? instance?.id : 1
-    }/StaffReport?fromRoleId=${payload ? payload : ""}`;
+    const initialUrl = `${prefix}/api/StaffReport?fromRoleId=${payload ? payload : ""}`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -50,7 +48,7 @@ export class ReportsAPI {
   static sendSatisfaction(token, payload, source, instance, reportId) {
     return axios
       .post(
-        `${prefix}/api/${instance?.id}/StaffReport/Satisfaction/${reportId}`,
+        `${prefix}/api/StaffReport/Satisfaction/${reportId}`,
         payload,
         {
           headers: {
@@ -70,7 +68,7 @@ export class ReportsAPI {
   }
 
   static getReportHistory(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/StaffReport/ReportHistory/${payload}`;
+    const initialUrl = `${prefix}/api/StaffReport/ReportHistory/${payload}`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -82,7 +80,7 @@ export class ReportsAPI {
       .catch((err) => err.response);
   }
   static getPossibleTransitions(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/StaffReport/PossibleTransitions/${payload}`;
+    const initialUrl = `${prefix}/api/StaffReport/PossibleTransitions/${payload}`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -95,7 +93,7 @@ export class ReportsAPI {
   }
 
   static getReports(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/StaffInfo/Reports`;
+    const initialUrl = `${prefix}/api/StaffInfo/Reports`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -165,7 +163,7 @@ export class ReportsAPI {
 
   static getExcel(queries, instance) {
     const token = getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN);
-    const initialUrl = `${prefix}/api/${instance?.id}/StaffInfo/Excel`;
+    const initialUrl = `${prefix}/api/StaffInfo/Excel`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -180,7 +178,7 @@ export class ReportsAPI {
 
   static getTask(token, id, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/StaffReport/${id}`, {
+      .get(`${prefix}/api/StaffReport/${id}`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -215,7 +213,7 @@ export class ReportsAPI {
 
   static getPossibleSources(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/StaffReport/PossibleSources`, {
+      .get(`${prefix}/api/StaffReport/PossibleSources`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -227,7 +225,7 @@ export class ReportsAPI {
   static createTransition(token, payload, source, instance, id) {
     return axios
       .post(
-        `${prefix}/api/${instance?.id}/StaffReport/MakeTransition/${id}`,
+        `${prefix}/api/StaffReport/MakeTransition/${id}`,
         payload,
         {
           headers: {
@@ -242,7 +240,7 @@ export class ReportsAPI {
 
   static createStage(token, payload, source, instance, id) {
     return axios
-      .post(`${prefix}/api/${instance?.id}/StaffReport/Review/${id}`, payload, {
+      .post(`${prefix}/api/StaffReport/Review/${id}`, payload, {
         headers: {
           Authorization: "Bearer " + token,
           "Content-Type": "application/json",
@@ -255,7 +253,7 @@ export class ReportsAPI {
   static registerByOperator(token, payload, source, instance) {
     return axios
       .post(
-        `${prefix}/api/${instance?.id}/StaffReport/RegisterByOperator`,
+        `${prefix}/api/StaffReport/RegisterByOperator`,
         payload,
         {
           headers: {
@@ -274,7 +272,7 @@ export class ReportsAPI {
   }
   static confirmRequestByOperator(token, payload, source, instance, id) {
     return axios
-      .put(`${prefix}/api/${instance?.id}/StaffReport/Accept/${id}`, payload, {
+      .put(`${prefix}/api/StaffReport/Accept/${id}`, payload, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -292,7 +290,7 @@ export class ReportsAPI {
   static sendMessageToCitizen(token, payload, source, instance, id) {
     return axios
       .post(
-        `${prefix}/api/${instance?.id}/StaffReport/MessageToCitizen/${id}`,
+        `${prefix}/api/StaffReport/MessageToCitizen/${id}`,
         payload,
         {
           headers: {
@@ -312,7 +310,7 @@ export class ReportsAPI {
   }
 
   static getComments(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/StaffReport/Comments`;
+    const initialUrl = `${prefix}/api/StaffReport/Comments`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -334,7 +332,7 @@ export class ReportsAPI {
   static updateComment(token, payload, source, instance, commentId) {
     return axios
       .post(
-        `${prefix}/api/${instance?.id}/StaffReport/ReplyComment/${commentId}`,
+        `${prefix}/api/StaffReport/ReplyComment/${commentId}`,
         payload,
         {
           headers: {
@@ -356,7 +354,7 @@ export class ReportsAPI {
   static deleteComment(token, payload, source, instance, commentId) {
     return axios
       .delete(
-        `${prefix}/api/${instance?.id}/StaffReport/Comment/${commentId}`,
+        `${prefix}/api/StaffReport/Comment/${commentId}`,
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -376,7 +374,7 @@ export class ReportsAPI {
 
   static updateCitizenRequest(token, payload, source, instance, id) {
     return axios
-      .put(`${prefix}/api/${instance?.id}/StaffReport/Comment/${id}`, payload, {
+      .put(`${prefix}/api/StaffReport/Comment/${id}`, payload, {
         headers: {
           Authorization: "Bearer " + token,
           "Content-Type": "application/json",
@@ -394,7 +392,7 @@ export class ReportsAPI {
 
   static updateReport(token, payload, source, instance, id) {
     return axios
-      .put(`${prefix}/api/${instance?.id}/StaffReport/${id}`, payload, {
+      .put(`${prefix}/api/StaffReport/${id}`, payload, {
         headers: {
           Authorization: "Bearer " + token,
           "Content-Type": "application/json",
@@ -438,7 +436,7 @@ export class CommonAPI {
     const Instance =
       getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_INSTANCE_ID) || {};
     return axios
-      .get(`${prefix}/api/${Instance}/StaffCommon/Categories`, {
+      .get(`${prefix}/api/StaffCommon/Categories`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -472,7 +470,7 @@ export class CommonAPI {
 
   static getEducationList(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/StaffCommon/Educations`, {
+      .get(`${prefix}/api/StaffCommon/Educations`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -510,7 +508,7 @@ export class CommonAPI {
       constants.SHAHRBIN_MANAGEMENT_INSTANCE
     ).cityId;
     return axios
-      .get(`${prefix}/api/${instanceId}/StaffCommon/Regions/${cityId}`, {
+      .get(`${prefix}/api/StaffCommon/Regions/${cityId}`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -522,7 +520,7 @@ export class CommonAPI {
   static getRegions(token, payload, source, instance) {
     return axios
       .get(
-        `${prefix}/api/${instance?.id}/StaffCommon/Regions/${instance.cityId}`,
+        `${prefix}/api/StaffCommon/Regions/${instance.cityId}`,
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -559,7 +557,7 @@ export class CommonAPI {
 export class AuthenticateAPI {
   static signin(token, payload, source, instance) {
     return axios
-      .post(`${prefix}/api/${instance?.id}/Authenticate/LoginStaff`, payload, {
+      .post(`${prefix}/api/Authenticate/LoginStaff`, payload, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -577,7 +575,7 @@ export class AuthenticateAPI {
   static resetPassword(token, payload, source, instance, id) {
     return axios
       .put(
-        `${prefix}/api/${instance?.id}/AdminUserManagement/Password/${id}`,
+        `${prefix}/api/AdminUserManagement/Password/${id}`,
         payload,
         {
           headers: {
@@ -600,7 +598,7 @@ export class AuthenticateAPI {
   static changePassword(token, payload, source, instance, id) {
     return axios
       .put(
-        `${prefix}/api/${instance?.id}/AdminUserManagement/Password/${id}`,
+        `${prefix}/api/AdminUserManagement/Password/${id}`,
         payload,
         {
           headers: {
@@ -623,7 +621,7 @@ export class AuthenticateAPI {
   static registerExecutive(token, payload, source, instance) {
     return axios
       .post(
-        `${prefix}/api/${instance?.id}/Authenticate/RegisterExecutive`,
+        `${prefix}/api/Authenticate/RegisterExecutive`,
         payload,
         {
           headers: {
@@ -646,7 +644,7 @@ export class AuthenticateAPI {
   static registerContractor(token, payload, source, instance) {
     return axios
       .post(
-        `${prefix}/api/${instance?.id}/AdminUserManagement/RegisterContractor`,
+        `${prefix}/api/AdminUserManagement/RegisterContractor`,
         payload,
         {
           headers: {
@@ -669,7 +667,7 @@ export class AuthenticateAPI {
   static registerMayor(token, payload, source, instance) {
     return axios
       .post(
-        `${prefix}/api/${instance?.id}/Authenticate/registerMayor`,
+        `${prefix}/api/Authenticate/registerMayor`,
         payload,
         {
           headers: {
@@ -692,7 +690,7 @@ export class AuthenticateAPI {
   static registerManager(token, payload, source, instance) {
     return axios
       .post(
-        `${prefix}/api/${instance?.id}/Authenticate/registerManager`,
+        `${prefix}/api/Authenticate/registerManager`,
         payload,
         {
           headers: {
@@ -714,7 +712,7 @@ export class AuthenticateAPI {
 
   static registerWithRoles(token, payload, source, instance) {
     return axios
-      .post(`${prefix}/api/${instance?.id}/AdminUserManagement`, payload, {
+      .post(`${prefix}/api/AdminUserManagement`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -736,7 +734,7 @@ export class AuthenticateAPI {
       constants.SHAHRBIN_MANAGEMENT_INSTANCE_ID
     );
     return axios
-      .get(`${prefix}/api/${instanceId}/AdminUserManagement/Regions/${id}`, {
+      .get(`${prefix}/api/AdminUserManagement/Regions/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -755,7 +753,7 @@ export class AuthenticateAPI {
 
 export class UserInfoAPI {
   static getAllUsers(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/AdminUserManagement/AllUsers`;
+    const initialUrl = `${prefix}/api/AdminUserManagement/AllUsers`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -774,7 +772,7 @@ export class UserInfoAPI {
       });
   }
   static getContractors(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/AdminUserManagement/GetContractors`;
+    const initialUrl = `${prefix}/api/AdminUserManagement/GetContractors`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -795,7 +793,7 @@ export class UserInfoAPI {
 
   static getRolesForCreate(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/AdminUserManagement/Roles`, {
+      .get(`${prefix}/api/AdminUserManagement/Roles`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -813,7 +811,7 @@ export class UserInfoAPI {
 
   static getRoles(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/StaffCommon/Roles`, {
+      .get(`${prefix}/api/StaffCommon/Roles`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -850,7 +848,7 @@ export class UserInfoAPI {
   static saveUserRegions(token, payload, source, instance, id) {
     return axios
       .put(
-        `${prefix}/api/${instance?.id}/AdminUserManagement/Regions/${id}`,
+        `${prefix}/api/AdminUserManagement/Regions/${id}`,
         payload,
         {
           headers: {
@@ -872,7 +870,7 @@ export class UserInfoAPI {
   static saveRoles(token, payload, source, instance, id) {
     return axios
       .put(
-        `${prefix}/api/${instance?.id}/AdminUserManagement/Roles/${id}`,
+        `${prefix}/api/AdminUserManagement/Roles/${id}`,
         payload,
         {
           headers: {
@@ -894,7 +892,7 @@ export class UserInfoAPI {
   static registerUser(token, payload, source, instance) {
     return axios
       .post(
-        `${prefix}/api/${instance?.id}/Authenticate/RegisterWithRoles`,
+        `${prefix}/api/Authenticate/RegisterWithRoles`,
         payload,
         {
           headers: {
@@ -915,7 +913,7 @@ export class UserInfoAPI {
 
   static getUser(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Authenticate`, {
+      .get(`${prefix}/api/Authenticate`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -934,7 +932,7 @@ export class UserInfoAPI {
   static updateUser(token, payload, source, instance) {
     console.log(payload);
     return axios
-      .put(`${prefix}/api/${instance?.id}/Authenticate`, payload, {
+      .put(`${prefix}/api/Authenticate`, payload, {
         headers: {
           Authorization: "Bearer " + token,
           // "Content-Type": "multipart/form-data",
@@ -953,7 +951,7 @@ export class UserInfoAPI {
 
   static updateUserById(token, payload, source, instance, id) {
     return axios
-      .put(`${prefix}/api/${instance?.id}/AdminUserManagement/${id}`, payload, {
+      .put(`${prefix}/api/AdminUserManagement/${id}`, payload, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -1003,7 +1001,7 @@ export class InfoAPI {
 
   static getListCharts(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/StaffInfo/ListChart`, {
+      .get(`${prefix}/api/StaffInfo/ListChart`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1021,7 +1019,7 @@ export class InfoAPI {
   }
 
   static getChart(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/StaffInfo/Charts/${payload?.code}?parameter=${payload?.parameter}`;
+    const initialUrl = `${prefix}/api/StaffInfo/Charts/${payload?.code}?parameter=${payload?.parameter}`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -1043,7 +1041,7 @@ export class InfoAPI {
 
   static getReportById(token, id, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/StaffReport/${id}`, {
+      .get(`${prefix}/api/StaffReport/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1062,7 +1060,7 @@ export class InfoAPI {
 
   static getExecutives(token, id, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/StaffCommon/Executives`, {
+      .get(`${prefix}/api/StaffCommon/Executives`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1083,7 +1081,7 @@ export class InfoAPI {
 export class PollAPI {
   static createPoll(token, payload, source, instance) {
     return axios
-      .post(`${prefix}/api/${instance?.id}/AdminPolls`, payload, {
+      .post(`${prefix}/api/AdminPolls`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1101,7 +1099,7 @@ export class PollAPI {
 
   static publishPoll(token, payload, source, instance, id) {
     return axios
-      .put(`${prefix}/api/${instance?.id}/AdminPolls/Edit/${id}`, payload, {
+      .put(`${prefix}/api/AdminPolls/Edit/${id}`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1118,7 +1116,7 @@ export class PollAPI {
   }
 
   static getAllPolls(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/AdminPolls/All`;
+    const initialUrl = `${prefix}/api/AdminPolls/All`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -1140,7 +1138,7 @@ export class PollAPI {
 
   static changePollStatus(token, payload, source, instance, id) {
     return axios
-      .put(`${prefix}/api/${instance?.id}/AdminPolls/Edit/${id}`, payload, {
+      .put(`${prefix}/api/AdminPolls/Edit/${id}`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1159,7 +1157,7 @@ export class PollAPI {
 
   static getPollResults(token, payload, source, instance, id) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/AdminPolls/Summary/${id}`, {
+      .get(`${prefix}/api/AdminPolls/Summary/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1198,7 +1196,7 @@ export class ParsiMap {
 export class ActorsAPI {
   static getActorRegions(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/StaffCommon/UserRegions`, {
+      .get(`${prefix}/api/StaffCommon/UserRegions`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1236,7 +1234,7 @@ export class OrganizationalUnitAPI {
 
   static createUnit(token, payload, source, instance) {
     return axios
-      .post(`${prefix}/api/${instance?.id}/AdminOrganizationalUnit`, payload, {
+      .post(`${prefix}/api/AdminOrganizationalUnit`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1249,7 +1247,7 @@ export class OrganizationalUnitAPI {
   static updateUnit(token, payload, source, instance, id) {
     return axios
       .put(
-        `${prefix}/api/${instance?.id}/AdminOrganizationalUnit/${id}`,
+        `${prefix}/api/AdminOrganizationalUnit/${id}`,
         payload,
         {
           headers: {
@@ -1264,7 +1262,7 @@ export class OrganizationalUnitAPI {
 
   static getUnit(token, payload, source, instance, id) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/AdminOrganizationalUnit/${id}`, {
+      .get(`${prefix}/api/AdminOrganizationalUnit/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1275,7 +1273,7 @@ export class OrganizationalUnitAPI {
   }
 
   static getAllOrgans(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/AdminOrganizationalUnit/All`;
+    const initialUrl = `${prefix}/api/AdminOrganizationalUnit/All`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -1316,7 +1314,7 @@ export class ProcessesAPI {
 
   static getProcessById(token, payload, source, instance, id) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/AdminProcesses/${id}`, {
+      .get(`${prefix}/api/AdminProcesses/${id}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1328,7 +1326,7 @@ export class ProcessesAPI {
 
   static createProcess(token, payload, source, instance) {
     return axios
-      .post(`${prefix}/api/${instance?.id}/AdminProcesses`, payload, {
+      .post(`${prefix}/api/AdminProcesses`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1340,7 +1338,7 @@ export class ProcessesAPI {
 
   static updateProcess(token, payload, source, instance, id) {
     return axios
-      .put(`${prefix}/api/${instance?.id}/AdminProcesses/${id}`, payload, {
+      .put(`${prefix}/api/AdminProcesses/${id}`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1352,7 +1350,7 @@ export class ProcessesAPI {
 
   static getExecutives(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/AdminProcesses/Executives`, {
+      .get(`${prefix}/api/AdminProcesses/Executives`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1366,7 +1364,7 @@ export class ProcessesAPI {
 export class ConfigurationsAPI {
   static getForms(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/AdminForms`, {
+      .get(`${prefix}/api/AdminForms`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1378,7 +1376,7 @@ export class ConfigurationsAPI {
 
   static getCategories(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/StaffCommon/Categories`, {
+      .get(`${prefix}/api/StaffCommon/Categories`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1390,7 +1388,7 @@ export class ConfigurationsAPI {
 
   static getOperators(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/AdminCategory/Operators`, {
+      .get(`${prefix}/api/AdminCategory/Operators`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1401,7 +1399,7 @@ export class ConfigurationsAPI {
   }
 
   static getAllCategories(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/AdminCategory/All`;
+    const initialUrl = `${prefix}/api/AdminCategory/All`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -1415,7 +1413,7 @@ export class ConfigurationsAPI {
   }
 
   static getProcesses(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/AdminProcesses`;
+    const initialUrl = `${prefix}/api/AdminProcesses`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -1430,7 +1428,7 @@ export class ConfigurationsAPI {
 
   static createCategory(token, payload, source, instance) {
     return axios
-      .post(`${prefix}/api/${instance?.id}/AdminCategory`, payload, {
+      .post(`${prefix}/api/AdminCategory`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1442,7 +1440,7 @@ export class ConfigurationsAPI {
 
   static deleteCategory(token, payload, source, instance) {
     return axios
-      .delete(`${prefix}/api/${instance?.id}/AdminCategory/${payload}`, {
+      .delete(`${prefix}/api/AdminCategory/${payload}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1454,7 +1452,7 @@ export class ConfigurationsAPI {
 
   static updateCategory(token, payload, source, instance, id) {
     return axios
-      .put(`${prefix}/api/${instance?.id}/AdminCategory/${id}`, payload, {
+      .put(`${prefix}/api/AdminCategory/${id}`, payload, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1467,7 +1465,7 @@ export class ConfigurationsAPI {
 
 export class ViolationAPI {
   static getViolations(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/StaffReport/ReportViolations`;
+    const initialUrl = `${prefix}/api/StaffReport/ReportViolations`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -1481,7 +1479,7 @@ export class ViolationAPI {
   }
 
   static getCommentViolations(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/StaffReport/CommentViolations`;
+    const initialUrl = `${prefix}/api/StaffReport/CommentViolations`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -1497,7 +1495,7 @@ export class ViolationAPI {
   static handleViolation(token, payload, source, instance, id) {
     return axios
       .put(
-        `${prefix}/api/${instance?.id}/StaffReport/ReportViolations/${id}`,
+        `${prefix}/api/StaffReport/ReportViolations/${id}`,
         payload,
         {
           headers: {
@@ -1513,7 +1511,7 @@ export class ViolationAPI {
   static handleCommentViolation(token, payload, source, instance, id) {
     return axios
       .put(
-        `${prefix}/api/${instance?.id}/StaffReport/CommentViolations/${id}`,
+        `${prefix}/api/StaffReport/CommentViolations/${id}`,
         payload,
         {
           headers: {
@@ -1529,7 +1527,7 @@ export class ViolationAPI {
 
 export class QuickAccessAPI {
   static getAccesses(token, payload, source, instance, queries) {
-    const initialUrl = `${prefix}/api/${instance?.id}/AdminQuickAccess`;
+    const initialUrl = `${prefix}/api/AdminQuickAccess`;
     const wholeUrl = createQueryParams(initialUrl, queries);
     return axios
       .get(wholeUrl, {
@@ -1544,7 +1542,7 @@ export class QuickAccessAPI {
 
   static createAccess(token, payload, source, instance) {
     return axios
-      .post(`${prefix}/api/${instance?.id}/AdminQuickAccess`, payload, {
+      .post(`${prefix}/api/AdminQuickAccess`, payload, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + token,
@@ -1556,7 +1554,7 @@ export class QuickAccessAPI {
 
   static editAccess(token, payload, source, instance, id) {
     return axios
-      .put(`${prefix}/api/${instance?.id}/AdminQuickAccess/${id}`, payload, {
+      .put(`${prefix}/api/AdminQuickAccess/${id}`, payload, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: "Bearer " + token,
@@ -1568,7 +1566,7 @@ export class QuickAccessAPI {
 
   static deleteAccess(token, payload, source, instance) {
     return axios
-      .delete(`${prefix}/api/${instance?.id}/AdminQuickAccess/${payload}`, {
+      .delete(`${prefix}/api/AdminQuickAccess/${payload}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1581,7 +1579,7 @@ export class QuickAccessAPI {
 
 export class InstanceManagementAPI {
   static getInstances(token, payload, source, instance) {
-    const initialUrl = `${prefix}/api/${instance?.id}/StaffCommon/ShahrbinInstances`;
+    const initialUrl = `${prefix}/api/StaffCommon/ShahrbinInstances`;
     return axios
       .get(initialUrl, {
         headers: {
@@ -1594,7 +1592,7 @@ export class InstanceManagementAPI {
   }
 
   static getInstanceById(token, payload, source, instance) {
-    const initialUrl = `${prefix}/api/${payload}/StaffCommon/MyShahrbinInstance`;
+    const initialUrl = `${prefix}/api/StaffCommon/MyShahrbinInstance`;
     return axios
       .get(initialUrl, {
         headers: {

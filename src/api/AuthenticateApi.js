@@ -34,7 +34,7 @@ export async function updateAvatar(Data) {
 
 export async function getCaptcha() {
   const data = await axios.get(
-    `/api/${instanceId}/Authenticate/Captcha`,
+    `/api/Authenticate/Captcha`,
     { responseType: "blob" },
     {
       headers: { Authorization: `Bearer ${Token}` },
@@ -44,49 +44,49 @@ export async function getCaptcha() {
 }
 
 export async function verifyStaff(payload) {
-  const data = await axios.post(`/api/1/Authenticate/VerifyStaff`, payload, {
+  const data = await axios.post(`/api/Authenticate/VerifyStaff`, payload, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data;
 }
 
 export async function postNewPhoneNumber(payload) {
-  const data = await axios.post(`/api/1/Authenticate/PhoneNumber`, payload, {
+  const data = await axios.post(`/api/Authenticate/PhoneNumber`, payload, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data;
 }
 
 export async function putNewPhoneNumber(payload) {
-  const data = await axios.put(`/api/1/Authenticate/PhoneNumber`, payload, {
+  const data = await axios.put(`/api/Authenticate/PhoneNumber`, payload, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data;
 }
 
 export async function forgotPassword(payload) {
-  const data = await axios.post(`/api/1/Authenticate/ForgotPassword`, payload, {
+  const data = await axios.post(`/api/Authenticate/ForgotPassword`, payload, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data;
 }
 
 export async function resetPassword(payload) {
-  const data = await axios.post(`/api/1/Authenticate/ResetPassword`, payload, {
+  const data = await axios.post(`/api/Authenticate/ResetPassword`, payload, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data;
 }
 
 export async function resendOtp(payload) {
-  const data = await axios.post(`/api/1/Authenticate/ResendOtp`, payload, {
+  const data = await axios.post(`/api/Authenticate/ResendOtp`, payload, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data;
 }
 
 export async function refreshToken(payload) {
-  const data = await axios.post(`/api/1/Authenticate/Refresh`, payload, {
+  const data = await axios.post(`/api/Authenticate/Refresh`, payload, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data;
@@ -94,7 +94,7 @@ export async function refreshToken(payload) {
 export async function RefreshToken(payload) {
   try {
     const response = await axios.post(
-      `/api/${instanceId}/Authenticate/Refresh`,
+      `/api/Authenticate/Refresh`,
       payload
     );
     saveToLocalStorage(

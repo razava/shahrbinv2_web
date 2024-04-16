@@ -24,7 +24,7 @@ export async function postFiles(Data) {
 }
 
 export async function EditProfile(Data) {
-  const data = await axios.put(`/api/${instanceId()}/Authenticate`, Data, {
+  const data = await axios.put(`/api/Authenticate`, Data, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data;
@@ -32,7 +32,7 @@ export async function EditProfile(Data) {
 
 export async function getCitizenInformation(id) {
   const data = await axios.get(
-    `/api/${instanceId()}/StaffReport/Citizen/${id}`,
+    `/api/StaffReport/Citizen/${id}`,
     {
       headers: { Authorization: `Bearer ${Token}` },
     }
@@ -41,7 +41,7 @@ export async function getCitizenInformation(id) {
 }
 
 export async function getReportById(id) {
-  const data = await axios.get(`/api/${instanceId()}/StaffReport/${id}`, {
+  const data = await axios.get(`/api/StaffReport/${id}`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data.data;
@@ -63,7 +63,7 @@ export async function postConnectionId(id) {
 
 export async function getFilters() {
   const data = await axios.get(
-    `/api/${instanceId()}/StaffCommon/ReportFilters`,
+    `/api/StaffCommon/ReportFilters`,
     {
       headers: { Authorization: `Bearer ${Token}` },
     }
@@ -72,14 +72,14 @@ export async function getFilters() {
 }
 
 export async function getUserFilters() {
-  const data = await axios.get(`/api/${instanceId()}/StaffCommon/UserFilters`, {
+  const data = await axios.get(`/api/StaffCommon/UserFilters`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data.data;
 }
 
 export async function getCategoryFormById(id) {
-  const data = await axios.get(`/api/${instanceId()}/StaffCommon/Form/${id}`, {
+  const data = await axios.get(`/api/StaffCommon/Form/${id}`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data.data;

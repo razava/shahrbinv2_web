@@ -13,21 +13,21 @@ const instanceId = getFromLocalStorage(
 );
 
 export async function getFAQ() {
-  const data = await axios.get(`/api/${instanceId}/StaffFaq`, {
+  const data = await axios.get(`/api/StaffFaq`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data.data;
 }
 
 export async function makeFAQ(Data) {
-  const data = await axios.post(`/api/${instanceId}/StaffFaq`, Data, {
+  const data = await axios.post(`/api/StaffFaq`, Data, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data;
 }
 
 export async function editFAQ({ Data, id }) {
-  const data = await axios.put(`/api/${instanceId}/StaffFaq/${id}`, Data, {
+  const data = await axios.put(`/api/StaffFaq/${id}`, Data, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data;
@@ -35,7 +35,7 @@ export async function editFAQ({ Data, id }) {
 
 export async function getReportHistory(id) {
   const data = await axios.get(
-    `/api/${instanceId}/StaffReport/ReportHistory/${id}`,
+    `/api/StaffReport/ReportHistory/${id}`,
     {
       headers: { Authorization: `Bearer ${Token}` },
     }
@@ -45,7 +45,7 @@ export async function getReportHistory(id) {
 
 export async function getReportComments(ReportId) {
   const data = await axios.get(
-    `/api/${instanceId}/StaffReport/ReportComments/${ReportId}`,
+    `/api/StaffReport/ReportComments/${ReportId}`,
     {
       headers: { Authorization: `Bearer ${Token}` },
     }
@@ -55,7 +55,7 @@ export async function getReportComments(ReportId) {
 
 export async function postMessageToCitizen({ id, payload }) {
   const data = await axios.post(
-    `/api/${instanceId}/StaffReport/MessageToCitizen/${id}`,
+    `/api/StaffReport/MessageToCitizen/${id}`,
     payload,
     {
       headers: { Authorization: `Bearer ${Token}` },
@@ -65,7 +65,7 @@ export async function postMessageToCitizen({ id, payload }) {
 }
 
 export async function getAllNotes() {
-  const data = await axios.get(`/api/${instanceId}/StaffReport/Notes`, {
+  const data = await axios.get(`/api/StaffReport/Notes`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data.data;
@@ -73,7 +73,7 @@ export async function getAllNotes() {
 
 export async function getReportNotes(reportId) {
   const data = await axios.get(
-    `/api/${instanceId}/StaffReport/Notes/${reportId}`,
+    `/api/StaffReport/Notes/${reportId}`,
     {
       headers: { Authorization: `Bearer ${Token}` },
     }
@@ -83,7 +83,7 @@ export async function getReportNotes(reportId) {
 
 export async function postReportNote({ ReportId, payload }) {
   const data = await axios.post(
-    `/api/${instanceId ? instanceId : 1}/StaffReport/Notes/${ReportId}`,
+    `/api/StaffReport/Notes/${ReportId}`,
     payload,
     {
       headers: { Authorization: `Bearer ${Token}` },
@@ -94,7 +94,7 @@ export async function postReportNote({ ReportId, payload }) {
 
 export async function putReportNote({ noteId, payload }) {
   const data = await axios.put(
-    `/api/${instanceId}/StaffReport/Notes/${noteId}`,
+    `/api/StaffReport/Notes/${noteId}`,
     payload,
     {
       headers: { Authorization: `Bearer ${Token}` },
@@ -105,7 +105,7 @@ export async function putReportNote({ noteId, payload }) {
 
 export async function deleteReportNote(noteId) {
   const data = await axios.delete(
-    `/api/${instanceId}/StaffReport/Notes/${noteId}`,
+    `/api/StaffReport/Notes/${noteId}`,
     {
       headers: { Authorization: `Bearer ${Token}` },
     }
@@ -115,7 +115,7 @@ export async function deleteReportNote(noteId) {
 
 export async function getSatisfaction(reportId) {
   const data = await axios.get(
-    `/api/${instanceId}/StaffReport/Satisfaction/${reportId}`,
+    `/api/StaffReport/Satisfaction/${reportId}`,
     {
       headers: { Authorization: `Bearer ${Token}` },
     }
@@ -125,7 +125,7 @@ export async function getSatisfaction(reportId) {
 
 export async function postObjection({ ReportId, payload }) {
   const data = await axios.post(
-    `/api/${instanceId}/StaffReport/Objection/${ReportId}`,
+    `/api/StaffReport/Objection/${ReportId}`,
     payload,
     {
       headers: { Authorization: `Bearer ${Token}` },
@@ -135,7 +135,7 @@ export async function postObjection({ ReportId, payload }) {
 }
 
 export async function getExcel(payload) {
-  const data = await axios.get(`/api/${instanceId}/StaffInfo/Excel`, {
+  const data = await axios.get(`/api/StaffInfo/Excel`, {
     headers: { Authorization: `Bearer ${Token}` },
   });
   return data.data.data;
@@ -143,7 +143,7 @@ export async function getExcel(payload) {
 
 export async function getViolationsOfReport(id) {
   const data = await axios.get(
-    `/api/${instanceId}/StaffReport/ReportViolations/${id}`,
+    `/api/StaffReport/ReportViolations/${id}`,
     {
       headers: { Authorization: `Bearer ${Token}` },
     }
@@ -153,7 +153,7 @@ export async function getViolationsOfReport(id) {
 
 export async function getCommentViolations(id) {
   const data = await axios.get(
-    `/api/${instanceId}/StaffReport/CommentViolations/${id}`,
+    `/api/StaffReport/CommentViolations/${id}`,
     {
       headers: { Authorization: `Bearer ${Token}` },
     }
