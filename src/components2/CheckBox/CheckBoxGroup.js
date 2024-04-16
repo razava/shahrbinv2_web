@@ -8,11 +8,13 @@ const CheckBoxGroup = ({
   name = "",
   options = [],
   defaultSelecteds = [],
-  defaults,
+  defaults = [],
   readOnly = false,
 }) => {
   //   states
-  const [values, setValues] = useState(defaultSelecteds);
+  const [values, setValues] = useState(defaults);
+
+  console.log(readOnly);
 
   const handleChange = (value, index) => {
     const newValues = values;
@@ -21,12 +23,13 @@ const CheckBoxGroup = ({
     onChange(newValues, name);
   };
   console.log(defaults);
-  useEffect(() => {
-    if (defaults) {
-      console.log("defaults", defaults);
-      setValues(defaults);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (defaults) {
+  //     console.log("defaults", defaults);
+  //     setValues(defaults);
+  //   }
+  // }, [defaults]);
+
   return (
     <>
       <section className={styles.checkBoxGroup}>
@@ -42,6 +45,7 @@ const CheckBoxGroup = ({
                   handleChange(value, i);
                 }
               }}
+              defaultChecked={defaults[i]?.checked}
               checked={values[i]?.checked || false}
             />
           ))}

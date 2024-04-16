@@ -33,6 +33,9 @@ export default function ShareInformation({ data }) {
       }
     });
   }
+
+  const comments = JSON.parse(data?.comments)?.values;
+
   return (
     <div className=" px-14 flex">
       <div
@@ -88,13 +91,68 @@ export default function ShareInformation({ data }) {
                 </div> */}
             </div>
             <div className=" grid grid-cols-1 gap-2 w-full">
-              <div className=" flex gap-2">
-                <p>توضیحات:</p>
-                <p className=" text-gray-500">
-                  {data?.category?.formElements.length > 0
-                    ? ""
-                    : doesExist(data?.comments)}
-                </p>
+              <div className=" flex flex-col gap-2">
+                <p>جزییات:</p>
+                <div className="">
+                  {comments && (
+                    <>
+                      {Object.keys(comments).map((key, item) => {
+                        console.log(Array.isArray(comments[key].value));
+                        if (typeof comments[key].value == "string") {
+                          return (
+                            <div className="">
+                              <span>{comments[key].name}</span>:{" "}
+                              <span className=" text-gray-500">
+                                {comments[key].value}
+                              </span>
+                            </div>
+                          );
+                        } else if (
+                          typeof comments[key].value == "object" &&
+                          !Array.isArray(comments[key].value)
+                        ) {
+                          return (
+                            <div>
+                              {comments[key].name}:{" "}
+                              <span className=" text-gray-500">
+                                {comments[key].value.title}
+                              </span>
+                            </div>
+                          );
+                        } else if (Array.isArray(comments[key].value)) {
+                          return (
+                            <span className=" flex gap-1">
+                              <span>{comments[key].name}:</span>
+                              <span className=" flex  gap-1 text-gray-500">
+                                <>
+                                  {comments[key].value.map((item, idx) => {
+                                    if (item.name) {
+                                      return (
+                                        <span>
+                                          {item.name}{" "}
+                                          {comments[key].value.length - 1 !=
+                                            idx && ","}
+                                        </span>
+                                      );
+                                    } else {
+                                      return (
+                                        <span>
+                                          {item.title}
+                                          {comments[key].value.length - 1 !=
+                                            idx && ","}
+                                        </span>
+                                      );
+                                    }
+                                  })}
+                                </>
+                              </span>
+                            </span>
+                          );
+                        }
+                      })}
+                    </>
+                  )}
+                </div>
               </div>
               {/* <div className=" flex gap-2">
                   <p>منطقه:</p>

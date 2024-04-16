@@ -17,7 +17,6 @@ const instanceId = getFromLocalStorage(
 
 axios.interceptors.request.use(function (config) {
   const token = getFromLocalStorage(constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN);
-  console.log(config);
   if (config?.url?.origin == "https://ticketingapi.shetabdahi.ir") {
     config.headers.Authorization = `bearer ${ticketingToken}`;
   } else {

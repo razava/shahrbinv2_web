@@ -204,6 +204,7 @@ const RegisterReport = () => {
     setValues(defaultValues);
     setAttachments([]);
     setCategoryId(null);
+    setCategory("");
     setCategoryTitle("");
     setIsIdentityVisible(true);
     setIsPublic(0);

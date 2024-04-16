@@ -43,12 +43,22 @@ export const options = {
       title: "فقط اعداد",
       value: "digitsOnly",
     },
+    {
+      id: "text-option-5",
+      title: "الزامی",
+      value: "required",
+    },
   ],
   select: [
     {
       id: "select-option-1",
       title: "غیرفعال",
       value: "disabled",
+    },
+    {
+      id: "text-option-2",
+      title: "قابل ویرایش",
+      value: "editable",
     },
     {
       id: "select-option-2",
@@ -64,6 +74,11 @@ export const options = {
       id: "select-option-4",
       title: "جستجو",
       value: "searchable",
+    },
+    {
+      id: "select-option-5",
+      title: "الزامی",
+      value: "required",
     },
   ],
   textarea: [
@@ -87,6 +102,11 @@ export const options = {
       title: "فقط اعداد",
       value: "digitsOnly",
     },
+    {
+      id: "textarea-option-5",
+      title: "الزامی",
+      value: "required",
+    },
   ],
   radio: [
     {
@@ -99,6 +119,16 @@ export const options = {
       title: "افقی",
       value: "horizontal",
     },
+    {
+      id: "radio-option-3",
+      title: "قابل ویرایش",
+      value: "editable",
+    },
+    {
+      id: "radio-option-4",
+      title: "الزامی",
+      value: "required",
+    },
   ],
   checkbox: [
     {
@@ -110,6 +140,16 @@ export const options = {
       id: "checkbox-option-2",
       title: "افقی",
       value: "horizontal",
+    },
+    {
+      id: "checkbox-option-3",
+      title: "قابل ویرایش",
+      value: "editable",
+    },
+    {
+      id: "checkbox-option-4",
+      title: "الزامی",
+      value: "required",
     },
   ],
   header: [],
@@ -248,9 +288,7 @@ export const editTabs = [
         { type: "text", name: "title", label: "عنوان" },
         { type: "text", name: "description", label: "زیر عنوان" },
       ],
-      container: [
-        { type: "text", name: "label", label: "برچسب" },
-      ],
+      container: [{ type: "text", name: "label", label: "برچسب" }],
     },
   },
   {

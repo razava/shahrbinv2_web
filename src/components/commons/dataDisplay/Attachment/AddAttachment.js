@@ -33,12 +33,13 @@ const AddAttachment = ({
     onSuccess: (res) => {
       // let newAttachmnets = attachments;
       // newAttachmnets = [...attachments];
+      console.log(res);
       let newAttachmnets = attachments;
       newAttachmnets = [
         ...newAttachmnets,
         {
           file: data,
-          id: res.id,
+          id: res.data.id,
         },
       ];
       console.log(newAttachmnets);

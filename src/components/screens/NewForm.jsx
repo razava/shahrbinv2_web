@@ -55,6 +55,7 @@ function NewForm() {
   });
 
   const postFormHandler = () => {
+    console.log(store.form);
     const formElements = store.form.map((item, index) => {
       return {
         elementType: item.elementType,
@@ -64,6 +65,7 @@ function NewForm() {
         meta: JSON.stringify(item),
       };
     });
+    console.log(formElements);
     const isEditMode = localStorage.getItem("formBuilder");
     if (isEditMode) {
       editFormMutation.mutate({

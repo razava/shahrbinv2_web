@@ -16,6 +16,7 @@ const getSizeStyle = (size) => {
 
 const CheckBox = ({
   checked = false,
+  defaultChecked = false,
   disabled = false,
   size = "medium",
   name = "",
@@ -33,9 +34,10 @@ const CheckBox = ({
   //   states
   //  ** flags
   const [isChecked, setIsChecked] = useState(checked);
-  console.log(isChecked);
+
   // styles
   const sizeStyle = getSizeStyle(size);
+  console.log(disabled);
   const checkBoxWrapperClassName = [
     styles.wrapper,
     disabled ? styles.disabled : "",
@@ -62,9 +64,10 @@ const CheckBox = ({
     onChange({ title, checked: !isChecked }, name);
   };
 
-  useEffect(() => {
-    setIsChecked(checked);
-  }, [checked]);
+  // useEffect(() => {
+  //   console.log(defaultChecked);
+  //   setIsChecked(defaultChecked);
+  // }, []);
 
   //   renders
   const renderLabel = () =>

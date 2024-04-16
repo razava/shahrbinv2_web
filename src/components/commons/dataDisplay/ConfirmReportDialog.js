@@ -242,12 +242,47 @@ const ConfirmReportDialog = ({
   ];
   const haveForm = ReportData?.comments?.[0] == "{";
 
+  useEffect(() => {
+    console.log(comments);
+  }, [comments]);
+
   return (
     <>
       {ReportData && (
         <>
           <div className={"w90 mxa frc row"}>
             <div className="w100 mxa row frc">
+              <TreeSystem
+                isStatic
+                staticData={store.initials.categories}
+                condition={categoryDialog}
+                setCondition={setCategoryDialog}
+                onChange={onCategoriesSelected}
+                defaultSelected={[{ id: categoryId }]}
+                singleSelect={true}
+                onClose={() => setCategoryDialog(false)}
+                renderToggler={(selected) => (
+                  <TextInput
+                    placeholder="انتخاب کنید."
+                    title="گروه موضوعی"
+                    readOnly={true}
+                    onClick={() => setCategoryDialog(true)}
+                    wrapperClassName="col-md-12 col-sm-12 col-12"
+                    inputClassName="pointer"
+                    required={false}
+                    value={
+                      selected.length > 0
+                        ? selected[0].title
+                        : categoryTitle2
+                        ? categoryTitle2
+                        : ""
+                    }
+                  />
+                )}
+              ></TreeSystem>
+            </div>
+
+            <div className={"w100 mxa frc row"}>
               <TextInput
                 wrapperClassName={"col-md-6 col-sm-12"}
                 value={addressDetail}
@@ -281,40 +316,7 @@ const ConfirmReportDialog = ({
                     height={500 - 40}
                   />
                 </DialogToggler>
-              </TextInput>
-              {console.log(categoryId)}
-              <TreeSystem
-                isStatic
-                staticData={store.initials.categories}
-                condition={categoryDialog}
-                setCondition={setCategoryDialog}
-                onChange={onCategoriesSelected}
-                defaultSelected={[{ id: categoryId }]}
-                singleSelect={true}
-                onClose={() => setCategoryDialog(false)}
-                renderToggler={(selected) => (
-                  <TextInput
-                    placeholder="انتخاب کنید."
-                    title="گروه موضوعی"
-                    readOnly={true}
-                    onClick={() => setCategoryDialog(true)}
-                    wrapperClassName="col-md-6 col-sm-12 col-12"
-                    inputClassName="pointer"
-                    required={false}
-                    value={
-                      selected.length > 0
-                        ? selected[0].title
-                        : categoryTitle2
-                        ? categoryTitle2
-                        : ""
-                    }
-                  />
-                )}
-              ></TreeSystem>
-            </div>
-
-            <div className={"w100 mxa frc row"}>
-              {console.log(store.initials.regions)}
+              </TextInput>{" "}
               <SelectBox
                 staticData
                 options={store.initials.regions}
@@ -334,9 +336,6 @@ const ConfirmReportDialog = ({
                 onChange={onVisibilityChange}
                 wrapperClassName="col-md-6 col-sm-12 col-12"
               />
-            </div>
-
-            <div className={"w100 mxa frc row"}>
               <SelectBox
                 staticData
                 options={[
@@ -354,11 +353,13 @@ const ConfirmReportDialog = ({
               />
             </div>
 
+            {/* <div className={"w100 row"}></div> */}
+
             <div className=" w-full mxa">
               {haveForm ? (
                 <CategoryForm2
-                  readOnly={true}
-                  onChange={() => null}
+                  readOnly={false}
+                  onChange={(data) => setComments(JSON.stringify(data))}
                   data={ReportData}
                 />
               ) : (

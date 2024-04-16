@@ -61,12 +61,10 @@ const TextInput = ({
   const errorClassName = [styles.error, classNames.error].join(" ");
   const controlsClassName = [styles.controls, classNames.controls].join(" ");
   const controlClassName = [styles.control, classNames.control].join(" ");
-  console.log(placeholder);
-  console.log(inputRef.current?.value);
+  
   //   functions  
   const handleChange = (e) => {
     const value = e.target.value;
-    console.log(value);
     if (value === "") return onChange?.(e.target.value, name);
     if (englishOnly) {
       if (/[A-Za-z][A-Za-z0-9]*/.test(value) || /\d+/.test(value)) {

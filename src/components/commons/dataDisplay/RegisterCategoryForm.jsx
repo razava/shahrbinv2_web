@@ -48,6 +48,7 @@ export default function RegisterCategoryForm({
       return item;
     });
     setValues(newValues);
+    console.log(newValues);
     onChange(newValues);
     if (element?.elementType == "dropzone") {
       console.log("dropzone");
