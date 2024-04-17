@@ -3,14 +3,13 @@ import { getUserReports } from "../../../api/AdminApi";
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { convertserverTimeToDateString } from "../../../helperFuncs";
 import DialogToggler from "../../helpers/DialogToggler";
-import ReportDialog from "../dataDisplay/ReportDialog";
 import { ReportsAPI } from "../../../apiCalls";
 import { useIntersection } from "@mantine/hooks";
 const modalRoot = document && document.getElementById("modal-root");
 
 export default function UserReports({ userId }) {
   const [dialogData, setDialogData] = useState({});
-  const [dialog, setDialog] = useState(false);  
+  const [dialog, setDialog] = useState(false);
 
   // //queries
   // const { data: UserReports, isLoading } = useQuery({
@@ -57,18 +56,11 @@ export default function UserReports({ userId }) {
   const _data = data?.pages.flatMap((page) => page);
 
   return (
-    <div className=" px-10 grid grid-cols-2 gap-5 overflow-y-auto pb-5">
+    <div className=" px-10 grid grid-cols-2 gap-5 overflow-y-auto pb-5 pt-2">
       {_data?.map((item, i) => {
-        if (i === _data?.length - 1)
-          return <div ref={ref} key={i}></div>;
+        if (i === _data?.length - 1) return <div ref={ref} key={i}></div>;
         return (
-          <div
-            onClick={() => {
-              setDialog(true);
-              setDialogData(item);
-            }}
-            className=" min-h-[24rem] bg-gray-100 shadow-md rounded-md p-4 cursor-pointe hover:scale-105 transition flex justify-center flex-col items-center cursor-pointer col-span-1"
-          >
+          <div className=" min-h-[21rem] bg-gray-100 shadow-md rounded-md p-4 cursor-pointe hover:scale-105 transition flex justify-center flex-col items-center cursor-pointer col-span-1">
             <div className=" flex flex-col justify-center w-full gap-2">
               <span className=" text-lg">
                 <span className=" font-bold">تاریخ ایجاد:</span>{" "}
@@ -83,6 +75,10 @@ export default function UserReports({ userId }) {
                 {" "}
                 <span className=" font-bold">موضوع:</span> {item.categoryTitle}
               </span>
+              <span className=" text-lg">
+                {" "}
+                <span className=" font-bold">آدرس:</span> {item.addressDetail}
+              </span>
             </div>
             <div className=" w-full text-center mx-auto bg-primary rounded-md text-white p-2 mt-auto">
               {item.lastStatus}
@@ -91,7 +87,7 @@ export default function UserReports({ userId }) {
         );
       })}
 
-      <DialogToggler
+      {/* <DialogToggler
         condition={dialog}
         dialogId={dialogData?.id}
         data={dialogData}
@@ -110,7 +106,7 @@ export default function UserReports({ userId }) {
           childData={dialogData}
           onNext={() => null}
         />
-      </DialogToggler>
+      </DialogToggler> */}
     </div>
   );
 }

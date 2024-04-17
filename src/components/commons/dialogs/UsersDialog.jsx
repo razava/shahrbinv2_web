@@ -132,6 +132,7 @@ const UsersDialog = ({
             <article label="تغییر رمز عبور" id="password">
               <ChangePasswordDialog
                 id={dialogData?.id}
+                mode={"admin"}
                 setCondition={() => console.log("Df")}
               />
             </article>

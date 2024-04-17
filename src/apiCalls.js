@@ -533,7 +533,7 @@ export class CommonAPI {
 
   static getAshkezarRegions(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Common/RegionsByName/اشکذر`, {
+      .get(`${prefix}/api/Common/RegionsByName/اشکذر`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -1288,7 +1288,7 @@ export class OrganizationalUnitAPI {
 
   static getOrgansActors(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/OrganizationalUnit/Actors`, {
+      .get(`${prefix}/api/OrganizationalUnit/Actors`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1302,7 +1302,7 @@ export class OrganizationalUnitAPI {
 export class ProcessesAPI {
   static getProcesses(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Processes`, {
+      .get(`${prefix}/api/Processes`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,

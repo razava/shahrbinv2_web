@@ -11,7 +11,12 @@ const modalRoot = document && document.getElementById("modal-root");
 
 const { errorMessage } = checkPassword("");
 
-const ChangePasswordDialog = ({ id, setCondition, type = 1 }) => {
+const ChangePasswordDialog = ({
+  id,
+  setCondition,
+  type = 1,
+  mode = "profile",
+}) => {
   const [password, setPassword] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -71,7 +76,7 @@ const ChangePasswordDialog = ({ id, setCondition, type = 1 }) => {
   );
   return (
     <>
-      <div className=" py2 w-full px-2">
+      <div className=" py2 w-full px-2 mb-20">
         {type === 2 && (
           <TextInput
             name="oldPassword"
@@ -101,7 +106,12 @@ const ChangePasswordDialog = ({ id, setCondition, type = 1 }) => {
           type="password"
         />
       </div>
-      <div className="w80 mxa fre py1 px2 border-t-light mt1 fixed b0 bg-white">
+
+      <div
+        className={` ${
+          mode == "admin" ? "w80" : "w-full"
+        } mxa fre py1 px2 border-t-light mt1 fixed b0 bg-white`}
+      >
         <Button
           title="ذخیره"
           className="py1 br05 bg-primary"
