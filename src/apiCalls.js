@@ -150,7 +150,7 @@ export class ReportsAPI {
     const queryParam = !query ? "" : `&query=${query}`;
     return axios
       .get(
-        `${prefix}/api/${instance?.id}/Info/Locations?pageNumber=${page}&pageSize=${perPage}${newFromDate}${newToDate}${queryParam}${categoryParam}${stageParam}${priorityParam}${regionParam}${organParam}`,
+        `${prefix}/api/Info/Locations?pageNumber=${page}&pageSize=${perPage}${newFromDate}${newToDate}${queryParam}${categoryParam}${stageParam}${priorityParam}${regionParam}${organParam}`,
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -200,7 +200,7 @@ export class ReportsAPI {
   ) {
     return axios
       .get(
-        `${prefix}/api/${instance?.id}/Task/NewReports?pageNumber=${page}&pageSize=${perPage}&fromDate=${fromDate}&toDate=${toDate}&query=${query}`,
+        `${prefix}/api/Task/NewReports?pageNumber=${page}&pageSize=${perPage}&fromDate=${fromDate}&toDate=${toDate}&query=${query}`,
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -481,7 +481,7 @@ export class CommonAPI {
 
   static getStages(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Common/Stages`, {
+      .get(`${prefix}/api/Common/Stages`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -492,7 +492,7 @@ export class CommonAPI {
 
   static getPriorities(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Common/Priorities`, {
+      .get(`${prefix}/api/Common/Priorities`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -829,7 +829,7 @@ export class UserInfoAPI {
 
   static getUserRoles(token, id, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/AdminUserManagement/Roles/${id}`, {
+      .get(`${prefix}/api/AdminUserManagement/Roles/${id}`, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -976,7 +976,7 @@ export class InfoAPI {
 
     return axios
       .get(
-        `${prefix}/api/${instance?.id}/Info/Summary2?SentFromDate=${
+        `${prefix}/api/Info/Summary2?SentFromDate=${
           queries.fromDate || ""
         }&SentToDate=${
           queries.toDate || ""
@@ -1208,7 +1208,7 @@ export class ActorsAPI {
 
   static getActors(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/Actors`, {
+      .get(`${prefix}/api/Actors`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
@@ -1222,7 +1222,7 @@ export class ActorsAPI {
 export class OrganizationalUnitAPI {
   static getOrgans(token, payload, source, instance) {
     return axios
-      .get(`${prefix}/api/${instance?.id}/OrganizationalUnit`, {
+      .get(`${prefix}/api/OrganizationalUnit`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,

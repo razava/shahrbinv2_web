@@ -49,7 +49,7 @@ export async function getReportById(id) {
 
 export async function postConnectionId(id) {
   const data = await axios.post(
-    `/api/${instanceId()}/Messages/ConnectionId`,
+    `/api/Messages/ConnectionId`,
     id,
     {
       headers: {
