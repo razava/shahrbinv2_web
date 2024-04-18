@@ -72,7 +72,7 @@ const ConfirmReportDialog = ({
   const [mapLoading, setMapLoading] = useState(false);
   const [categoryDialog, setCategoryDialog] = useState(false);
 
-  const [categoryTitle2, setCategoryTitle2] = useState(categoryTitle);
+  const [categoryTitle2, setCategoryTitle2] = useState();
   const onTextChange = (name) => (e) => {
     let value = e.target ? e.target.value : e;
     if (name === "comments") {
@@ -90,7 +90,7 @@ const ConfirmReportDialog = ({
     if (ReportData) {
       console.log(ReportData);
       setComments(ReportData.comments);
-      // setCategoryTitle(ReportData.category && ReportData.category.title);
+      setCategoryTitle2(ReportData.categoryTitle);
       setCategoryId(ReportData.categoryId);
       setAddressDetail(ReportData.address && ReportData.address.detail);
       setCoordinates({
