@@ -50,31 +50,31 @@ export const options = {
     },
   ],
   select: [
-    {
-      id: "select-option-1",
-      title: "غیرفعال",
-      value: "disabled",
-    },
+    // {
+    //   id: "select-option-1",
+    //   title: "غیرفعال",
+    //   value: "disabled",
+    // },
     {
       id: "text-option-2",
       title: "قابل ویرایش",
       value: "editable",
     },
-    {
-      id: "select-option-2",
-      title: "چند انتخابی",
-      value: "multiple",
-    },
-    {
-      id: "select-option-3",
-      title: "قابل پاک کردن",
-      value: "clearable",
-    },
-    {
-      id: "select-option-4",
-      title: "جستجو",
-      value: "searchable",
-    },
+    // {
+    //   id: "select-option-2",
+    //   title: "چند انتخابی",
+    //   value: "multiple",
+    // },
+    // {
+    //   id: "select-option-3",
+    //   title: "قابل پاک کردن",
+    //   value: "clearable",
+    // },
+    // {
+    //   id: "select-option-4",
+    //   title: "جستجو",
+    //   value: "searchable",
+    // },
     {
       id: "select-option-5",
       title: "الزامی",
@@ -82,11 +82,11 @@ export const options = {
     },
   ],
   textarea: [
-    {
-      id: "textarea-option-1",
-      title: "غیرفعال",
-      value: "disabled",
-    },
+    // {
+    //   id: "textarea-option-1",
+    //   title: "غیرفعال",
+    //   value: "disabled",
+    // },
     {
       id: "textarea-option-2",
       title: "قابل ویرایش",
@@ -109,11 +109,11 @@ export const options = {
     },
   ],
   radio: [
-    {
-      id: "radio-option-1",
-      title: "غیرفعال",
-      value: "disabled",
-    },
+    // {
+    //   id: "radio-option-1",
+    //   title: "غیرفعال",
+    //   value: "disabled",
+    // },
     {
       id: "radio-option-2",
       title: "افقی",
@@ -131,11 +131,11 @@ export const options = {
     },
   ],
   checkbox: [
-    {
-      id: "checkbox-option-1",
-      title: "غیرفعال",
-      value: "disabled",
-    },
+    // {
+    //   id: "checkbox-option-1",
+    //   title: "غیرفعال",
+    //   value: "disabled",
+    // },
     {
       id: "checkbox-option-2",
       title: "افقی",
