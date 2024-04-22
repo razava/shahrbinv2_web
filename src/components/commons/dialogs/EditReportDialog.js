@@ -35,6 +35,7 @@ const EditReportDialog = ({ report = {}, onSuccess = (f) => f }) => {
     isIdentityVisible: false,
     medias: [],
     regionId: "",
+    priority: "",
   });
 
   //   flags
@@ -119,6 +120,7 @@ const EditReportDialog = ({ report = {}, onSuccess = (f) => f }) => {
         longitude: values.coordinates.longitude,
         elevation: 0,
       },
+      priority: Number(values.priority),
       attachments: values.medias
         .filter((media) => !media.isDeleted)
         .forEach((media, i) => media),
@@ -199,6 +201,7 @@ const EditReportDialog = ({ report = {}, onSuccess = (f) => f }) => {
             medias: res.data.medias || [],
             regionId: res.data.address?.regionId || "",
             category: res.data.category || {},
+            priority: res.data?.priority,
           });
         },
         requestEnded: (res) => {
@@ -208,6 +211,8 @@ const EditReportDialog = ({ report = {}, onSuccess = (f) => f }) => {
       });
     }
   }, [report]);
+
+  const haveForm = ReportData?.comments?.[0] == "{";
 
   console.log(ReportData?.media);
   return (
@@ -310,20 +315,44 @@ const EditReportDialog = ({ report = {}, onSuccess = (f) => f }) => {
             value={values.isIdentityVisible}
             wrapperClassName="col-md-6 col-sm-12"
           />
-        </div>
-
-        <div className="w100 mxa frc row">
-          <Textarea
-            value={values.comments}
-            name="comments"
+          <SelectBox
+            staticData
+            options={[
+              { id: 0, title: "کم" },
+              { id: 1, title: "عادی" },
+              { id: 2, title: "زیاد" },
+              { id: 3, title: "فوری" },
+            ]}
+            name="priority"
+            value={values.priority}
             handleChange={handleChange}
-            title="توضیحات"
-            inputClassName="mh100"
-            wrapperClassName="col-sm-12"
+            handle={["title"]}
+            label="اولویت"
+            wrapperClassName="col-md-6 col-sm-12 col-12"
           />
         </div>
+
         <div className=" w-full mxa">
-          {ReportData?.form && <CategoryForm2 data={ReportData} />}
+          {haveForm ? (
+            <CategoryForm2
+              readOnly={false}
+              onChange={(data) =>
+                setValues({ ...values, comments: JSON.stringify(data) })
+              }
+              data={ReportData}
+            />
+          ) : (
+            <div className="w100 mxa">
+              <Textarea
+                value={values.comments}
+                name="comments"
+                handleChange={handleChange}
+                title="توضیحات"
+                inputClassName="mh100"
+                wrapperClassName="col-sm-12"
+              />
+            </div>
+          )}
         </div>
         <div className={"w90 mxa px1"}>
           <label className={"text-secondary f15"}>پیوست ها</label>

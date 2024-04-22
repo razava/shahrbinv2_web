@@ -38,6 +38,7 @@ const AddProcessDialog = ({
     setValues({
       title: data.title,
       actorIds: data.actorIds,
+      code: data?.code,
     });
     const ac = data.actorIds.map((item) => {
       return { id: item };

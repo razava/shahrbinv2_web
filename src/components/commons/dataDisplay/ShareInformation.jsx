@@ -34,6 +34,7 @@ export default function ShareInformation({ data }) {
     });
   }
 
+  
   const comments = JSON.parse(data?.comments)?.values;
 
   return (
@@ -236,13 +237,28 @@ export default function ShareInformation({ data }) {
               {reportDetailData?.map((item, index) => {
                 return (
                   <div className="border-0 border-b border-dashed border-b-gray-600 flex gap-2 items-center  p-2">
-                    <div className=" flex flex-col gap-2">
-                      <div className=" flex">
-                        <div className=" text-black rounded-lg">
-                          {index + 1}
-                          {")"}
+                    <div className=" flex flex-col gap-2 w-full">
+                      <div className=" flex justify-between w-full">
+                        <div className="flex">
+                          <div className=" text-black rounded-lg">
+                            {index + 1}
+                            {")"}
+                          </div>
+                          <div className=" pr-2">
+                            {item.message} - {item?.actor?.title}
+                            {(item?.actor?.firstName ||
+                              item?.actor?.lastName) &&
+                              " (" +
+                                ((item?.actor?.firstName
+                                  ? item?.actor?.firstName
+                                  : "") +
+                                  " " +
+                                  (item?.actor?.lastName
+                                    ? item?.actor?.lastName
+                                    : "")) +
+                                ")"}
+                          </div>
                         </div>
-                        <div className=" pr-2">{item.message} - </div>
                         <div className=" pr-2">
                           {convertserverTimeToDateString(item.dateTime)}
                         </div>

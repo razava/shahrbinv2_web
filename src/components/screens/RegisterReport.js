@@ -149,7 +149,7 @@ const RegisterReport = () => {
         },
         attachments: attachments.map((attachment) => attachment.id),
         visibility: isPublic,
-        defaultPriority: Number(values.defaultPriority),
+        priority: Number(values.defaultPriority),
       });
     } else {
       toast(validation.message, { type: "error" });
