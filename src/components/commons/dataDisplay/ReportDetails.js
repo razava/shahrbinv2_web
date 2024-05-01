@@ -52,8 +52,11 @@ const ReportDetails = ({ data }) => {
           <TextInput
             value={
               data?.currentActor?.title +
+              " " +
               (data?.currentActor?.firstName || data?.currentActor?.lastName
-                ? data?.currentActor?.firstName + data?.currentActor?.lastName
+                ? data?.currentActor?.firstName +
+                  " " +
+                  data?.currentActor?.lastName
                 : "")
             }
             readOnly={true}

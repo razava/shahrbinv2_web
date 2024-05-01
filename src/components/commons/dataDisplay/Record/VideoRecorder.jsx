@@ -55,24 +55,30 @@ export default function App({
   const getRecordingFileRenderProp = async (blob) => {
     console.log({ blob });
   };
+
   useEffect(() => {
+    console.log(recordWebcam.status);
     recordWebcam.open();
   }, []);
 
+  console.log(recordWebcam);
+
   useEffect(() => {
+    console.log("🚀 ~ useEffect ~ closeWebcam:", closeWebcam);
     if (closeWebcam != 0) {
-      console.log(222);
       recordWebcam.close();
+      console.log(recordWebcam.status);
+      console.log(222);
     }
   }, [closeWebcam]);
-  
 
   const uploadMutation = useMutation({
     mutationKey: ["File"],
     mutationFn: postFiles,
     onSuccess: (res) => {
+      console.log("🚀 ~ res:", res);
       recordWebcam.close();
-      addRecord(res, "video");
+      addRecord(res.data, "video");
     },
     onError: (err) => {},
   });
@@ -127,12 +133,14 @@ export default function App({
               recordWebcam.status === CAMERA_STATUS.CLOSED ||
               recordWebcam.status === CAMERA_STATUS.RECORDING ||
               recordWebcam.status === CAMERA_STATUS.PREVIEW ||
+              recordWebcam.status === CAMERA_STATUS.INIT ||
               video
             }
             className={` flex-1 ${
               (recordWebcam.status === CAMERA_STATUS.CLOSED ||
                 recordWebcam.status === CAMERA_STATUS.RECORDING ||
                 recordWebcam.status === CAMERA_STATUS.PREVIEW ||
+                recordWebcam.status === CAMERA_STATUS.INIT ||
                 video) &&
               "opacity-50"
             }`}

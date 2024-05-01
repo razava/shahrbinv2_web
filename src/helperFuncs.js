@@ -198,7 +198,7 @@ export const reportColumn = [
         ) : (
           ""
         )}
-        {isTimePassed(row.responseDeadline) && row?.priority == 4 ? (
+        {isTimePassed(row.responseDeadline) && row?.priority == 3 ? (
           <i
             className="fad fa-fire-alt text-red-600"
             style={{ fontSize: "17px" }}

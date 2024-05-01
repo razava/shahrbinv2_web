@@ -115,9 +115,11 @@ const ReportDialog = ({
             <article label="نظرات شهروندان" id="reportComments">
               <ReportComments data={data} />
             </article>
-            <article label="دیگر درخواست ها" id="requests">
-              <UserReports userId={data?.citizenId} />
-            </article>
+            {checkRoles && (
+              <article label="دیگر درخواست ها" id="requests">
+                <UserReports userId={data?.citizenId} />
+              </article>
+            )}
             <article label="یادداشت ها" id="notes">
               <Notes data={data} />
             </article>

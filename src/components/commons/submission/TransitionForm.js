@@ -125,7 +125,7 @@ const TransitionForm = ({
     // actors.map((actor, i) => {
     //   payload.append(`actors[${i}].id`, actor.id);
     // });
-    console.log(selectedActors);
+
     return {
       transitionId: transition.transitionId,
       reasonId: reasonId,
@@ -219,6 +219,11 @@ const TransitionForm = ({
   };
   const hasVideo = attachments.find((item) => item?.type == "video");
   const hasVoice = attachments.find((item) => item?.type == "voice");
+
+  useEffect(() => {
+    localStorage.removeItem("myVideo");
+  }, []);
+
   return (
     <>
       <div className={[styles.infoList, "pb5 mb1"].join(" ")}>
@@ -304,8 +309,10 @@ const TransitionForm = ({
           open={open}
           onClose={() => {
             setOpen(false);
+            console.log("clossse");
             setCloseWebcam((pre) => pre + 1);
           }}
+          closeOnOverlayClick={false}
           center
           modalId="recorder"
           styles={{ direction: "ltr" }}
