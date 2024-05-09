@@ -194,6 +194,7 @@ const AddCategory = ({ match }) => {
             // filters={store.filters}
             setQuery={setQuery}
             query={query}
+            mode="client"
           />
         </div>
         {/* <Filters filterTypes={{ query: true }} /> */}

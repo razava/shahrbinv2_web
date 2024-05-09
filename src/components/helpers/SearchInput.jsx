@@ -7,9 +7,11 @@ export default function SearchInput({
   setQuery,
   filters,
   setIsQuery,
+  mode = "server",
 }) {
   const [store, dispatch] = useContext(AppStore);
   const handleKeyPress = (event) => {
+    if (mode == "client") return;
     setIsQuery(false);
     if (event.key === "Enter") {
       dispatch({
@@ -38,10 +40,14 @@ export default function SearchInput({
         <span
           onClick={() => {
             setIsQuery(true);
-            dispatch({
-              type: "setFilters",
-              payload: { ...filters, query: "" },
-            });
+            if (mode == "client") {
+              setQuery("");
+            } else {
+              dispatch({
+                type: "setFilters",
+                payload: { ...filters, query: "" },
+              });
+            }
           }}
           className="w-8 cursor-pointer"
         >

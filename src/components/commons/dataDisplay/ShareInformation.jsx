@@ -34,9 +34,9 @@ export default function ShareInformation({ data }) {
     });
   }
 
-  
   const comments = JSON.parse(data?.comments)?.values;
 
+  
   return (
     <div className=" px-14 flex">
       <div
@@ -127,22 +127,24 @@ export default function ShareInformation({ data }) {
                               <span className=" flex  gap-1 text-gray-500">
                                 <>
                                   {comments[key].value.map((item, idx) => {
-                                    if (item.name) {
-                                      return (
-                                        <span>
-                                          {item.name}{" "}
-                                          {comments[key].value.length - 1 !=
-                                            idx && ","}
-                                        </span>
-                                      );
-                                    } else {
-                                      return (
-                                        <span>
-                                          {item.title}
-                                          {comments[key].value.length - 1 !=
-                                            idx && ","}
-                                        </span>
-                                      );
+                                    if (item) {
+                                      if (item?.name) {
+                                        return (
+                                          <span>
+                                            {item.name}{" "}
+                                            {comments[key].value.length - 1 !=
+                                              idx && ","}
+                                          </span>
+                                        );
+                                      } else {
+                                        return (
+                                          <span>
+                                            {item.title}
+                                            {comments[key].value.length - 1 !=
+                                              idx && ","}
+                                          </span>
+                                        );
+                                      }
                                     }
                                   })}
                                 </>
