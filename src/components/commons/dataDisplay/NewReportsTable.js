@@ -24,7 +24,7 @@ import NoData from "../../helpers/NoData/NoData";
 const modalRoot = document && document.getElementById("modal-root");
 const modalRoot2 = document && document.getElementById("modal2-root");
 
-const NewReportsTable = ({ roleId = null, onRefer = (f) => f }) => {
+const NewReportsTable = ({ roleId = null, onRefer = (f) => f, canRefer }) => {
   const userRoles = getUserRoles();
   const isConfirm = hasRole(["Operator"], userRoles) && roleId == "NEW";
   const isEditable = hasRole(["Operator"], userRoles) && roleId !== "NEW";
@@ -238,6 +238,7 @@ const NewReportsTable = ({ roleId = null, onRefer = (f) => f }) => {
   // eefects
 
   useSignalR(onNewReport);
+  console.log("🚀 ~ canRefer:", canRefer);
 
   return (
     <>
@@ -257,6 +258,7 @@ const NewReportsTable = ({ roleId = null, onRefer = (f) => f }) => {
             setDialog: setDialog,
             refresh: refresh,
             caller: ReportsAPI.getTask,
+            canRefer: canRefer,
           }}
           id="report-dialog"
         />
@@ -296,6 +298,7 @@ const NewReportsTable = ({ roleId = null, onRefer = (f) => f }) => {
             readOnly={false}
             setDialog={setDialog}
             refresh={refresh}
+            canRefer={canRefer}
             caller={ReportsAPI.getTask}
             childData={dialogData}
             onNext={closeDialog}

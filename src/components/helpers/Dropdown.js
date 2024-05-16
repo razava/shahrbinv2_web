@@ -88,6 +88,7 @@ const Dropdown = ({
           className,
           dropItemClassName,
           scroll ? "scrollbar" : "",
+          dropDownClassName,
         ].join(" ")}
         style={{
           ...posStyle,

@@ -22,6 +22,8 @@ import MyDataTable from "../helpers/MyDataTable";
 import SearchInput from "../helpers/SearchInput";
 import { editCategory } from "../../api/AdminApi";
 import { useMutation } from "@tanstack/react-query";
+import CategoryTree from "./CategoryTree";
+import CategoryTree2 from "./CategoryTree2";
 
 const modalRoot = document && document.getElementById("modal-root");
 
@@ -30,6 +32,7 @@ const AddCategory = ({ match }) => {
 
   // data states
   const [data, setData] = useState([]);
+  const [allData, setAllData] = useState();
   const [filterData, setFilterData] = useState([]);
   const [currentCategory, setCurrentCategory] = useState(null);
 
@@ -119,6 +122,7 @@ const AddCategory = ({ match }) => {
         caller: ConfigurationsAPI.getAllCategories,
         successCallback: (res) => {
           console.log(res.data);
+          setAllData(res.data);
           const flatData = getFlatData(res.data);
           console.log(flatData);
           setData(flatData);
@@ -187,7 +191,7 @@ const AddCategory = ({ match }) => {
           icon="fas fa-stream"
           onClick={() => setAddCategoryDialog(true)}
         />
-        <div className=" flex items-center">
+        {/* <div className=" flex items-center">
           <SearchInput
             isQuery={isQuery}
             setIsQuery={setIsQuery}
@@ -196,8 +200,7 @@ const AddCategory = ({ match }) => {
             query={query}
             mode="client"
           />
-        </div>
-        {/* <Filters filterTypes={{ query: true }} /> */}
+        </div> */}
       </>
     );
   };
@@ -221,6 +224,16 @@ const AddCategory = ({ match }) => {
     },
   ];
 
+  const handelEditCategory = (data) => {
+    console.log(data);
+    openDialog(data);
+  };
+  const changeCategoryState = (data) => {
+    editCategoryMutation.mutate({
+      Data: { isDeleted: !data.isDeleted },
+      id: data.id,
+    });
+  };
   //   table columns
   const columns = [
     {
@@ -259,15 +272,23 @@ const AddCategory = ({ match }) => {
       <TableHeader renderHeader={renderTableHeader} />
 
       <LayoutScrollable clipped={(window.innerHeight * 3) / 48 + 10}>
-        <MyDataTable
+        {/* <MyDataTable
           data={query ? filterData : data}
           columns={columns}
           theme={{ initializer: tableLightTheme, name: "light" }}
           loading={loading}
           pagination={false}
           conditionalRowStyles={condStyle}
-        />
+        /> */}
+        {allData && (
+          <CategoryTree2
+            changeCategoryState={changeCategoryState}
+            editCategory={handelEditCategory}
+            Data={allData}
+          />
+        )}
       </LayoutScrollable>
+      {/* {allData != [] && <CategoryTree Data={allData} />} */}
 
       <DialogToggler
         condition={addCategoryDialog}

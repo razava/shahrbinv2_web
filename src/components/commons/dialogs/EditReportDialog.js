@@ -123,7 +123,7 @@ const EditReportDialog = ({ report = {}, onSuccess = (f) => f }) => {
       priority: Number(values.priority),
       attachments: values.medias
         .filter((media) => !media.isDeleted)
-        .forEach((media, i) => media),
+        .map((media, i) => media.id),
     };
     return payload;
   };

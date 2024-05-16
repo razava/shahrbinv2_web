@@ -62,6 +62,7 @@ const LoginForm = () => {
       requestEnded: () => {
         setLoading(false);
         refetch();
+        setValues({ ...values, captcha: "" });
       },
     });
   };

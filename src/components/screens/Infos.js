@@ -33,6 +33,7 @@ const filterTypes = {
   to: true,
   category: true,
   regions: true,
+  geometry: true,
   reportsToInclude: true,
 };
 const filterDefaults = {
@@ -285,7 +286,7 @@ const Infos = ({ match }) => {
         {/* {renderBreadCrumb()} */}
         <LayoutScrollable clipped={(window.innerHeight * 3) / 48 + 10}>
           <div className="w100 mxa flex h-full">
-            <section className="w100 mxa bg-white br1 overflow-auto h-full px-1">
+            <section className="w100 mxa bg-white br1 overflow-auto h-full px-10 pr-10">
               {loading ? (
                 <section className="relative w100 vh100 fcc">
                   <Loader absolute={true} />
@@ -457,6 +458,7 @@ const ChartsList = ({
         total={charts.length}
         scroll
         scrollHeight={300}
+        dropDownClassName=" !w-[310px]"
         className="frc"
       >
         {charts.map((chart, i) => (

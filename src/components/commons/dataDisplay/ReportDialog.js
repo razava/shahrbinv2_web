@@ -32,6 +32,7 @@ const ReportDialog = ({
   childData,
   onNext = (f) => f,
   defTab = "reportDetails",
+  canRefer,
 }) => {
   // data states
   const [data, setData] = useState({});
@@ -75,7 +76,7 @@ const ReportDialog = ({
   const isInspector = hasRole(userRoles, ["Inspector"]);
   const isAdmin = hasRole(userRoles, ["Admin"]);
   const checkRoles = userRoles.includes("Operator");
-  console.log(defTab == "ReportViolations");
+  
   return (
     <>
       {loading && <Loader absolute={true} />}
@@ -163,7 +164,7 @@ const ReportDialog = ({
                 <ReportActions data={data} onNext={onNext} refresh={refresh} />
               </article>
             )}
-            {!readOnly && (
+            {!readOnly && canRefer && (
               <article label="ارجاع" id="finalize">
                 <Referral
                   data={data}

@@ -309,15 +309,19 @@ const RegisterReport = () => {
                   outSideClickEvent={"mousedown"}
                   id="select-on-map-dialog"
                 >
-                  <SelectOnMapDialog
-                    saveChanges={saveAddressChanges}
-                    condition={mapDialog}
-                    setCondition={setMapDialog}
-                    setLoading={setMapLoading}
-                    // width={600}
-                    height={500}
-                    defaultAddress={values.address}
-                  />
+                  <>
+                    <SelectOnMapDialog
+                      saveChanges={saveAddressChanges}
+                      condition={mapDialog}
+                      setCondition={setMapDialog}
+                      setLoading={setMapLoading}
+                      // width={600}
+                      height={500}
+                      defaultAddress={values.address}
+                    >
+                  
+                    </SelectOnMapDialog>
+                  </>
                 </DialogToggler>
               </TextInput>
             </div>

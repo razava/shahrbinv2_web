@@ -20,6 +20,7 @@ const SelectOnMapDialog = ({
   defaultAddress = "",
   condition,
   setCondition = (f) => f,
+  children,
 }) => {
   const inputRef = useRef(null);
 
@@ -36,6 +37,7 @@ const SelectOnMapDialog = ({
       store.initials.instance.longitude || process.env.REACT_APP_LONGITUDE,
   });
   const [searchAddress, setSearchAddress] = useState("");
+  const [addressDetail, setAddressDetail] = useState("");
   const [geofences, setGeoFences] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -70,6 +72,7 @@ const SelectOnMapDialog = ({
         setLoading(false);
         console.log(res);
         setSearchAddress(res.data.address);
+        // setAddressDetail(res.data.address);
         setGeoFences(res.data.regionId);
       },
       errorCallback: () => {},
@@ -92,7 +95,11 @@ const SelectOnMapDialog = ({
     ParsiMap.routing(value).then((res) => {
       setLoading(false);
       console.log(res);
-      if (res && res?.data?.data?.results && res?.data?.data?.results?.length > 0) {
+      if (
+        res &&
+        res?.data?.data?.results &&
+        res?.data?.data?.results?.length > 0
+      ) {
         console.log(res);
         setSearchResults(res.data.data.results);
       }
@@ -130,7 +137,11 @@ const SelectOnMapDialog = ({
   };
 
   const onConfirm = () => {
-    saveChanges(searchAddress, coordinates, geofences);
+    saveChanges(
+      addressDetail ? addressDetail : searchAddress,
+      coordinates,
+      geofences
+    );
     closeDialog();
   };
   return (
@@ -184,7 +195,18 @@ const SelectOnMapDialog = ({
             className="px1"
           />
         )}
-
+        <TextInput
+          value={addressDetail}
+          name="lastName"
+          onChange={(name) => (e) => {
+            const value = e.target.value;
+            setAddressDetail(value);
+          }}
+          required={false}
+          title="متن آدرس"
+          wrapperClassName="col-md-12 col-sm-12"
+        />
+        {/* {children} */}
         <DialogButtons
           primaryTitle="تایید"
           onPrimaryClick={onConfirm}

@@ -250,13 +250,19 @@ const NewReports = ({ match }) => {
       badge: sourcesCounts[i] !== undefined ? sourcesCounts[i] : "",
     };
   });
-
+  const canRefer = possibleSources.find((item) => activeTab === item.roleId)?.canRefer;
+  console.log(canRefer);
+  console.log(possibleSources.find((item) => activeTab === item.roleId));
   useSignalR(onChangeReceived);
   return (
     <>
       <div className={layoutStyle.wrapper}>
         <TableHeader renderHeader={renderTableHeader} />
-        <NewReportsTable roleId={activeTab} onRefer={onRefer} />
+        <NewReportsTable
+          canRefer={canRefer}
+          roleId={activeTab}
+          onRefer={onRefer}
+        />
       </div>
 
       {/* {noData ? <NoData title="درخواستی وجود ندارد." /> : null} */}

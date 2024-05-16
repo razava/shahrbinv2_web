@@ -10,6 +10,7 @@ import { getCitizenInformation } from "../../../api/commonApi";
 import { getReportHistory } from "../../../api/StaffApi";
 import Button from "../../helpers/Button";
 import { priorities } from "../../../utils/constants";
+import { useQuery } from "@tanstack/react-query";
 
 moment.loadPersian({ usePersianDigits: true });
 const ReportDetails = ({ data }) => {
@@ -25,6 +26,13 @@ const ReportDetails = ({ data }) => {
       }
     });
   }
+
+  //queries
+  const { data: citizenData, isLoading } = useQuery({
+    queryKey: ["citizenData", data.citizenId],
+    queryFn: () => getCitizenInformation(data.citizenId),
+  });
+
   console.log(data);
 
   return (
@@ -43,6 +51,24 @@ const ReportDetails = ({ data }) => {
             value={doesExist(data?.categoryTitle)}
             readOnly={true}
             title="موضوع "
+            wrapperClassName="mxa flex-1"
+            inputClassName=""
+            required={false}
+          />
+        </div>
+        <div className="w90 mxa frc wrap">
+          <TextInput
+            value={doesExist(citizenData?.phoneNumber)}
+            readOnly={true}
+            title="شماره تماس"
+            wrapperClassName="mxa flex-1"
+            inputClassName=""
+            required={false}
+          />
+          <TextInput
+            value={doesExist(data?.lastStatus)}
+            readOnly={true}
+            title="وضعیت"
             wrapperClassName="mxa flex-1"
             inputClassName=""
             required={false}
@@ -74,6 +100,7 @@ const ReportDetails = ({ data }) => {
             required={false}
           />
         </div>
+
         <div className="w90 mxa frc wrap">
           <TextInput
             value={convertserverTimeToDateString(data?.sent)}

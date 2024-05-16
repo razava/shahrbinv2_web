@@ -82,7 +82,7 @@ const MoreDetails = ({ data }) => {
               required={false}
             />
           </div>
-          <div className="w90 mxa wrap">
+          {/* <div className="w90 mxa wrap">
             <TextInput
               value={doesExist(data?.lastStatus)}
               readOnly={true}
@@ -91,7 +91,7 @@ const MoreDetails = ({ data }) => {
               inputClassName=""
               required={false}
             />
-          </div>
+          </div> */}
           <div className={"px1 py1 w90 mxa d-flex fdc al-s ju-c relative"}>
             <label
               className={
