@@ -23,7 +23,7 @@ mapboxgl.setRTLTextPlugin(
 const root = createRoot(document.getElementById("root"));
 
 root.render(
-  <BrowserRouter basename={process.env.REACT_APP_BASENAME}>
+  <BrowserRouter basename={window.__ENV__?.REACT_APP_BASENAME}>
     <AppContext2>
       <AppContext>
         <App />
