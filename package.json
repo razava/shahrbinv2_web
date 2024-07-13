@@ -1,8 +1,8 @@
 {
   "name": "shahrbin-admin",
-  "version": "0.3.21",
+  "version": "0.3.22",
   "private": true,
-  "homepage": ".",
+  "homepage": "/admin",
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^3.0.2",
     "@ckeditor/ckeditor5-upload": "^40.2.0",
