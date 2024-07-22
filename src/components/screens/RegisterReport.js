@@ -318,9 +318,7 @@ const RegisterReport = () => {
                       // width={600}
                       height={500}
                       defaultAddress={values.address}
-                    >
-                  
-                    </SelectOnMapDialog>
+                    ></SelectOnMapDialog>
                   </>
                 </DialogToggler>
               </TextInput>
@@ -462,6 +460,7 @@ const RegisterReport = () => {
             id: reportId,
             readOnly: false,
             setDialog: setReferDialog,
+            canRefer: true,
             // refresh: refresh,
             caller: ReportsAPI.getTask,
           }}
