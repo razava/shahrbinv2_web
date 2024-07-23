@@ -376,13 +376,17 @@ export const signUserIn = (res, history) => {
     constants.SHAHRBIN_MANAGEMENT_AUTH_TOKEN_EXPIRATION,
     formattedDate
   );
-  saveToLocalStorage(constants.SHAHRBIN_MANAGEMENT_USER_ROLES, [
-    decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"],
-  ]);
-  const currentTime = new Date().toISOString();
-  saveToLocalStorage(constants.SHAHRBIN_MANAGEMENT_LOGIN_TIME, currentTime);
   const roles =
     decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+  if (typeof roles == "string") {
+    saveToLocalStorage(constants.SHAHRBIN_MANAGEMENT_USER_ROLES, [roles]);
+  } else {
+    saveToLocalStorage(constants.SHAHRBIN_MANAGEMENT_USER_ROLES, roles);
+  }
+
+  const currentTime = new Date().toISOString();
+  saveToLocalStorage(constants.SHAHRBIN_MANAGEMENT_LOGIN_TIME, currentTime);
   // const to = isManager(res.data.roles) ? appRoutes.infos : appRoutes.newReports;
   const to = hasRole(["Mayor", "Manager", "Admin"], roles)
     ? "/admin/infos"
