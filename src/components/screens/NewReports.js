@@ -29,6 +29,7 @@ const filterTypes = {
   satisfactionValues: true,
   priorities: true,
   executives: true,
+  regions: true,
 };
 
 const NewReports = ({ match }) => {

@@ -39,6 +39,7 @@ const filterTypes = {
   satisfactionValues: true,
   priorities: true,
   executives: true,
+  regions: true,
 };
 
 const modalRoot = document && document.getElementById("modal-root");
