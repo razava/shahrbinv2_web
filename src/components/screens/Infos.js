@@ -35,6 +35,7 @@ const filterTypes = {
   regions: true,
   geometry: true,
   reportsToInclude: true,
+  satisfactionValues: true,
 };
 const filterDefaults = {
   fromDate: "",
@@ -219,14 +220,12 @@ const Infos = ({ match }) => {
           {stack && <p className=" text-lg text-[var(--primary)]">/ {stack}</p>}
         </div>
         <div className=" flex items-center ml-3 divide-y divide-x">
-          {locations?.length == 0 ||
-            (locations == null && (
-              <Filters
-                filtersData={filtersData}
-                filterTypes={filterTypes}
-                filterValues={filters}
-              />
-            ))}
+          <Filters
+            filtersData={filtersData}
+            filterTypes={filterTypes}
+            filterValues={filters}
+          />
+
           {chartsData?.length > 0 && (
             <span className=" h-8 w-1 bg-gray-300"></span>
           )}
