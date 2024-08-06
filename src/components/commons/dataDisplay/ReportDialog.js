@@ -102,7 +102,7 @@ const ReportDialog = ({
             )}
             {haveForm ? (
               <article label="فرم" id="formmm">
-                <CategoryForm2 data={data} />
+                <CategoryForm2 data={data} /> 
               </article>
             ) : (
               false

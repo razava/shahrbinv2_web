@@ -11,12 +11,14 @@ import { getReportHistory } from "../../../api/StaffApi";
 import Button from "../../helpers/Button";
 import { priorities } from "../../../utils/constants";
 import { useQuery } from "@tanstack/react-query";
+import CategoryForm2 from "./CategoryForm2";
 
 moment.loadPersian({ usePersianDigits: true });
 const ReportDetails = ({ data }) => {
   const [store] = useContext(AppStore);
   const componentRef = useRef(null);
   let regionName;
+  let haveTextarea = false;
 
   if (data.address) {
     console.log(data.address.regionId);
@@ -33,8 +35,13 @@ const ReportDetails = ({ data }) => {
     queryFn: () => getCitizenInformation(data.citizenId),
   });
 
-  console.log(data);
-
+  
+  if (data?.comments?.[0] == "{") {
+    if (JSON.parse(data?.comments)?.values?.length == 1) {
+      haveTextarea = true;
+    }
+  }
+  
   return (
     <section className={styles.reportDetails}>
       <div className={styles.infoList}>
@@ -128,6 +135,9 @@ const ReportDetails = ({ data }) => {
             inputClassName=""
             required={false}
           />
+        </div>
+        <div className="w-[91%] mxa frc wrap">
+          {haveTextarea && <CategoryForm2 data={data} />}
         </div>
         {/* <Textarea
           value={data?.form ? "" : doesExist(data?.comments)}

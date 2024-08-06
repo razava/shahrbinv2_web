@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import jalaliday from "jalaliday";
 import jwtDecode from "jwt-decode";
+import Rating from "./components/helpers/Rating/Rating";
 
 moment.loadPersian({ usePersianDigits: true });
 dayjs.extend(jalaliday);
@@ -227,6 +228,15 @@ export const reportColumn = [
     name: "تاریخ ایجاد",
     grow: 1,
     cell: (row) => <span>{convertserverTimeToDateString(row.sent)}</span>,
+  },
+  {
+    name: "خشنودی‌سنجی",
+    grow: 1,
+    cell: (row) => (
+      <span>
+        {row?.rating ? <Rating size={2} value={row?.rating} /> : "---"}
+      </span>
+    ),
   },
 ];
 

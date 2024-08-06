@@ -11,7 +11,7 @@ import { getSatisfaction } from "../../../api/StaffApi";
 const Satisfaction = ({ data }) => {
   // states
   const [values, setValues] = useState({
-    rating: data.report?.satisfaction?.rating || 1,
+    rating: data.report?.satisfaction?.rating || 0,
     comments: data.report?.satisfaction?.comments || "",
   });
   const [loading, setLoading] = useState(false);
