@@ -16,7 +16,7 @@ export default function CategoryForm2({ data, onChange, readOnly = true }) {
 
   //queries
   const { data: categoryForm, isLoading } = useQuery({
-    queryKey: ["CategoryForm", formId],
+    queryKey: ["CategoryForm", formId, defaultValues],
     queryFn: () => getCategoryFormById(formId),
   });
 

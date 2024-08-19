@@ -15,8 +15,6 @@ const prefix2 = "https://ticketingapi.shetabdahi.ir";
 // const prefix = process.env.REACT_APP_API_URL;
 axios.interceptors.response.use(
   function (response) {
-    console.log(response);
-    console.log(response.data?.data);
     if (response.status == 200 || response.status == 201) {
       if (response.data?.message) {
         toast(response.data?.message, { type: "success" });

@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import styles from "../../../stylesheets/reportdialog.module.css";
 import moment from "moment-jalaali";
 import { convertserverTimeToDateString, doesExist } from "../../../helperFuncs";
@@ -15,13 +15,15 @@ import CategoryForm2 from "./CategoryForm2";
 
 moment.loadPersian({ usePersianDigits: true });
 const ReportDetails = ({ data }) => {
+  const [haveTextarea, setHaveTextarea] = useState(false);
+  const [reportData, setReportData] = useState();
+
   const [store] = useContext(AppStore);
   const componentRef = useRef(null);
   let regionName;
-  let haveTextarea = false;
+  // let haveTextarea = false;
 
   if (data.address) {
-    console.log(data.address.regionId);
     let regions = store.initials.regions.map((item) => {
       if (item.id == data?.address?.regionId) {
         regionName = item.name;
@@ -35,13 +37,32 @@ const ReportDetails = ({ data }) => {
     queryFn: () => getCitizenInformation(data.citizenId),
   });
 
-  
-  if (data?.comments?.[0] == "{") {
-    if (JSON.parse(data?.comments)?.values?.length == 1) {
-      haveTextarea = true;
+  // if (data?.comments?.[0] == "{") {
+  //   if (JSON.parse(data?.comments)?.values?.length == 1) {
+  //     haveTextarea = true;
+  //   }
+  // }
+
+  useEffect(() => {
+    setHaveTextarea(false);
+    setReportData(data);
+    if (data?.comments?.[0] == "{") {
+      try {
+        // Escape newlines and then parse the JSON
+        const escapedComments = data.comments.replace(/\n/g, "\\n");
+        const parsedComments = JSON.parse(escapedComments);
+
+        if (parsedComments?.values?.length == 1) {
+          setHaveTextarea(true);
+        }
+      } catch (error) {
+        console.error("Failed to parse comments:", error);
+      }
     }
-  }
-  
+  }, [data]);
+
+  console.log(data?.comments);
+
   return (
     <section className={styles.reportDetails}>
       <div className={styles.infoList}>
@@ -136,9 +157,11 @@ const ReportDetails = ({ data }) => {
             required={false}
           />
         </div>
-        <div className="w-[91%] mxa frc wrap">
-          {haveTextarea && <CategoryForm2 data={data} />}
-        </div>
+        {reportData && (
+          <div className="w-[91%] mxa frc wrap">
+            {haveTextarea && <CategoryForm2 data={data} />}
+          </div>
+        )}
         {/* <Textarea
           value={data?.form ? "" : doesExist(data?.comments)}
           readOnly={true}

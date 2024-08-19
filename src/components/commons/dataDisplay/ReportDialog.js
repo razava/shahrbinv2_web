@@ -70,7 +70,7 @@ const ReportDialog = ({
   }, []);
 
   const haveForm = data?.comments?.[0] == "{";
-  console.log(haveForm);
+  
   const userRoles = getUserRoles();
   const isExecutive = hasRole(userRoles, ["Executive"]);
   const isInspector = hasRole(userRoles, ["Inspector"]);
