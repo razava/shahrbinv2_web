@@ -45,13 +45,15 @@ const ReportDetails = ({ data }) => {
 
   useEffect(() => {
     setHaveTextarea(false);
-    setReportData(data);
     if (data?.comments?.[0] == "{") {
       try {
         // Escape newlines and then parse the JSON
         const escapedComments = data.comments.replace(/\n/g, "\\n");
+        console.log(escapedComments);
         const parsedComments = JSON.parse(escapedComments);
-
+        console.log(parsedComments);
+        data.comments = escapedComments;
+        setReportData(data);
         if (parsedComments?.values?.length == 1) {
           setHaveTextarea(true);
         }
