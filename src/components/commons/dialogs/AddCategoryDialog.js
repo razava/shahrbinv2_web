@@ -42,20 +42,6 @@ const AddCategoryDialog = ({
 }) => {
   const isEditMode = mode === "edit";
 
-  // data states
-  const { data, isLoading, isSuccess } = useQuery({
-    queryKey: ["categoryData", categoryId],
-    queryFn: () => getCategoryById(categoryId),
-    enabled: isEditMode,
-    onSuccess: (data) => {
-      console.log(data);
-      setCategoryId2(data.parentId);
-      if (data.parentId != 1) {
-        setParent([{ id: data.parentId, title: handelParent(data.parentId) }]);
-      }
-    },
-  });
-  console.log(data);
   const [values, setValues] = useState({
     title: "",
     processId: "",
@@ -79,6 +65,40 @@ const AddCategoryDialog = ({
   const [categoryTitle2, setCategoryTitle2] = useState([]);
   const [parent, setParent] = useState([]);
   const [categoryId2, setCategoryId2] = useState(store.initials.categories.id);
+
+  const [payload, setPayload] = useState(null);
+  // flags
+  const [createRequest, setCreateRequest] = useState(false);
+
+
+  // data states
+  const { data, isLoading, isSuccess } = useQuery({
+    queryKey: ["categoryData", categoryId],
+    queryFn: () => getCategoryById(categoryId),
+    enabled: isEditMode,
+    onSuccess: (data) => {
+      setValues({
+        title: data.title,
+        processId: data.processId,
+        order: data.order,
+        code: data.code,
+        responseDuration: data.responseDuration / 24,
+        duration: data.duration / 24,
+        description: data.description,
+        objectionAllowed: data.objectionAllowed ? 1 : 0,
+        editingAllowed: data.editingAllowed ? 1 : 0,
+        formId: data.form ? data.form.id : null,
+        defaultPriority: data.defaultPriority,
+      });
+      parentId.current = data.parentId;
+      setCategoryId2(data.parentId);
+      if (data.parentId != 1) {
+        setParent([{ id: data.parentId, title: handelParent(data.parentId) }]);
+      }
+    },
+  });
+  // console.log(data);
+  
   // main states
   let categoryTitle;
   store.initials.categories?.categories?.map((item) => {
@@ -93,9 +113,7 @@ const AddCategoryDialog = ({
       });
     }
   });
-  const [payload, setPayload] = useState(null);
-  // flags
-  const [createRequest, setCreateRequest] = useState(false);
+ 
 
   const onCategoriesSelected = (selecteds) => {
     // if (selecteds.length > 0) {
@@ -130,19 +148,6 @@ const AddCategoryDialog = ({
   };
   // console.log(defaltValues);
   const fillInputs = () => {
-    parentId.current = data.parentId;
-    const ab = {
-      title: data.title,
-      processId: data.processId,
-      order: data.order,
-      code: data.code ? data.code : "",
-      responseDuration: data.responseDuration / 24,
-      duration: data.duration / 24,
-      description: data.description,
-      objectionAllowed: data.objectionAllowed ? 1 : 0,
-      formId: data.formId ? data.formId : null,
-    };
-    console.log(data.editingAllowed, "ed");
     setValues({
       title: data.title,
       processId: data.processId,
@@ -156,13 +161,13 @@ const AddCategoryDialog = ({
       formId: data.form ? data.form.id : null,
       defaultPriority: data.defaultPriority,
     });
+    parentId.current = data.parentId;
   };
 
   useEffect(() => {
     if (isEditMode && data) {
       fillInputs();
     }
-
     getData().then((res) => {
       setProcesses(res[0]?.data);
       setParents(res[1]?.data);
@@ -256,70 +261,262 @@ const AddCategoryDialog = ({
       ? [{ id: data?.parentId, title: handelParent(data?.parentId) }]
       : [];
 
-  useEffect(() => {
-    console.log(values);
-  }, [values]);
+  // useEffect(() => {
+  //   console.log(values);
+  // }, [values]);
 
-  console.log(data);
+  //console.log(data);
   return (
     <>
       <>
+{isEditMode && values && values.title && 
+  <form className="w100 mx-a relative">
+  <div className="w100 mxa row">
+    <TextInput
+      value={values.title}
+      title="عنوان"
+      wrapperClassName="col-md-6 col-sm-12"
+      inputClassName=""
+      name="title"
+      onChange={handleChange}
+      required={false}
+    />
+    {/* <MultiSelect
+    strings={{ label: "پدر" }}
+    caller={CommonAPI.getSubjectGroups}
+    isStatic={false}
+    wrapperClassName={"col-md-6 col-sm-12"}
+    nameKey="title"
+    valueKey="id"
+    maxHeight={300}
+    singleSelect={true}
+    onChange={onParentChange}
+    defaultSelecteds={category ? [{ id: category.parentId }] : []}
+    isInDialog={true}
+    id="categories"
+  /> */}
+    <TreeSystem
+      // isStatic
+      // staticData={store.initials.categories}
+      caller={ConfigurationsAPI.getCategories}
+      condition={categoryDialog}
+      setCondition={setCategoryDialog}
+      onChange={onCategoriesSelected}
+      defaultSelecteds={parent}
+      singleSelect={true}
+      onClose={() => setCategoryDialog(false)}
+      mode="Add"
+      renderToggler={(selected) => (
+        <TextInput
+          placeholder="انتخاب کنید."
+          title="پدر"
+          readOnly={true}
+          onClick={() => setCategoryDialog(true)}
+          wrapperClassName="col-md-6 col-sm-12 col-12"
+          inputClassName="pointer"
+          required={false}
+          value={
+            selected.length > 0
+              ? selected[0].title
+              : categoryId
+              ? handelParent(data?.parentId)
+              : ""
+          }
+        />
+      )}
+    ></TreeSystem>
+  </div>
+   <div className="w100 mxa row">
+     <SelectBox
+       value={values.processId}
+       label="فرآیند"
+       caller={ConfigurationsAPI.getProcesses}
+       wrapperClassName="col-md-6 col-sm-12"
+       inputClassName=""
+       name="processId"
+       handleChange={handleChange}
+       required={false}
+     />
+
+     <SelectBox
+       value={values.objectionAllowed}
+       label="امکان تجدید نظر"
+       staticData={true}
+       options={objectionValues.map((v) => ({ ...v, id: v.value }))}
+       wrapperClassName="col-md-6 col-sm-12"
+       inputClassName=""
+       name="objectionAllowed"
+       handleChange={handleChange}
+       required={false}
+     />
+   </div>
+   <div className="w100 mxa row">
+     <TextInput
+       value={values.order}
+       title="ترتیب"
+       wrapperClassName="col-md-6 col-sm-12"
+       inputClassName=""
+       name="order"
+       onChange={handleChange}
+       required={false}
+     />
+     <TextInput
+       value={values.code}
+       title="کد"
+       wrapperClassName="col-md-6 col-sm-12"
+       inputClassName=""
+       name="code"
+       onChange={handleChange}
+       required={false}
+     />
+   </div>
+   <div className="w100 mxa row">
+     <TextInput
+       value={values.responseDuration}
+       title="ضرب‌العجل پاسخگویی"
+       wrapperClassName="col-md-6 col-sm-12"
+       inputClassName=""
+       name="responseDuration"
+       onChange={handleChange}
+       required={false}
+       placeholder="روز"
+     />
+     <TextInput
+       value={values.duration}
+       title="ضرب‌العجل اتمام"
+       wrapperClassName="col-md-6 col-sm-12"
+       inputClassName=""
+       name="duration"
+       onChange={handleChange}
+       required={false}
+       placeholder="روز"
+     />
+   </div>
+   <div className="w100 mxa row">
+     <SelectBox
+       value={values.formId}
+       label="فرم"
+       caller={ConfigurationsAPI.getForms}
+       wrapperClassName="col-md-6 col-sm-12"
+       inputClassName=""
+       name="formId"
+       handleChange={handleChange}
+       required={false}
+     />
+     <Textarea
+       value={values.description}
+       title="توضیحات"
+       wrapperClassName="col-md-6 col-sm-12"
+       inputClassName=""
+       name="description"
+       handleChange={handleChange}
+       required={false}
+     />
+   </div>
+   <div className={"w100 mxa frc row"}>
+     <SelectBox
+       staticData
+       options={[
+         { id: 0, title: "کم" },
+         { id: 1, title: "عادی" },
+         { id: 2, title: "زیاد" },
+         { id: 3, title: "فوری" },
+       ]}
+       name="defaultPriority"
+       value={values.defaultPriority}
+       handleChange={handleChange}
+       handle={["title"]}
+       label="اولویت"
+       wrapperClassName="col-md-6 col-sm-12 col-12"
+     />
+     <SelectBox
+       value={values.editingAllowed}
+       label="نیاز به تایید و ویرایش"
+       staticData={true}
+       options={objectionValues.map((v) => ({ ...v, id: v.value }))}
+       wrapperClassName="col-md-6 col-sm-12"
+       inputClassName=""
+       name="editingAllowed"
+       handleChange={handleChange}
+       required={false}
+     />
+   </div>
+   {!isEditMode && (
+     <div className={"w100 mxa frc row"}>
+       <MultiSelect
+         strings={{ label: "اپراتور" }}
+         caller={ConfigurationsAPI.getOperators}
+         isStatic={false}
+         nameKey="text"
+         valueKey={"value"}
+         maxHeight={160}
+         onChange={(values) => handleChange("operatorIds")(values)}
+         // defaultSelecteds={defaultActors}
+         isInDialog={true}
+         wrapperClassName="col-md-12"
+         id="organs-list"
+       />
+     </div>
+   )}
+ </form>
+}
+{!isEditMode &&
         <form className="w100 mx-a relative">
-          <div className="w100 mxa row">
-            <TextInput
-              value={values.title}
-              title="عنوان"
-              wrapperClassName="col-md-6 col-sm-12"
-              inputClassName=""
-              name="title"
-              onChange={handleChange}
-              required={false}
-            />
-            {/* <MultiSelect
-            strings={{ label: "پدر" }}
-            caller={CommonAPI.getSubjectGroups}
-            isStatic={false}
-            wrapperClassName={"col-md-6 col-sm-12"}
-            nameKey="title"
-            valueKey="id"
-            maxHeight={300}
-            singleSelect={true}
-            onChange={onParentChange}
-            defaultSelecteds={category ? [{ id: category.parentId }] : []}
-            isInDialog={true}
-            id="categories"
-          /> */}
-            <TreeSystem
-              // isStatic
-              // staticData={store.initials.categories}
-              caller={ConfigurationsAPI.getCategories}
-              condition={categoryDialog}
-              setCondition={setCategoryDialog}
-              onChange={onCategoriesSelected}
-              defaultSelecteds={parent}
-              singleSelect={true}
-              onClose={() => setCategoryDialog(false)}
-              mode="Add"
-              renderToggler={(selected) => (
-                <TextInput
-                  placeholder="انتخاب کنید."
-                  title="پدر"
-                  readOnly={true}
-                  onClick={() => setCategoryDialog(true)}
-                  wrapperClassName="col-md-6 col-sm-12 col-12"
-                  inputClassName="pointer"
-                  required={false}
-                  value={
-                    selected.length > 0
-                      ? selected[0].title
-                      : categoryId
-                      ? handelParent(data?.parentId)
-                      : ""
-                  }
-                />
-              )}
-            ></TreeSystem>
-          </div>
+         <div className="w100 mxa row">
+           <TextInput
+             value={values.title}
+             title="عنوان"
+             wrapperClassName="col-md-6 col-sm-12"
+             inputClassName=""
+             name="title"
+             onChange={handleChange}
+             required={false}
+           />
+           {/* <MultiSelect
+           strings={{ label: "پدر" }}
+           caller={CommonAPI.getSubjectGroups}
+           isStatic={false}
+           wrapperClassName={"col-md-6 col-sm-12"}
+           nameKey="title"
+           valueKey="id"
+           maxHeight={300}
+           singleSelect={true}
+           onChange={onParentChange}
+           defaultSelecteds={category ? [{ id: category.parentId }] : []}
+           isInDialog={true}
+           id="categories"
+         /> */}
+           <TreeSystem
+             // isStatic
+             // staticData={store.initials.categories}
+             caller={ConfigurationsAPI.getCategories}
+             condition={categoryDialog}
+             setCondition={setCategoryDialog}
+             onChange={onCategoriesSelected}
+             defaultSelecteds={parent}
+             singleSelect={true}
+             onClose={() => setCategoryDialog(false)}
+             mode="Add"
+             renderToggler={(selected) => (
+               <TextInput
+                 placeholder="انتخاب کنید."
+                 title="پدر"
+                 readOnly={true}
+                 onClick={() => setCategoryDialog(true)}
+                 wrapperClassName="col-md-6 col-sm-12 col-12"
+                 inputClassName="pointer"
+                 required={false}
+                 value={
+                   selected.length > 0
+                     ? selected[0].title
+                     : categoryId
+                     ? handelParent(data?.parentId)
+                     : ""
+                 }
+               />
+             )}
+           ></TreeSystem>
+         </div>
           <div className="w100 mxa row">
             <SelectBox
               value={values.processId}
@@ -453,6 +650,7 @@ const AddCategoryDialog = ({
             </div>
           )}
         </form>
+        }
         <div className="w100 mxa fre py1 px2 border-t-light mt1">
           <Button
             title={isEditMode ? "ویرایش دسته‌بندی" : "ایجاد دسته‌بندی"}

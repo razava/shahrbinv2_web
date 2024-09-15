@@ -84,7 +84,7 @@ const AddCategory = ({ match }) => {
   const getAllBranches = (item) => {
     const children = [];
     item.forEach((child) => {
-      console.log(item);
+      //console.log(item);
       children.push(child);
       children.push(...getAllBranches(child));
     });
@@ -115,16 +115,16 @@ const AddCategory = ({ match }) => {
   }
 
   const getCategories = () => {
-    console.log(queries);
+    //console.log(queries);
     setLoading(true);
     callAPI(
       {
         caller: ConfigurationsAPI.getAllCategories,
         successCallback: (res) => {
-          console.log(res.data);
+          //console.log(res.data);
           setAllData(res.data);
           const flatData = getFlatData(res.data);
-          console.log(flatData);
+          //console.log(flatData);
           setData(flatData);
         },
         requestEnded: () => setLoading(false),
@@ -132,11 +132,11 @@ const AddCategory = ({ match }) => {
       queries
     );
   };
-  console.log(data);
+  //console.log(data);
   //   open category details dialog
 
   const openDialog = (category) => {
-    console.log(category);
+    //console.log(category);
     setCurrentCategory(category.category);
     setDialogData(category);
     setDialog(true);
@@ -169,7 +169,7 @@ const AddCategory = ({ match }) => {
 
   useEffect(() => {
     const pereData = data;
-    console.log(query);
+    //console.log(query);
     // const filteredData = data?.filter((item) => {
     //   console.log(item);
     //   if (item.title.includes(query)) {
@@ -179,7 +179,7 @@ const AddCategory = ({ match }) => {
     const filteredData = data?.filter((item) =>
       item.title.toLowerCase().includes(query.toLowerCase())
     );
-    console.log(filteredData);
+    //console.log(filteredData);
     setFilterData(filteredData);
   }, [query]);
   // renders
@@ -210,7 +210,7 @@ const AddCategory = ({ match }) => {
       id: `category-${1}`,
       title: "ویرایش",
       icon: "far fa-edit",
-      onClick: (row) => openDialog(row),
+      //onClick: (row) => openDialog(row),
     },
     {
       id: `category-${2}`,
@@ -225,7 +225,7 @@ const AddCategory = ({ match }) => {
   ];
 
   const handelEditCategory = (data) => {
-    console.log(data);
+    //console.log(data);
     openDialog(data);
   };
   const changeCategoryState = (data) => {

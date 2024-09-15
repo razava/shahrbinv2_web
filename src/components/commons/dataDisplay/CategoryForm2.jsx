@@ -11,13 +11,35 @@ import { getCategoryFormById } from "../../../api/commonApi";
 import { useQuery } from "@tanstack/react-query";
 
 export default function CategoryForm2({ data, onChange, readOnly = true }) {
-  const defaultValues = JSON.parse(data?.comments)?.values;
-  const formId = JSON.parse(data?.comments)?.formId;
 
+  const [defaultValues, setDefaultValues] = useState(null);
+  const [formId, setFormId] = useState(null);
+  const [jsonError, setJsonError] = useState(null);
+
+  useEffect(() => {
+    try {
+      if (data?.comments) {
+        const parsedComments = JSON.parse(data.comments);
+        setDefaultValues(parsedComments.values);
+        setFormId(parsedComments.formId);
+        setJsonError(null); // پاک کردن خطا در صورت موفقیت
+      }
+    } catch (e) {
+      // در صورت وقوع خطا، نمایش خطا
+      setDefaultValues(null);
+      setFormId(null);
+      setJsonError('خطا در پردازش داده‌های JSON: ' + e.message);
+    }
+  }, [data]);
+  // const defaultValues = JSON.parse(data?.comments)?.values;
+  // const formId = JSON.parse(data?.comments)?.formId;
+  // console.log("FFFFFFFOOOOOORRRRRMMMMMIIIIDDDD");
+  //  console.log(jsonError);
+  // console.log(formId);
   //queries
   const { data: categoryForm, isLoading } = useQuery({
     queryKey: ["CategoryForm", formId, defaultValues],
-    queryFn: () => getCategoryFormById(formId),
+    queryFn: () => {if(formId) getCategoryFormById(formId)},
   });
 
   let obj = {};
