@@ -13,6 +13,7 @@ const SelectOnMapDialog = ({
   width = "100%",
   height = "100%",
   saveChanges = (f) => f,
+  //defaultCoordinates,
   defaultCoordinates = {
     latitude: process.env.REACT_APP_LATITUDE,
     longitude: process.env.REACT_APP_LONGITUDE,
@@ -27,28 +28,35 @@ const SelectOnMapDialog = ({
   // store
   const [store] = useContext(AppStore);
 
-  console.log(store.initials.instance);
+  // //console.log("store.initials.instance");
+  // //console.log(store.initials.instance);
+  // //console.log(defaultCoordinates);
+  // //console.log(defaultAddress);
 
   const [showMap, setShowMap] = useState(false);
-  const [coordinates, setCoordinates] = useState({
-    latitude:
-      store.initials.instance.latitude || process.env.REACT_APP_LATITUDE,
-    longitude:
-      store.initials.instance.longitude || process.env.REACT_APP_LONGITUDE,
-  });
+  // const [coordinates, setCoordinates] = useState({
+  //   latitude:
+  //     store.initials.instance.latitude || process.env.REACT_APP_LATITUDE,
+  //   longitude:
+  //     store.initials.instance.longitude || process.env.REACT_APP_LONGITUDE,
+  // });
+
+  const [coordinates, setCoordinates] = useState(null);
+
   const [searchAddress, setSearchAddress] = useState("");
   const [addressDetail, setAddressDetail] = useState("");
   const [geofences, setGeoFences] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  console.log(store.initials.instance);
+  ////console.log(store.initials.instance);
+
   useEffect(() => {
     if (condition) {
       setCoordinates({
         latitude:
-          store.initials.instance.latitude || defaultCoordinates.latitude,
+           defaultCoordinates.latitude ? defaultCoordinates.latitude : store.initials.instance.latitude,
         longitude:
-          store.initials.instance.longitude || defaultCoordinates.longitude,
+           defaultCoordinates.longitude ? defaultCoordinates.longitude : store.initials.instance.longitude,
       });
       setSearchAddress(defaultAddress);
       setShowMap(true);
@@ -64,16 +72,20 @@ const SelectOnMapDialog = ({
   }, [inputRef.current, `condition`]);
 
   const fetchAddress = (coordinates) => {
+    //console.log("بیا اینجا  fetchAddress.....");
+
     setLoading(true);
     callAPI({
       caller: ParsiMap.reverse,
       payload: coordinates,
       successCallback: (res) => {
         setLoading(false);
-        console.log(res);
+       
         setSearchAddress(res.data.address);
         // setAddressDetail(res.data.address);
         setGeoFences(res.data.regionId);
+        // //console.log("res.data.regionId");
+        // //console.log(res.data.regionId);
       },
       errorCallback: () => {},
       requestEnded: () => {},
@@ -91,16 +103,18 @@ const SelectOnMapDialog = ({
     if (e) {
       e.preventDefault();
     }
+    //console.log("بیا اینجا  getAddress.....");
+
     setLoading(true);
     ParsiMap.routing(value).then((res) => {
       setLoading(false);
-      console.log(res);
+      //console.log(res);
       if (
         res &&
         res?.data?.data?.results &&
         res?.data?.data?.results?.length > 0
       ) {
-        console.log(res);
+        //console.log(res);
         setSearchResults(res.data.data.results);
       }
     });
@@ -109,11 +123,14 @@ const SelectOnMapDialog = ({
   const onSearch = (name) => (e) => {
     const value = e.target.value;
     setSearchAddress(value);
+    //console.log("بیا اینجا  onSearch.....");
 
     getAddress(value)(undefined);
   };
 
   const goToLocation = (address) => (e) => {
+    //console.log("بیا اینجا  goToLocation.....");
+
     e.stopPropagation();
     const coordinates = {
       latitude: address.geo_location.center.lat,
@@ -137,6 +154,8 @@ const SelectOnMapDialog = ({
   };
 
   const onConfirm = () => {
+    //console.log("بیا اینجا  onConfirm.....");
+
     saveChanges(
       addressDetail ? addressDetail : searchAddress,
       coordinates,

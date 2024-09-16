@@ -196,7 +196,8 @@ const RegisterReport = () => {
   };
 
   const saveAddressChanges = (detail, coordinates, geofences) => {
-    setValues({ ...values, address: detail, coordinates, region: geofences });
+    console.log("Add Report")
+    setValues({ ...values, address: detail, coordinates,region:geofences });
     closeModal();
   };
 

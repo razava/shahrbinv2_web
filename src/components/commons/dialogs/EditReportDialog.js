@@ -64,8 +64,10 @@ const EditReportDialog = ({ report = {}, onSuccess = (f) => f }) => {
   };
 
   const saveAddressChange = (address, coordinates, geofences) => {
-    const regionId = findRegionId(regions, geofences);
-    setValues({ ...values, address, coordinates, regionId });
+    console.log("Add Report")
+    // const regionId = findRegionId(regions, geofences);
+    // setValues({ ...values, address, coordinates, regionId });
+    setValues({ ...values, address, coordinates,regionId:geofences });
   };
 
   const onVisibilityChange = (name) => (e) =>
