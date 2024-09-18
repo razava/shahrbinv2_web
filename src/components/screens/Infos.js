@@ -118,7 +118,8 @@ const Infos = ({ match }) => {
         successCallback: (res) => {
           setChartsData(res.data.charts);
           const locs = res.data.locations?.map((item) => {
-            delete item.reportId;
+            // delete item.reportId;
+            // delete item.trackingNumber;
             return item;
           });
           setLocations(locs);
@@ -253,9 +254,9 @@ const Infos = ({ match }) => {
     !locations == null;
 
   const { windowWidth, windowHeight } = useResize();
-  useEffect(() => {
-    console.log(locations);
-  }, [locations]);
+  // useEffect(() => {
+  //   console.log(locations);
+  // }, [locations]);
 
   const renderBreadCrumb = () => {
     return (

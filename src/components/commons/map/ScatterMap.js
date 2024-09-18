@@ -5,14 +5,13 @@ import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import TileWMS from "ol/source/TileWMS";
-import { fromLonLat } from "ol/proj";
+import { fromLonLat, transform } from "ol/proj";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import { Icon, Style } from "ol/style";
 import Draw from "ol/interaction/Draw";
-import { transform } from "ol/proj";
-import scatter from "../../../assets/Images/scatter.png";
 import Button from "../../helpers/Button";
+import scatter from "../../../assets/Images/scatter.png";
 
 function ScatterMap({
   width = 400,
@@ -30,8 +29,11 @@ function ScatterMap({
   const [markers, setMarkers] = useState([]);
   const [vector, setVector] = useState();
   const [drawInteraction, setDrawInteraction] = useState(null);
+  const [tooltip, setTooltip] = useState({ show: false, x: 0, y: 0, content: "" });
+  const [drawingEnabled, setDrawingEnabled] = useState(true);
   const mapElement = useRef();
-  const locationsRef = useRef();
+  const tooltipRef = useRef();
+
   mapElement.current = map;
 
   useEffect(() => {
@@ -39,15 +41,24 @@ function ScatterMap({
       if (mode === "chart") {
         addMarkerLayer();
       }
-      addDrawInteraction();
+
+      // Clear existing interactions if any
+      map.getInteractions().forEach((interaction) => {
+        if (interaction instanceof Draw) {
+          map.removeInteraction(interaction);
+        }
+      });
+
+      if (drawingEnabled) {
+        addDrawInteraction();
+      }
+
       if (localStorage.getItem("MapView") && map) {
         const v = JSON.parse(localStorage.getItem("MapView"));
         map.getView().fit(v, map.getSize());
       }
     }
-  }, [map, locations]);
-
-  useEffect(() => {}, [map]);
+  }, [map, locations, drawingEnabled]);
 
   const addMarkerLayer = () => {
     if (layer) map.removeLayer(layer);
@@ -74,10 +85,12 @@ function ScatterMap({
       (p, index) =>
         new Feature({
           geometry: p,
-          name: `Marker ${index + 1}`,
-          population: 4000 + index,
-          rainfall: 500 + index,
-          customData: locations[index], // Add custom data from the locations
+          id: locations[index].reportId,
+          trackingNumber: locations[index].trackingNumber,
+          categoryTitle: locations[index].categoryTitle,
+          address: locations[index].address,
+          status: locations[index].status,
+          customData: locations[index],
         })
     );
 
@@ -87,7 +100,8 @@ function ScatterMap({
       }),
     });
 
-    iconFeatures.forEach((i) => i.setStyle(iconStyle));
+    iconFeatures.forEach((i) => { i.setStyle(iconStyle); });
+
     setMarkers(iconFeatures);
     return iconFeatures;
   };
@@ -97,11 +111,13 @@ function ScatterMap({
     const vectorLayer = new VectorLayer({
       source: source,
     });
+  
     const draw = new Draw({
       source: source,
       type: "Polygon",
+      condition: (event) => event.originalEvent.button === 0, // فقط کلیک چپ
     });
-
+  
     draw.on("drawend", (event) => {
       event.stopPropagation();
       const feature = event.feature;
@@ -122,14 +138,15 @@ function ScatterMap({
       }
       setDrawInteraction(flatCoordinates);
     });
-
-    setVector(vectorLayer);
+  
     map.addInteraction(draw);
     map.addLayer(vectorLayer);
+    setVector(vectorLayer);
   };
+  
 
   useEffect(() => {
-    const initalFeaturesLayer = new TileLayer({
+    const initialFeaturesLayer = new TileLayer({
       extent: [
         -20037508.342789244, -20037508.342789244, 20037508.342789244,
         20037508.342789244,
@@ -147,7 +164,7 @@ function ScatterMap({
 
     const initialMap = new Map({
       target: mapElement.current,
-      layers: [initalFeaturesLayer],
+      layers: [initialFeaturesLayer],
       view: new View({
         projection: "EPSG:3857",
         center: fromLonLat(center),
@@ -156,26 +173,41 @@ function ScatterMap({
       controls: [],
     });
 
-    // Add the singleclick event listener
-    initialMap.on("singleclick", function (event) {
+    initialMap.on("click", () => {
+      setTooltip({ show: false, x: 0, y: 0, content: "" });
+    });
+
+    initialMap.on("contextmenu", function (event) {
+      event.preventDefault();
+      if (!drawingEnabled) return; // Prevent drawing if disabled
+
       initialMap.forEachFeatureAtPixel(event.pixel, function (feature) {
         const properties = feature.getProperties();
-        console.log(properties);
-        alert(
-          `Clicked on: ${properties.name}\nPopulation: ${
-            properties.population
-          }\nRainfall: ${properties.rainfall}\nCustom Data: ${JSON.stringify(
-            properties.customData
-          )}`
-        );
-        return true; // Stop iteration after the first feature is found
+        if (!properties || !properties.customData) {
+          console.warn("Properties are undefined or missing");
+          return;
+        }
+
+        const [x, y] = event.pixel;
+
+        setTooltip({
+          show: true,
+          x,
+          y,
+          content: `
+            <strong>شماره درخواست: </strong> ${properties.trackingNumber}<br><br>
+            <strong>موضوع: </strong> ${properties.categoryTitle}<br><br>
+            <strong>آدرس: </strong> ${properties.address}<br><br>
+          `,
+        });
+        return true;
       });
     });
 
     setMap(initialMap);
 
     return () => {};
-  }, []);
+  }, [drawingEnabled]);
 
   return (
     <div>
@@ -186,13 +218,62 @@ function ScatterMap({
         className={className}
         style={{ width, height, cursor: "pointer" }}
       ></div>
+
+      {tooltip.show && (
+        <>
+          <div
+            ref={tooltipRef}
+            style={{
+              position: "absolute",
+              top: tooltip.y - 60,
+              left: tooltip.x - 100,
+              backgroundColor: "#fff",
+              color: "#333",
+              border: "1px solid rgba(0, 0, 0, 0.1)",
+              padding: "12px 16px",
+              borderRadius: "8px",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+              zIndex: 1000,
+              pointerEvents: "none",
+              fontSize: "14px",
+              maxWidth: "220px",
+              whiteSpace: "normal",
+              wordWrap: "break-word",
+              overflow: "hidden",
+              textAlign: "right",
+              direction: "rtl",
+              transform: "translateX(-50%)",
+            }}
+            dangerouslySetInnerHTML={{ __html: tooltip.content }}
+          />
+
+          <div
+            style={{
+              position: "absolute",
+              top: tooltip.y - 50,
+              left: tooltip.x - 95,
+              width: "0",
+              height: "0",
+              borderLeft: "10px solid transparent",
+              borderRight: "10px solid transparent",
+              borderTop: "10px solid #4A90E2",
+              zIndex: 999,
+              transform: "translateX(-50%)",
+            }}
+          ></div>
+        </>
+      )}
+
       <div className="flex gap-2">
         <Button
           title="پاک کردن"
           className="py1 br05 bg-primary text-white mx-auto my-2"
           onClick={() => {
-            map.removeLayer(vector);
-            addDrawInteraction();
+            if (vector) {
+              map.removeLayer(vector);
+              setVector(null);
+            }
+            setDrawingEnabled(true); // Enable drawing
           }}
         />
         {mode === "filter" && (
@@ -200,9 +281,12 @@ function ScatterMap({
             title="تایید"
             className="py1 br05 bg-primary text-white mx-auto my-2"
             onClick={() => {
-              map.removeLayer(vector);
-              addDrawInteraction();
+              if (vector) {
+                map.removeLayer(vector);
+                setVector(null);
+              }
               handelDrawInteraction(drawInteraction);
+              setDrawingEnabled(true); // Enable drawing
             }}
           />
         )}
