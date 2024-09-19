@@ -145,69 +145,135 @@ function ScatterMap({
   };
   
 
+  // useEffect(() => {
+  //   const initialFeaturesLayer = new TileLayer({
+  //     extent: [
+  //       -20037508.342789244, -20037508.342789244, 20037508.342789244,
+  //       20037508.342789244,
+  //     ],
+  //     source: new TileWMS({
+  //       url: process.env.REACT_APP_MAP_PROXY_URL,
+  //       params: {
+  //         layers: "osm",
+  //         srs: "EPSG:3857",
+  //         exceptions: "application/vnd.ogc.se_inimage",
+  //         transparent: true,
+  //       },
+  //     }),
+  //   });
+
+  //   const initialMap = new Map({
+  //     target: mapElement.current,
+  //     layers: [initialFeaturesLayer],
+  //     view: new View({
+  //       projection: "EPSG:3857",
+  //       center: fromLonLat(center),
+  //       zoom,
+  //     }),
+  //     controls: [],
+  //   });
+
+  //   initialMap.on("click", () => {
+  //     setTooltip({ show: false, x: 0, y: 0, content: "" });
+  //   });
+
+  //   initialMap.on("contextmenu", function (event) {
+  //     event.preventDefault();
+  //     if (!drawingEnabled) return; // Prevent drawing if disabled
+
+  //     initialMap.forEachFeatureAtPixel(event.pixel, function (feature) {
+  //       const properties = feature.getProperties();
+  //       if (!properties || !properties.customData) {
+  //         console.warn("Properties are undefined or missing");
+  //         return;
+  //       }
+
+  //       const [x, y] = event.pixel;
+
+  //       setTooltip({
+  //         show: true,
+  //         x,
+  //         y,
+  //         content: `
+  //           <strong>شماره درخواست: </strong> ${properties.trackingNumber}<br><br>
+  //           <strong>موضوع: </strong> ${properties.categoryTitle}<br><br>
+  //           <strong>آدرس: </strong> ${properties.address}<br><br>
+  //         `,
+  //       });
+  //       return true;
+  //     });
+  //   });
+
+  //   setMap(initialMap);
+
+  //   return () => {};
+  // }, [drawingEnabled]);
+
+
   useEffect(() => {
-    const initialFeaturesLayer = new TileLayer({
-      extent: [
-        -20037508.342789244, -20037508.342789244, 20037508.342789244,
-        20037508.342789244,
-      ],
-      source: new TileWMS({
-        url: process.env.REACT_APP_MAP_PROXY_URL,
-        params: {
-          layers: "osm",
-          srs: "EPSG:3857",
-          exceptions: "application/vnd.ogc.se_inimage",
-          transparent: true,
-        },
-      }),
-    });
-
-    const initialMap = new Map({
-      target: mapElement.current,
-      layers: [initialFeaturesLayer],
-      view: new View({
-        projection: "EPSG:3857",
-        center: fromLonLat(center),
-        zoom,
-      }),
-      controls: [],
-    });
-
-    initialMap.on("click", () => {
-      setTooltip({ show: false, x: 0, y: 0, content: "" });
-    });
-
-    initialMap.on("contextmenu", function (event) {
-      event.preventDefault();
-      if (!drawingEnabled) return; // Prevent drawing if disabled
-
-      initialMap.forEachFeatureAtPixel(event.pixel, function (feature) {
-        const properties = feature.getProperties();
-        if (!properties || !properties.customData) {
-          console.warn("Properties are undefined or missing");
-          return;
-        }
-
-        const [x, y] = event.pixel;
-
-        setTooltip({
-          show: true,
-          x,
-          y,
-          content: `
-            <strong>شماره درخواست: </strong> ${properties.trackingNumber}<br><br>
-            <strong>موضوع: </strong> ${properties.categoryTitle}<br><br>
-            <strong>آدرس: </strong> ${properties.address}<br><br>
-          `,
-        });
-        return true;
+    if (mapElement.current && !map) { // اطمینان از اینکه mapElement مقداردهی شده است
+      const initialFeaturesLayer = new TileLayer({
+        extent: [
+          -20037508.342789244, -20037508.342789244, 20037508.342789244,
+          20037508.342789244,
+        ],
+        source: new TileWMS({
+          url: process.env.REACT_APP_MAP_PROXY_URL,
+          params: {
+            layers: "osm",
+            srs: "EPSG:3857",
+            exceptions: "application/vnd.ogc.se_inimage",
+            transparent: true,
+          },
+        }),
       });
-    });
+  
+      const initialMap = new Map({
+        target: mapElement.current, // اینجا باید اطمینان حاصل کنید که mapElement مقداردهی شده
+        layers: [initialFeaturesLayer],
+        view: new View({
+          projection: "EPSG:3857",
+          center: fromLonLat(center),
+          zoom,
+        }),
+        controls: [],
+      });
+  
+      initialMap.on("click", () => {
+        setTooltip({ show: false, x: 0, y: 0, content: "" });
+      });
+  
+      initialMap.on("contextmenu", function (event) {
+        event.preventDefault();
+        if (!drawingEnabled) return; // Prevent drawing if disabled
+  
+        initialMap.forEachFeatureAtPixel(event.pixel, function (feature) {
+          const properties = feature.getProperties();
+          if (!properties || !properties.customData) {
+            console.warn("Properties are undefined or missing");
+            return;
+          }
+  
+          const [x, y] = event.pixel;
+  
+          setTooltip({
+            show: true,
+            x,
+            y,
+            content: `
+              <strong>شماره درخواست: </strong> ${properties.trackingNumber}<br><br>
+              <strong>موضوع: </strong> ${properties.categoryTitle}<br><br>
+              <strong>آدرس: </strong> ${properties.address}<br><br>
+            `,
+          });
+          return true;
+        });
+      });
 
-    setMap(initialMap);
-
-    return () => {};
-  }, [drawingEnabled]);
+      setMap(initialMap); // نقشه ایجاد شده را ذخیره می‌کنیم
+    }
+  }, [mapElement, center, zoom, map]); // وابستگی‌ها را به درستی تنظیم کنید
+  
 
   return (
     <div>
