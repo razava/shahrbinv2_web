@@ -10,42 +10,52 @@ jobs:
     env: 
       RUNNER_TOOL_CACHE: /toolcache
     runs-on: alpine
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      # نصب Node.js و Yarn در Alpine و پاک کردن کش
+      - name: Install Node.js and Yarn
+        run: |
+          # نصب Node.js و npm
+          apk add --no-cache nodejs npm
+          # نصب Yarn
+          npm install -g yarn
+          # پاک‌سازی کش‌های npm و yarn
+          npm cache clean --force
+          yarn cache clean
+
+      # نصب وابستگی‌ها
+      - name: Install Dependencies
+        run: yarn install
+
+      # بیلد پروژه
+      - name: Build Project
+        run: yarn build
 
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
         with:
-          # list of Docker images to use as base name for tags
           images: |
             razava/shahrbin-jame-admin
-
-          # generate Docker tags based on the following events/attributes
           tags: |
             type=ref,event=branch
             type=semver,pattern={{major}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{version}}
 
-      # - name: Set up QEMU
-      #   uses: docker/setup-qemu-action@v3
-
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_REGISTRY_USERNAME }}
           password: ${{ secrets.DOCKER_REGISTRY_PASSWORD }}
-          
-      -
-        name: Build and push
+
+      - name: Build and push
         uses: docker/build-push-action@v6
         with:
           push: true
           context: "{{defaultContext}}"
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-      
-
