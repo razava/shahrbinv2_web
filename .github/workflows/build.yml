@@ -6,7 +6,9 @@ on:
       - "v*.*.*"
 
 jobs:
-  docker:
+  BuildAndDocker:
+    env: 
+      RUNNER_TOOL_CACHE: /toolcache
     runs-on: alpine
     steps:
       - name: Checkout
