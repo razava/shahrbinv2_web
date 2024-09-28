@@ -1,4 +1,8 @@
-FROM node:18-alpine AS builder
+FROM node:18.20.3 AS builder
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN npm -g i pnpm
+WORKDIR /app
 
 ENV NODE_ENV production
 # ENV REACT_APP_BASENAME=/
@@ -10,9 +14,9 @@ WORKDIR /app
 
 COPY ./package*.json ./
 
-RUN npm install --force
+RUN pnpm i
 COPY . .
-RUN npm run build
+RUN pnpm build
 
 FROM nginx
 COPY --from=builder /app/build /usr/share/nginx/html
