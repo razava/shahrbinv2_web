@@ -16,7 +16,7 @@ COPY ./package*.json ./
 
 RUN pnpm i
 COPY . .
-RUN npm run build
+RUN pnpm build
 
 FROM nginx
 COPY --from=builder /app/build /usr/share/nginx/html
