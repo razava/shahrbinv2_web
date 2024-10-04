@@ -269,7 +269,7 @@ const AddCategoryDialog = ({
   return (
     <>
       <>
-{isEditMode && values && values.title && 
+{isEditMode && values && values.title && values.code && 
   <form className="w100 mx-a relative">
   <div className="w100 mxa row">
     <TextInput

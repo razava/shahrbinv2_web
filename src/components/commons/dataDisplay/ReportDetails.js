@@ -49,7 +49,7 @@ const ReportDetails = ({ data }) => {
     if (data?.comments?.[0] == "{") {
       try {
         // Escape newlines and then parse the JSON
-        const escapedComments = data.comments.replace(/\n/g, "\\n");
+        const escapedComments = data.comments.replace(/[\n\t\r]/g, '');
         const parsedComments = JSON.parse(escapedComments);
 
         if (parsedComments?.values?.length == 1) {
