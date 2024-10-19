@@ -4,29 +4,44 @@ on:
   push:
     tags:
       - "v*.*.*"
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   BuildAndDocker:
     env: 
       RUNNER_TOOL_CACHE: /toolcache
+      ACTIONS_STEP_DEBUG: true
+      YARN_ENABLE_LOGS: true
+
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Node.js and npm
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y nodejs npm
-          npm cache clean --force
+      - name: Set up Node.js 20.17.0
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.17.0'
 
+      # پاکسازی کش yarn
+      - name: Clean Yarn Cache
+        run: yarn cache clean
+
+      # نصب Yarn
+      - name: Install Yarn
+        run: npm install -g yarn
+
+      # نصب وابستگی‌ها
       - name: Install Dependencies
-        run: npm install
+        run: yarn install
 
+      # ساخت پروژه بدون lint
       - name: Build Project
-        run: npm run build
+        run: SKIP_PREFLIGHT_CHECK=true yarn build --verbose
+
+      - name: List files
+        run: ls -al
 
       - name: Docker meta
         id: meta
