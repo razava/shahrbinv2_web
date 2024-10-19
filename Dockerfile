@@ -1,7 +1,7 @@
 FROM node:18.20.3 AS builder
 
-# نصب yarn به جای pnpm
-RUN npm install -g yarn
+# نصب pnpm به جای yarn
+RUN npm install -g pnpm
 
 WORKDIR /app
 
@@ -13,16 +13,16 @@ ENV NODE_ENV production
 # ENV REACT_APP_SIGNALR_URL=https://shahrbinapi.shetabdahi.ir
 ENV PUBLIC_URL=/admin
 
-# پاک کردن کش npm و yarn قبل از نصب
-RUN npm cache clean --force && yarn cache clean
+# پاک کردن کش npm و pnpm قبل از نصب
+RUN npm cache clean --force && pnpm store prune
 
-# کپی کردن فایل‌های package.json و نصب وابستگی‌ها با yarn
+# کپی کردن فایل‌های package.json و نصب وابستگی‌ها با pnpm
 COPY ./package*.json ./
-RUN yarn install
+RUN pnpm install
 
 # کپی کردن باقی فایل‌ها و ساخت پروژه
 COPY . .
-RUN yarn build
+RUN pnpm build
 
 # استفاده از nginx برای سرو کردن برنامه
 FROM nginx
