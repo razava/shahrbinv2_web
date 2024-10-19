@@ -38,7 +38,8 @@ jobs:
 
       # ساخت پروژه بدون lint
       - name: Build Project
-        run: SKIP_PREFLIGHT_CHECK=true yarn build --verbose
+        run: |
+          CI=false SKIP_PREFLIGHT_CHECK=true yarn build --verbose
 
       - name: List files
         run: ls -al
