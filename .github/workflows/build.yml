@@ -4,33 +4,29 @@ on:
   push:
     tags:
       - "v*.*.*"
+  workflow_dispatch: 
 
 jobs:
   BuildAndDocker:
     env: 
       RUNNER_TOOL_CACHE: /toolcache
-    runs-on: alpine
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # نصب Node.js و Yarn در Alpine و پاک کردن کش
       - name: Install Node.js and Yarn
         run: |
-          # نصب Node.js و npm
-          apk add --no-cache nodejs npm
-          # نصب Yarn
+          sudo apt-get update
+          sudo apt-get install -y nodejs npm
           npm install -g yarn
-          # پاک‌سازی کش‌های npm و yarn
           npm cache clean --force
           yarn cache clean
 
-      # نصب وابستگی‌ها
       - name: Install Dependencies
         run: yarn install
 
-      # بیلد پروژه
       - name: Build Project
         run: yarn build
 
@@ -56,6 +52,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          context: "{{defaultContext}}"
+          context: .
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
