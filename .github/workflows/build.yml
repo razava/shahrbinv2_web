@@ -16,19 +16,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Node.js and Yarn
+      - name: Install Node.js and npm
         run: |
           sudo apt-get update
           sudo apt-get install -y nodejs npm
-          npm install -g yarn
           npm cache clean --force
-          yarn cache clean
 
       - name: Install Dependencies
-        run: yarn install
+        run: npm install
 
       - name: Build Project
-        run: yarn build
+        run: npm run build
 
       - name: Docker meta
         id: meta
