@@ -11,7 +11,7 @@ jobs:
     env: 
       RUNNER_TOOL_CACHE: /toolcache
       ACTIONS_STEP_DEBUG: true
-      YARN_ENABLE_LOGS: true
+      PNPM_ENABLE_LOGS: true
 
     runs-on: ubuntu-latest
 
@@ -24,25 +24,15 @@ jobs:
         with:
           node-version: '20.17.0'
 
-      # پاکسازی کش yarn
-      - name: Clean Yarn Cache
-        run: yarn cache clean
+      - name: Install pnpm
+        run: npm install -g pnpm
 
-      # نصب Yarn
-      - name: Install Yarn
-        run: npm install -g yarn
-
-      # نصب وابستگی‌ها
       - name: Install Dependencies
-        run: yarn install
+        run: pnpm install
 
-      # ساخت پروژه بدون lint
       - name: Build Project
         run: |
-          CI=false SKIP_PREFLIGHT_CHECK=true yarn build --verbose
-
-      - name: List files
-        run: ls -al
+          CI=false SKIP_PREFLIGHT_CHECK=true pnpm build --verbose
 
       - name: Docker meta
         id: meta
@@ -66,6 +56,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          context: .
+          context: . 
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
