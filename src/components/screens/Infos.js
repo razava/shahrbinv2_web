@@ -63,6 +63,7 @@ const Infos = ({ match }) => {
   const [isScatterMap, setIsScatterMap] = useState(false);
   const [filters, setFilters] = useState(filterDefaults);
   const [stack, setStack] = useState("");
+  const [parameterStack, setParameterStack] = useState([]);
 
   useEffect(() => {
     getChartsList({});
@@ -171,10 +172,42 @@ const Infos = ({ match }) => {
     )?.code;
     console.log(chartCode);
     console.log(item);
+    setParameterStack([...parameterStack, chartParameter]);
+
     setStack(item.title);
     setChartParameter(item.parameters);
     getInfos({ chartId: { code: chartCode, parameter: item.parameters } });
+
+    console.log("parameterStack : " + parameterStack);
   };
+
+// Handle the back button to return to the previous chart
+const handleBackButtonClick = () => {
+  if (!parameterStack) return;
+  var prevs = [...parameterStack]
+  const temp = prevs.splice(-1,1)
+  if (!temp) return;
+
+  const chartCode = chartsList.find(
+    (c) => String(c.id) === String(selectedChartId)
+  )?.code;
+
+  // Restore the previous chart state
+  
+  setChartParameter( temp);
+  setParameterStack([...prevs]);
+
+  console.log("parameterStack : " + parameterStack);
+  console.log("prevStack : " +   temp);
+  console.log("prevStack 2: " +   prevs);
+
+  // Fetch previous chart data
+  getInfos({ chartId: { code: chartCode, parameter: temp } });
+
+  // Reset `preChartParameter` after use
+  //setPreChartParameter(null);
+};
+
 
   const onChartSelected = (chart) => {
     // setStack([
@@ -303,7 +336,20 @@ const Infos = ({ match }) => {
                         />
                       ))}
                   </div>
-
+                  {parameterStack && parameterStack.length>0 && <button
+          onClick={handleBackButtonClick}
+          style={{
+            marginBottom: "10px",
+            padding: "10px",
+            backgroundColor: "#007bff",
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          بازگشت به نمودار قبلی
+        </button>}
                   {/* {pieChartsData.length > 0 &&
                     pieChartsData.map((pieChartData, i) => (
                       <PieChart
