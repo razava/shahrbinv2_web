@@ -4,35 +4,35 @@ on:
   push:
     tags:
       - "v*.*.*"
+  workflow_dispatch:
 
 jobs:
   BuildAndDocker:
     env: 
       RUNNER_TOOL_CACHE: /toolcache
-    runs-on: alpine
+      ACTIONS_STEP_DEBUG: true
+      PNPM_ENABLE_LOGS: true
+
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # نصب Node.js و Yarn در Alpine و پاک کردن کش
-      - name: Install Node.js and Yarn
-        run: |
-          # نصب Node.js و npm
-          apk add --no-cache nodejs npm
-          # نصب Yarn
-          npm install -g yarn
-          # پاک‌سازی کش‌های npm و yarn
-          npm cache clean --force
-          yarn cache clean
+      - name: Set up Node.js 20.17.0
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.17.0'
 
-      # نصب وابستگی‌ها
+      - name: Install pnpm
+        run: npm install -g pnpm
+
       - name: Install Dependencies
-        run: yarn install
+        run: pnpm install
 
-      # بیلد پروژه
       - name: Build Project
-        run: yarn build
+        run: |
+          CI=false SKIP_PREFLIGHT_CHECK=true pnpm build --verbose
 
       - name: Docker meta
         id: meta
@@ -56,6 +56,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          context: "{{defaultContext}}"
+          context: .
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
