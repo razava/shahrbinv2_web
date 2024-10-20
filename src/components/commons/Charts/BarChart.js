@@ -76,7 +76,7 @@ const BarChart = ({
         color: "#000",
         align: "end",
         anchor: "end",
-        offset: 8,
+        offset: 80,
         font: { size: 12 },
         clip: false,
         formatter: (value, context) => context.dataset.customLabel[context.dataIndex],
@@ -106,7 +106,7 @@ const BarChart = ({
           autoSkip: false, // جلوگیری از حذف برچسب‌ها
           maxRotation: isHorizontal ? 0 : 85,  // چرخش برچسب‌ها در حالت عمودی
           minRotation: isHorizontal ? 0 : 85,  // حداقل چرخش برچسب‌ها
-          padding: 10,  // افزایش فاصله بین برچسب‌ها
+          //padding: 10,  // افزایش فاصله بین برچسب‌ها
         },
       },
       y: {
