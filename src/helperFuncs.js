@@ -234,7 +234,7 @@ export const reportColumn = [
     grow: 1,
     cell: (row) => (
       <span>
-        {row?.rating ? <Rating size={2} value={row?.rating} /> : "---"}
+        {<Rating size={2} value={row?.rating} />}
       </span>
     ),
   },

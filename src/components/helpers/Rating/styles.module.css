@@ -23,3 +23,8 @@
 .star.active {
   color: var(--yellow);
 }
+
+.emptyRating {
+  font-size: 21px;
+  color: rgb(57, 50, 50);
+}

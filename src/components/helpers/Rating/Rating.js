@@ -3,84 +3,61 @@ import styles from "./styles.module.css";
 import Icon from "../Icon/Icon";
 
 const defaultStars = [
-  {
-    id: 1,
-    hover: false,
-    active: false,
-    order: 1,
-  },
-  {
-    id: 2,
-    hover: false,
-    active: false,
-    order: 2,
-  },
-  {
-    id: 3,
-    hover: false,
-    active: false,
-    order: 3,
-  },
-  {
-    id: 4,
-    hover: false,
-    active: false,
-    order: 4,
-  },
-  {
-    id: 5,
-    hover: false,
-    active: false,
-    order: 5,
-  },
+  { id: 1, hover: false, active: false, order: 1 },
+  { id: 2, hover: false, active: false, order: 2 },
+  { id: 3, hover: false, active: false, order: 3 },
+  { id: 4, hover: false, active: false, order: 4 },
+  { id: 5, hover: false, active: false, order: 5 },
 ];
 
 const Rating = ({
-  onChange = (f) => f,
-  value,
-  defaultValue,
+  onChange = () => {},
+  value = 0,
+  defaultValue = 0,
   name = "",
   size = 5,
 }) => {
-  console.log(value);
-  // states
+  // Hook ها باید بدون شرط اجرا شوند
   const [stars, setStars] = useState(
-    defaultStars.map((s, i) =>
-      value < s.order ? { ...s, active: false } : { ...s, active: true }
-    )
+    defaultStars.map((s) => ({
+      ...s,
+      active: value >= s.order,
+    }))
   );
-  const [rating, setRating] = useState(0);
-  console.log(value);
+  const [rating, setRating] = useState(defaultValue);
+
+  // به‌روزرسانی ستاره‌ها بر اساس مقدار جدید
   useEffect(() => {
-    if (defaultValue) {
-      setStars(
-        defaultStars.map((s, i) =>
-          value < s.order ? { ...s, active: false } : { ...s, active: true }
-        )
-      );
-    }
+    setStars(
+      defaultStars.map((s) => ({
+        ...s,
+        active: value >= s.order,
+      }))
+    );
   }, [value]);
-  // functions
+
+  // اگر مقدار نال باشد، بجای null، علامت --- نشان دهیم
+  if (value === null) {
+    return <div className={styles.emptyRating}>---</div>;
+  }
+
+  // توابع مربوط به تعامل با ستاره‌ها
   const onMouseEnter = (star) => {
     const index = stars.indexOf(star);
-    const modifiedStars = stars.map((star, i) => {
-      if (i <= index) {
-        star.hover = true;
-        return star;
-      } else {
-        star.hover = false;
-        return star;
-      }
-    });
-    setStars(modifiedStars);
+    setStars(
+      stars.map((s, i) => ({
+        ...s,
+        hover: i <= index,
+      }))
+    );
   };
 
   const onMouseLeave = () => {
-    setStars((prev) =>
-      prev.map((star) => {
-        star.hover = false;
-        return star;
-      })
+    setStars(
+      stars.map((s) => ({
+        ...s,
+        hover: false,
+      }))
     );
   };
 
@@ -88,42 +65,37 @@ const Rating = ({
     const index = stars.indexOf(star);
     setRating(index + 1);
     onChange(index + 1, name);
-    const modifiedStars = stars.map((star, i) => {
-      if (i <= index) {
-        star.active = true;
-        return star;
-      } else {
-        star.active = false;
-        return star;
-      }
-    });
-    setStars(modifiedStars);
+    setStars(
+      stars.map((s, i) => ({
+        ...s,
+        active: i <= index,
+      }))
+    );
   };
+
   return (
-    <>
-      <div className={styles.stars} onMouseLeave={onMouseLeave}>
-        {stars.map((star, i) => (
-          <span
-            key={i}
-            className={[
-              styles.star,
-              star.hover ? styles.hover : "",
-              star.active ? styles.active : "",
-              "frc",
-            ].join(" ")}
-            style={{
-              width: size * 6,
-              height: size * 6,
-              margin: `0 ${size}px`,
-            }}
-            onMouseEnter={() => onMouseEnter(star)}
-            onClick={() => onClick(star)}
-          >
-            <Icon icon="fas fa-star" size={size} />
-          </span>
-        ))}
-      </div>
-    </>
+    <div className={styles.stars} onMouseLeave={onMouseLeave}>
+      {stars.map((star) => (
+        <span
+          key={star.id}
+          className={[
+            styles.star,
+            star.hover ? styles.hover : "",
+            star.active ? styles.active : "",
+            "frc",
+          ].join(" ")}
+          style={{
+            width: size * 6,
+            height: size * 6,
+            margin: `0 ${size}px`,
+          }}
+          onMouseEnter={() => onMouseEnter(star)}
+          onClick={() => onClick(star)}
+        >
+          <Icon icon="fas fa-star" size={size} />
+        </span>
+      ))}
+    </div>
   );
 };
 
