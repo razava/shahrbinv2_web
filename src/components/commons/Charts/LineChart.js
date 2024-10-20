@@ -10,9 +10,11 @@ import {
   Legend,
 } from "chart.js";
 import { getElementAtEvent, Line } from "react-chartjs-2";
+import ChartDataLabels from "chartjs-plugin-datalabels"; // اضافه کردن پلاگین
 import { formatLabel } from "../../../utils/functions";
 import { randomColor } from "../../../helperFuncs";
 import { backgroundColor, borderColor } from "../../../utils/constants";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -20,8 +22,10 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ChartDataLabels // ثبت پلاگین
 );
+
 ChartJS.defaults.font.family = "iranyekan";
 
 const COLORS = [
@@ -32,7 +36,7 @@ const COLORS = [
   "#9AD0F5",
   "#CCB2FF",
   "#E4E5E7",
-  ...[...Array(1000)].map((c) => randomColor()),
+  ...[...Array(1000)].map(() => randomColor()),
 ];
 
 const LineChart = ({
@@ -53,7 +57,7 @@ const LineChart = ({
       : [];
 
   const defaultOptions = {
-    indexAxis: "y",
+    indexAxis: isHorizontal ? "y" : "x", // جابجایی محور‌ها بر اساس isHorizontal
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -62,27 +66,45 @@ const LineChart = ({
       },
       title: {
         display: true,
-        text: "",
+        text: chartTitle,
       },
       datalabels: {
-        display: true,
+        display: true, // مطمئن شوید که فعال است
         color: "#000",
         align: "end",
         anchor: "end",
         offset: 0,
-        // rotation: 30,
         font: { size: "12" },
-        formatter: function (value, context, index) {
-          return value === "0"
-            ? ""
-            : context.dataset.customLabel[context.dataIndex];
+        formatter: function (value, context) {
+          const displayValue =
+            context.dataset.customLabel[context.dataIndex];
+          return value !== 0 ? displayValue : ""; // اگر مقدار صفر نیست، نمایش بده
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const value = context.dataset.customLabel[context.dataIndex];
+            return value ? `Value: ${value}` : '';
+          },
+        },
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          autoSkip: false, // عدم پرش برچسب‌ها
+          maxRotation: 45, // حداکثر چرخش برچسب‌ها
+          minRotation: 0,
+        },
+      },
+      y: {
+        ticks: {
+          autoSkip: false, // عدم پرش برچسب‌ها روی محور y
         },
       },
     },
   };
-  const options = defaultOptions;
-  options.plugins.title.text = chartTitle;
-  options.indexAxis = isHorizontal ? "y" : "x";
 
   const data = {
     labels,
@@ -91,14 +113,10 @@ const LineChart = ({
         ? chartData.series.map((s, i) => {
             return {
               label: s.title,
-              data: chartData.series[0].values.map((v, j) => {
-                return chartData.series?.[i]?.values?.[j]?.value;
-              }),
+              data: s.values.map((v) => v.value),
               backgroundColor: backgroundColor[i] || backgroundColor[i % 30],
               borderColor: borderColor[i] || borderColor[i % 30],
-              customLabel: chartData.series[0].values.map((v, j) => {
-                return chartData.series?.[i]?.values?.[j]?.displayValue;
-              }),
+              customLabel: s.values.map((v) => v.displayValue),
             };
           })
         : [],
@@ -112,9 +130,10 @@ const LineChart = ({
       onClickOnElement(item);
     }
   };
+
   return (
     <Line
-      options={options}
+      options={defaultOptions}
       data={data}
       width={width}
       height={height}
